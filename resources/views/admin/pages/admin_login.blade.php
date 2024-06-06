@@ -68,7 +68,7 @@
         <!-- /.login-logo -->
         <div class="card card-outline card-primary">
             <div class="card-header text-center py-4">
-                <a href="{{ route('login_form') }}" class="h1"><b>Admin </b>Login (Flat)</a>
+                <a href="{{ route('login_form') }}" class="h3"><b>Admin </b>Login (Flat)</a>
             </div>
             <div class="card-body">
                 {{-- <p class="login-box-msg">Admin Login Panel</p> --}}
@@ -103,12 +103,12 @@
                     </div>
                     <div class="row pt-2">
                         <div class="col-8">
-                            <div class="icheck-primary">
+                            {{-- <div class="icheck-primary">
                                 <input type="checkbox" id="remember">
                                 <label for="remember">
                                     Remember Me
                                 </label>
-                            </div>
+                            </div> --}}
                         </div>
                         <!-- /.col -->
                         <div class="col-4 ">

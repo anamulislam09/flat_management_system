@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Package;
 use Illuminate\Http\Request;
 
 class PackageController extends Controller
@@ -23,23 +24,23 @@ class PackageController extends Controller
         $data['amount'] = $request->amount;
         $data['duration'] = $request->duration;
         Package::create($data);
-        return redirect()->route('packages.all')->with('message', 'Package Created Successfully');
+        return redirect()->route('package.all')->with('message', 'Package Created Successfully');
     }
 
-    public function Edit($id)
-    {
-        $data = Package::FindOrFail($id);
-        return view('superadmin.packages.edit', compact('data'));
-    }
+    // public function Edit($id)
+    // {
+    //     $data = Package::FindOrFail($id);
+    //     return view('superadmin.packages.edit', compact('data'));
+    // }
 
-    public function Update(Request $request)
-    {
-        $data = Package::where('id', $request->id)->first();
-        $data['amount'] = $request->amount;
-        $data['duration'] = $request->duration;
-        $data->save();
-        return redirect()->back()->with('message', 'Package Updated Successfully');
-    }
+    // public function Update(Request $request)
+    // {
+    //     $data = Package::where('id', $request->id)->first();
+    //     $data['amount'] = $request->amount;
+    //     $data['duration'] = $request->duration;
+    //     $data->save();
+    //     return redirect()->back()->with('message', 'Package Updated Successfully');
+    // }
 
     public function Delete($id)
     {

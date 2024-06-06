@@ -64,7 +64,7 @@
     <div class="register-box">
         <div class="card card-outline card-primary">
             <div class="card-header text-center">
-                <a href="{{ route('register_form') }}" class="h1"><b>Admin</b> Registration (Flat)</a>
+                <a href="{{ route('register_form') }}" class="h3"><b>Admin</b> Registration (Flat)</a>
             </div>
             <div class="card-body">
                 {{-- <p class="login-box-msg">Register a new membership</p> --}}
@@ -78,7 +78,7 @@
                 <form action="{{ route('admin.store') }}" method="post">
                     @csrf
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="name" placeholder="Enter FullName" required>
+                        <input type="text" class="form-control" name="name" placeholder="Name" required>
                         <div class="input-group-append" data-toggle="tooltip" data-placement="top"
                             title="Enter Full Name">
                             <div class="input-group-text">
@@ -88,7 +88,7 @@
                     </div>
                     <div class="input-group mb-3">
                         <input type="text" class="form-control" name="phone"
-                            placeholder="Enter a Valid Phone Number " required>
+                            placeholder="Phone Number " required>
                         <div class="input-group-append" data-toggle="tooltip" data-placement="top"
                             title="Enter Phone Number">
                             <div class="input-group-text">
@@ -97,7 +97,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <textarea name="address" id="" cols="" class="form-control" rows="" placeholder="Enter Address"
+                        <textarea name="address" id="" cols="" class="form-control" rows="" placeholder="Address"
                             required></textarea>
                         <div class="input-group-append" data-toggle="tooltip" data-placement="top"
                             title="Enter your Address">
@@ -107,7 +107,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="text" class="form-control" name="nid_no" placeholder="Enter NID / NRC Number"
+                        <input type="text" class="form-control" name="nid_no" placeholder="NID / NRC Number"
                             required>
                         <div class="input-group-append" aria-hidden="true" data-toggle="tooltip" data-placement="top"
                             title="Enter yor NID / NRC Number">
@@ -117,7 +117,7 @@
                         </div>
                     </div>
                     <div class="input-group mb-3">
-                        <input type="email" class="form-control" name="email" placeholder="Enter Valid Email"
+                        <input type="email" class="form-control" name="email" placeholder="Valid Email"
                             required>
                         <div class="input-group-append" data-toggle="tooltip" data-placement="top"
                             title="Enter Your Valid Email">
@@ -128,7 +128,7 @@
                     </div>
 
                     <div class="input-group mb-3">
-                        <input type="password" class="form-control" name="password" placeholder="Enter a Password"
+                        <input type="password" class="form-control" name="password" placeholder="Password"
                             required>
                         <div class="input-group-append" data-toggle="tooltip" data-placement="top"
                             title="Enter a Password">
@@ -155,7 +155,7 @@
                                     I agree to the <a href="#">terms</a>
                                 </label>
                             </div> --}}
-                            <a href="{{ route('login_form') }}" class="text-center">I have already a membership</a>
+                            <a href="{{ route('login_form') }}" class="text-center ">I have already a membership</a>
                         </div>
                         <!-- /.col -->
                         <div class="col-4">

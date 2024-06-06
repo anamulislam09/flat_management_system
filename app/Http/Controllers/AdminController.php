@@ -4,7 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Mail\ForgotPasswordMail;
 use App\Models\Client;
+use App\Models\Exp_process;
+use App\Models\ExpenseVoucher;
+use App\Models\ExpSetup;
 use App\Models\Flat;
+use App\Models\Income;
+use App\Models\OpeningBalance;
+use App\Models\OthersIncome;
+use App\Models\Package;
+use App\Models\SetupHistory;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
@@ -32,9 +41,10 @@ class AdminController extends Controller
     public function Login(Request $request)
     {
         $check = $request->all();
-        $datas = Auth::guard('admin')->attempt(['email' => $check['email'], 'password' => $check['password'], 'status' => 1]);
+        // dd($check);
+        $datas = Auth::guard('admin')->attempt(['email' => $check['email'], 'password' => $check['password'], 'status' => 1, 'isVerified' => 1]);
         if (!$datas) {
-            return back()->with('message', 'Something Went Wrong! ');
+            return back()->with('message', 'Something Went Wrong!');
         } else {
             $check = $request->all();
             if (Auth::guard('admin')->attempt(['email' => $check['email'], 'password' => $check['password']])) {
@@ -54,12 +64,6 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        // $email = Client::where('email', $request->email)->exists();
-        // if ($email) {
-        //     return redirect()->back()->with('message', 'This Email already used!');
-        // } 
-        // else {
-        // $id = UniqueIdGenerator::generate(['table' => 'Clients', 'length' => 4]);
         $start_at = 1001;
 
         if ($start_at) {
@@ -75,13 +79,74 @@ class AdminController extends Controller
         $data['address'] = $request->address;
         $data['phone'] = $request->phone;
         $data['nid_no'] = $request->nid_no;
+        $otp = Str::random(4);
+        $data['otp'] = $otp;
         $data['image'] = $request->image;
         $client = Client::create($data);
 
-        return redirect()->route('login_form')->with('message', 'Admin register Successfully');
+        if ($client) {
+            $data = Client::latest()->first();
+
+            $post_url = "http://api.smsinbd.com/sms-api/sendsms";
+            $post_values['api_token'] = "V8qsvGXfqBFhS4FozsQq7MyaeqTzXY2es6ufjQ3M";
+            $post_values['senderid'] = "8801969908462";
+            $post_values['message'] = "Your OPT Code is: " . $data->otp;
+            $post_values['contact_number'] = $data->phone;
+
+            $post_string = "";
+            foreach ($post_values as $key => $value) {
+                $post_string .= "$key=" . urlencode($value) . "&";
+            }
+            $post_string = rtrim($post_string, "& ");
+
+            $request = curl_init($post_url);
+            curl_setopt($request, CURLOPT_HEADER, 0);
+            curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($request, CURLOPT_POSTFIELDS, $post_string);
+            curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
+            $post_response = curl_exec($request);
+            curl_close($request);
+            $array =  json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $post_response), true);
+
+            return redirect()->route('admin.verfy')->with('message', 'Registration Successfully');
+        }
     }
 
     // register method ends here
+
+    // client verified rouite start here
+        // Verify method ends here
+        public function Verify()
+        {
+            $client = Client::latest()->first();
+            return view('admin.pages.admin_register_verify', compact('client'));
+        }
+        // Verify method ends here
+    
+        // Verify store method ends here
+        public function VerifyStore(Request $request)
+        {
+            $client = Client::where('id', $request->client_id)->first();
+            if ($client->otp == $request->otp) {
+                $client['isVerified'] = 1;
+                $client->save();
+                return redirect()->route('admin.verfied');
+            } else {
+                return redirect()->back()->with('message', 'OTP is Invalied! please, Submit Valied OTP.');
+            }
+        }
+        // Verify store method ends here
+    
+        // Verified method ends here
+        public function Verified(Request $request)
+        {
+            $client = Client::latest()->first();
+            return view('admin.pages.admin_register_verified', compact('client'));
+        }
+        // Verified method ends here
+    // client verified rouite start here
+
+
 
     // Logout method ends here
     public function AdminLogout()
@@ -108,6 +173,7 @@ class AdminController extends Controller
     // ClientEdit edit 
     public function ClientEdit($id)
     {
+        
         if (Auth::guard('admin')->user()->role == 0) {
             $data = Client::findOrFail($id);
             $flat = Flat::where('client_id', $data->id)->first();
@@ -121,13 +187,20 @@ class AdminController extends Controller
     // Client update 
     public function ClientUpdate(Request $request)
     {
+        $isverify = DB::table('clients')->where('id', $request->id)->first();
+        $package_amount = Package::where('id', $request->package)->first();
         if (Auth::guard('admin')->user()->role == 0) {
+            if ($isverify->isVerified == 1) {
             $data = array();
             $data['status'] = $request->status;
             DB::table('Clients')->where('id', $request->id)->update($data);
 
-            $notification = array('message' => 'Client status update successfully.', 'alert_type' => 'warning');
-            return redirect()->route('clients.all')->with($notification);
+            $notification = array('message' => 'Customer Update Successfully.', 'alert_type' => 'warning');
+            return redirect()->route('client.all')->with($notification);
+        } else {
+            $notification = array('message' => 'OPS! This Client Was Not Verified.', 'alert_type' => 'danger');
+            return redirect()->back()->with($notification);
+        }
         } else {
             $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
             return redirect()->back()->with($notification);
@@ -194,7 +267,7 @@ class AdminController extends Controller
     {
         if (Auth::guard('admin')->user()->role == 0) {
             $data = Client::where('role', 1)->get();
-            return view('superadmin.Clients.ClientAll', compact('data'));
+            return view('superadmin.clients.clientAll', compact('data'));
         } else {
             $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
             return redirect()->back()->with($notification);

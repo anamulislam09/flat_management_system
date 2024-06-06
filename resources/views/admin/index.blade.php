@@ -22,7 +22,7 @@
         @php
             $user = App\Models\User::where('client_id', Auth::guard('admin')->user()->id)->count();
             $flat = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
-            $total_exp = App\Models\Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
+            $total_exp = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
             $total_income = App\Models\Income::where('client_id', Auth::guard('admin')->user()->id)->sum('paid');
             $manualOpeningBlance = DB::table('opening_balances')
                 ->where('client_id', Auth::guard('admin')->user()->id)
@@ -31,14 +31,15 @@
                 ->where('client_id', Auth::guard('admin')->user()->id)
                 ->sum('amount');
 
-            $balance = App\Models\MonthlyBlance::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
-            $Customers = App\Models\Customer::where('role', 1)->count();
+            $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
+            $clients = App\Models\Client::where('role', 1)->count();
             $category = App\Models\Category::count();
+            $packages = App\Models\Package::count();
             $superAdmin = Auth::guard('admin')->user()->id;
 
             // this month transactions
             $flats = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
-            $expense = App\Models\Exp_detail::where('client_id', Auth::guard('admin')->user()->id)
+            $expense = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', date('Y-m'))
                 ->sum('amount');
             $income = App\Models\Income::where('client_id', Auth::guard('admin')->user()->id)
@@ -49,7 +50,7 @@
                 ->where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', date('Y-m'))
                 ->sum('amount');
-            $balance = App\Models\MonthlyBlance::where('client_id', Auth::guard('admin')->user()->id)
+            $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', date('Y-m'))
                 ->sum('amount');
 
@@ -65,14 +66,14 @@
                             <!-- small box -->
                             <div class="small-box bg-info">
                                 <div class="inner">
-                                    <p>Total Customers</p>
-                                    <h3>{{ $Customers }}</h3>
+                                    <p>Total Clients</p>
+                                    <h3>{{ $clients }}</h3>
 
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
                                 </div>
-                                <a href="{{ route('customers.all') }}" class="small-box-footer">More info <i
+                                <a href="{{ route('client.all') }}" class="small-box-footer">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -83,6 +84,21 @@
                                 <div class="inner">
                                     <p>Total Category</p>
                                     <h3>{{ $category }}</h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                <a href="{{ route('category.index') }}" class="small-box-footer">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <p>Total Packages</p>
+                                    <h3>{{ $packages }}</h3>
 
                                 </div>
                                 <div class="icon">

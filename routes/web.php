@@ -10,6 +10,7 @@ use App\Http\Controllers\ExpSetupController;
 use App\Http\Controllers\FlatController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OthersIncomeController;
+use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PdfGeneratorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -36,6 +37,9 @@ Route::post('/admin/login/owner', [AdminController::class, 'Login'])->name('admi
 // admin register route start here 
 Route::get('/admin/register', [AdminController::class, 'AdminRegister'])->name('register_form');
 Route::post('/admin/register/store', [AdminController::class, 'Store'])->name('admin.store');
+Route::get('/admin/register-verify', [AdminController::class, 'Verify'])->name('admin.verfy');
+Route::post('/admin/register-verify/store', [AdminController::class, 'VerifyStore'])->name('admin.verfy.store');
+Route::get('/admin/register-verified', [AdminController::class, 'Verified'])->name('admin.verfied');
 // admin register route ends here 
 
 // Customer Forgate password route start here 
@@ -53,26 +57,29 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/clients', [AdminController::class, 'Client'])->name('client.all');
     Route::get('/client/edit/{id}', [AdminController::class, 'ClientEdit'])->name('client.edit');
     Route::post('/client/update', [AdminController::class, 'ClientUpdate'])->name('client.update');
+    // client data deleted 
+    Route::get('/clients/all', [AdminController::class, 'ClientAll'])->name('client.index');
+    Route::post('/client/delete', [AdminController::class, 'ClientDataDelete'])->name('client.data.delete');
 
     // admin login route start here 
     Route::post('/logout', [AdminController::class, 'AdminLogout'])->name('admin.logout');
-
-    //    Permission route 
-    // Route::get('/all-permission', [RoleController::class, 'AllPermission'])->name('all.permission');
-    // Route::get('/permission/create', [RoleController::class, 'Create'])->name('permission.create');
-    //   Route::post('/user/update', [UserController::class, 'Update'])->name('user.update');
-    //   Route::post('/user/delete', [UserController::class, 'Destroy'])->name('user.delete');
 
     //    Category route 
     Route::get('/category', [CategoryController::class, 'Index'])->name('category.index');
     Route::get('/category/create', [CategoryController::class, 'Create'])->name('category.create');
     Route::post('/category/store', [CategoryController::class, 'Store'])->name('category.store');
-    Route::get('/category/edit/{id}', [CategoryController::class, 'Edit'])->name('category.edit');
-    Route::post('/category/update', [CategoryController::class, 'Update'])->name('category.update');
+    // Route::get('/category/edit/{id}', [CategoryController::class, 'Edit'])->name('category.edit');
+    // Route::post('/category/update', [CategoryController::class, 'Update'])->name('category.update');
     Route::get('/category/delete/{id}', [CategoryController::class, 'Destroy'])->name('category.delete');
 
-    Route::get('/clients/all', [AdminController::class, 'ClientAll'])->name('client.index');
-    Route::post('/client/delete', [AdminController::class, 'ClientDataDelete'])->name('client.data.delete');
+    // Packages route  
+    Route::get('/packages', [PackageController::class, 'Index'])->name('package.all');
+    Route::get('/package/create', [PackageController::class, 'Create'])->name('package.create');
+    Route::post('/package/store', [PackageController::class, 'Store'])->name('package.store');
+    Route::get('/package/edit/{id}', [PackageController::class, 'Edit'])->name('package.edit');
+    Route::post('/package/update', [PackageController::class, 'Update'])->name('package.update');
+    Route::get('/package/delete/{id}', [PackageController::class, 'Delete'])->name('package.delete');
+
 
 });
 

@@ -1,70 +1,119 @@
 <aside class="main-sidebar sidebar-dark-primary elevation-4 p-0">
     <!-- Brand Logo -->
-    <a href="{{ route('admin.dashboard') }}" class="brand-link">
-        <img src="{{ asset('admin//dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-            class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="{{ route('admin.dashboard') }}" class="brand-link bg-success text-center">
         @if (Auth::guard('admin')->user()->role == 0)
-            <span class="brand-text font-weight-light">Super Admin</span>
+            <span class="brand-text font-weight-bold">Super Admin</span>
         @else
-            <span class="brand-text font-weight-light">Admin dashboard</span>
+            <span class="brand-text font-weight-bold">Admin dashboard</span>
         @endif
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar mt-3">
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel pb-3 mb-3 d-flex">
-            <div class="image">
-                <img src="{{ asset('admin//dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2"
-                    alt="User Image">
-            </div>
-            <div class="info">
-                <a href="{{ route('admin.dashboard') }}" class="d-block">{{ Auth::guard('admin')->user()->name }}</a>
-            </div>
-        </div>
-        <!-- Sidebar Menu -->
         <!-- Category start here -->
         <nav class=" mb-5">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
+                <li class="nav-item ">
+                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p> Dashboard </p>
+                        </a>
+                       
+                    </li>
                 @if (Auth::guard('admin')->user()->role == 0)
-                    <li
-                        class="nav-item {{ Request::routeIs('customers.all') || Request::routeIs('customers.create') || Request::routeIs('customers.edit') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link">
+                    <li class="nav-item {{ Request::routeIs('client.all') || Request::routeIs('client.edit') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link {{ Request::routeIs('client.all') || Request::routeIs('client.edit') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
-                                Customers
+                                Clients
                                 <i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-3">
                             <li class="nav-item">
-                                <a href="{{ route('customers.all') }}"
-                                    class="nav-link {{ Request::routeIs('customers.all') || Request::routeIs('customers.create') || Request::routeIs('customers.edit') ? 'active' : '' }}">
+                                <a href="{{ route('client.all') }}"
+                                    class="nav-link {{ Request::routeIs('client.all') || Request::routeIs('client.edit') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>Customers</p>
+                                    <p>All Client</p>
                                 </a>
                             </li>
 
                         </ul>
                     </li>
                     {{-- expense category start here --}}
-                    <li class="nav-item">
+                    {{-- <li  class="nav-item {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'menu-open' : '' }}">>
                         <a href="{{ route('category.index') }}"
                             class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>Expense Category</p>
                         </a>
-                    </li>
+                    </li> --}}
+
+                    <li class="nav-item {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p>
+                            Expense Category
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ml-3">
+                        <li class="nav-item">
+                            <a href="{{ route('category.index') }}"
+                                class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.edit') ? 'active' : '' }}">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>All Categories</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('category.create') }}"
+                                class="nav-link {{ Request::routeIs('category.create') ? 'active' : '' }}">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Add New</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
 
                     <li class="nav-item">
-                        <a href="{{ route('customer.index') }}"
-                            class="nav-link {{ Request::routeIs('customer.index') || Request::routeIs('customer.index') ? 'active' : '' }}">
+                        <a href="{{ route('client.index') }}"
+                            class="nav-link {{ Request::routeIs('client.index') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-circle"></i>
-                            <p>Delete Customer Data</p>
+                            <p>Delete Client Data</p>
                         </a>
                     </li>
                     {{-- expense category ends here --}}
+                    {{-- Package route Srtart here --}}
+                    <li
+                    class="nav-item {{ Request::routeIs('package.all') || Request::routeIs('package.create') || Request::routeIs('package.edit') ? 'menu-open' : '' }}">
+                    <a href="#" class="nav-link {{ Request::routeIs('package.all') || Request::routeIs('package.create') || Request::routeIs('package.edit') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p>
+                            Packages
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview ml-3">
+                        <li class="nav-item">
+                            <a href="{{ route('package.all') }}"
+                                class="nav-link {{ Request::routeIs('package.all') || Request::routeIs('package.edit') ? 'active' : '' }}">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>All packages</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ route('package.create') }}"
+                                class="nav-link {{Request::routeIs('package.create') ? 'active' : '' }}">
+                                <i class="far fa-dot-circle nav-icon"></i>
+                                <p>Add New</p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+
+                    {{-- Package route ends here --}}
                 @endif
 
                 @if (Auth::guard('admin')->user()->role == 1)

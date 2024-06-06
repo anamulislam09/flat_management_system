@@ -2,20 +2,29 @@
 
 @section('admin_content')
     <div class="content-wrapper">
+            <div class="container-fluid">
+              <div class="row">
+                  <div class="col-sm-6">
+                      <h1 class="mt-4 ml-2" style="font-size: 25px">Expense Category</h1>
+                  </div>
+                  <div class="col-sm-6">
+                      <ol class="breadcrumb float-sm-right">
+                          <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+                          <li class="breadcrumb-item active">Expense Category</li>
+                      </ol>
+                  </div>
+              </div>
+          </div>
         <!-- Main content -->
         <section class="content mt-3">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12 mt-3">
                         <div class="card">
-                            <div class="card-header bg-primary">
-                                <div style="float: left">
-                                    <h3 class="card-title pt-2" style="width:100%; text-align:center">Add Expense
-                                    </h3>
-                                </div>
-                                <div style="float: right">
-                                    <a href="{{ route('category.index') }}" class="btn btn-primary" style="float:right"> See All</a>
-                                </div>
+                            <div class="card-header bg-primary p-1">
+                                <h3 class="card-title">
+                                    <a href="{{ route('category.index') }}"class="btn btn-light shadow rounded m-0"><span>See All</span></a>
+                                </h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
