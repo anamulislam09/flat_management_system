@@ -18,54 +18,52 @@ class UserController extends Controller
 {
   public function Index()
   {
-    $flat = Flat::where('client_id', Auth::guard('admin')->user()->id)->get();;
-    if (!empty($flat)) {
+    // $flat = Flat::where('client_id', Auth::guard('admin')->user()->id)->get();;
+    // if (!empty($flat)) {
       $data = User::where('client_id', Auth::guard('admin')->user()->id)->get();
-      return view('admin.users.index', compact('data'));
-    }
-    // $data = User::where('client_id', Auth::guard('admin')->user()->id)->get();;
-    return view('admin.users.index');
-    //end method
+    // }
+    return view('admin.users.index', compact('data'));
+
   }
 
-  //create multiple user method start here
-  public function Create()
-  {
-    $data = Flat::where('client_id', Auth::guard('admin')->user()->id)->exists();
-    if (!$data) {
-      return redirect()->back()->with('message', 'Pls! Flat create first');
-    } else {
-      $data = User::where('client_id', Auth::guard('admin')->user()->id)->get();
-      // $data = User::where('client_id', Auth::guard('admin')->user()->id)->where('role_id', 0)->where('status', 0)->get();
-      return view('admin.users.create', compact('data'));
-      //end method
-    }
-  }
+  // //create multiple user method start here
+  // public function Create()
+  // {
+  //   $data = Flat::where('client_id', Auth::guard('admin')->user()->id)->exists();
+  //   if (!$data) {
+  //     return redirect()->back()->with('message', 'Pls! Flat create first');
+  //   } else {
+  //     $data = User::where('client_id', Auth::guard('admin')->user()->id)->get();
+  //     // $data = User::where('client_id', Auth::guard('admin')->user()->id)->where('role_id', 0)->where('status', 0)->get();
+  //     return view('admin.users.create', compact('data'));
+  //     //end method
+  //   }
+  // }
 
-  public function Store(Request $request)
-  {
-    $data = Flat::where('client_id', Auth::guard('admin')->user()->id)->exists();
-    if (!$data) {
-      return redirect()->back()->with('message', 'Pls! Flat create first');
-    } else {
+  // public function Store(Request $request)
+  // {
+  //   $data = Flat::where('client_id', Auth::guard('admin')->user()->id)->exists();
+  //   if (!$data) {
+  //     return redirect()->back()->with('message', 'Pls! Flat create first');
+  //   } else {
 
-      $flat_id = $request->flat_id;
-      $user_id = $request->user_id;
-      for ($i = 0; $i < count($user_id); $i++) {
-        User::where("user_id", $user_id)->update([
-          'name' => $request->name[$i],
-          'phone' => $request->phone[$i],
-          'nid_no' => $request->nid_no[$i],
-          'address' => $request->address[$i],
-          'email' => $request->email[$i],
-          'password' => Hash::make($request->phone[$i]),
-        ]);
-        return redirect()->route('users.index')->with('message', 'User Updated Successfully');
-      }
+  //     $flat_id = $request->flat_id;
+  //     $user_id = $request->user_id;
+  //     for ($i = 0; $i < count($user_id); $i++) {
+  //       User::where("user_id", $user_id)->update([
+  //         'name' => $request->name[$i],
+  //         'phone' => $request->phone[$i],
+  //         'nid_no' => $request->nid_no[$i],
+  //         'address' => $request->address[$i],
+  //         'email' => $request->email[$i],
+  //         'password' => Hash::make($request->phone[$i]),
+  //       ]);
+  //       return redirect()->route('users.index')->with('message', 'User Updated Successfully');
+  //     }
 
-      // }
-    }
-  }
+  //     // }
+  //   }
+  // }
   //create multiple user method ends here
 
   //create single user method start here

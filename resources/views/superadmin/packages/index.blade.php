@@ -6,7 +6,6 @@
             .card-title a {
                 font-size: 15px;
             }
-
             table,
             thead,
             tbody,

@@ -1,7 +1,21 @@
 @extends('layouts.admin')
 
 @section('admin_content')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
+<style>
+          @media screen and (max-width: 767px) {
+    div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_filter, div.dataTables_wrapper div.dataTables_info, div.dataTables_wrapper div.dataTables_paginate{
+text-align: right !important;
+    }
+    
+    .card-title a{
+        font-size: 15px;
+    }
+    table, thead, tbody, tr, td{
+        font-size: 15px;
+    }
+}
+</style>
+
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">

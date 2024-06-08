@@ -1,7 +1,30 @@
 @extends('layouts.admin')
 
 @section('admin_content')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
+    <style>
+        @media screen and (max-width: 767px) {
+            .card-title a {
+                font-size: 15px;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            td {
+                font-size: 15px;
+            }
+
+            .text {
+                font-size: 14px;
+            }
+
+            .button {
+                margin-top: -0px !important;
+            }
+
+        }
+    </style>
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
@@ -21,8 +44,9 @@
                                             @csrf
                                             <div class="row">
                                                 <div class=" col-lg-5 form-group">
-                                                    <label for="unit" class="">Expense Category </label>
-                                                    <select name="cat_id" class="form-control" id="" required>
+                                                    <label for="unit" class="text">Expense Category </label>
+                                                    <select name="cat_id" class="form-control text" id=""
+                                                        required>
                                                         <option value="" selected disabled>Select Once</option>
                                                         @foreach ($exp_cat as $item)
                                                             <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -31,12 +55,13 @@
                                                     </select>
                                                 </div>
                                                 <div class=" col-lg-5 form-group">
-                                                    <label for="unit" class="">Expense Amount</label>
-                                                    <input type="text" name="amount" class="form-control"
+                                                    <label for="unit" class="text">Expense Amount</label>
+                                                    <input type="text" name="amount" class="form-control text"
                                                         placeholder="Enter Expense Amount" required>
                                                 </div>
                                                 <div class="col-lg-2">
-                                                    <button type="submit" class="btn btn-sm btn-primary float-end"
+                                                    <button type="submit"
+                                                        class="btn btn-sm btn-primary float-end text button"
                                                         style="margin-top: 35px" id="">Submit</button>
                                                 </div>
                                             </div>
@@ -45,7 +70,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if (count($expDetails) < 1)
+                        @if (count($expense) < 1)
                         @else
                             <div class="card">
                                 <div class="card-body">
@@ -61,7 +86,7 @@
                                                     <th width="20%" class="text-center">Action</th>
                                             </thead>
                                             <tbody>
-                                                @foreach ($expDetails as $key => $item)
+                                                @foreach ($expense as $key => $item)
                                                     @php
                                                         $data = DB::table('categories')
                                                             ->where('id', $item->cat_id)
@@ -69,7 +94,7 @@
                                                         // total amounrt
                                                         $month = Carbon\Carbon::now()->month;
                                                         $year = Carbon\Carbon::now()->year;
-                                                        $total = App\Models\Exp_detail::where(
+                                                        $total = App\Models\Expense::where(
                                                             'client_id',
                                                             Auth::guard('admin')->user()->id,
                                                         )
@@ -115,7 +140,7 @@
                                                             <a href="#" class="btn btn-sm btn-info edit"
                                                                 data-id="{{ $item->id }}" data-toggle="modal"
                                                                 data-target="#editexp"><i class="fas fa-edit"></i></a>
-                                                            <a href="{{ route('expense-details.delate', $item->id) }}"
+                                                            <a href="{{ route('expense.delate', $item->id) }}"
                                                                 class="btn btn-sm btn-danger"><i
                                                                     class="fas fa-trash"></i></a>
                                                             <a href="{{ route('expense.voucher.create', $item->id) }}"
@@ -128,6 +153,7 @@
                                                 <tr>
                                                     <td colspan="4" class="text-right"><strong>Total =</strong></td>
                                                     <td class="text-right"><strong>{{ $total }}</strong></td>
+                                                    <td></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -167,7 +193,7 @@
     <script>
         $('body').on('click', '.edit', function() {
             let exp_id = $(this).data('id');
-            $.get("/admin/expense-details/edit/" + exp_id, function(data) {
+            $.get("/admin/expense/edit/" + exp_id, function(data) {
                 $('#modal_body').html(data);
                 // console.log(data);
             })

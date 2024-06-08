@@ -6,6 +6,23 @@
       list-style: none;
     }
   </style>
+   <style>
+    @media screen and (max-width: 767px) {
+        .label {
+            font-size: 14px;
+        }
+        .text{
+          font-size: 14px;
+        }
+        /* table,
+        thead,
+        tbody,
+        tr,
+        td {
+            font-size: 14px;
+        } */
+    }
+</style>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
   <div class="content-wrapper">
     <!-- Main content -->
@@ -38,7 +55,7 @@
                         $data = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->first();
 
                       @endphp
-                      <ul>
+                      <ul class="text">
                         <li>No of Flat:{{$no_flat}} </li>
                         <li>No of Floor:{{$no_floor}} </li>
                         <li>Service Charge: {{$data->amount}} tk</li>
@@ -53,28 +70,28 @@
               <div class="card-body">
                 <!-- /.card-header -->
                 <div class="row py-4">
-                  <div class="col-10 m-auto border p-5" style="background: #ddd">
+                  <div class="col-lg-10 col-md-10 col-sm-12 m-auto border p-5" style="background: #ddd">
                     <form action="{{ route('flat.store') }}" method="POST">
                       @csrf
                       <div class="row">
                         <div class="col-lg-6">
                           <div class=" form-group">
-                            <label for="floor" class="">No of Floor :</label>
-                            <input type="text" class="form-control" value="" name="floor" id="floor"
+                            <label for="floor" class="label">No of Floor :</label>
+                            <input type="text" class="form-control text" value="" name="floor" id="floor"
                               placeholder="Enter Number Of Floor" required>
                           </div>
                         </div>
                         <div class="col-lg-6">
                           <div class="form-group">
-                            <label for="unit" class="">Unit Per Floor :</label>
-                            <input type="text" class="form-control" value="" name="unit" id="unit"
+                            <label for="unit" class="label">Unit Per Floor :</label>
+                            <input type="text" class="form-control text" value="" name="unit" id="unit"
                               placeholder="Enter Number Of Unit Per Floor" required>
                           </div>
                         </div>
                       </div>
                       <div class="form-group">
-                        <label for="unit" class="">Flat Sequence :</label>
-                        <select name="sequence" id="" class="form-control" required>
+                        <label for="unit" class="label">Flat Sequence :</label>
+                        <select name="sequence" id="" class="form-control text" required>
                           <option value="" selected disabled>Select Once</option>
                           <option value="1">A1,A2,A3</option>
                           <option value="2">A1,B1,C1</option>
@@ -82,8 +99,8 @@
                         </select>
                       </div>
                       <div class="form-group">
-                        <label for="unit" class="">Amount of Service Charge :</label>
-                        <input type="text" class="form-control" value="" name="amount"
+                        <label for="unit" class="label">Amount of Service Charge :</label>
+                        <input type="text" class="form-control text" value="" name="amount"
                           placeholder="Enter Service Charge" required>
                       </div>
                       <div class="">

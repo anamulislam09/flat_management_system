@@ -20,6 +20,34 @@
         .table tr th {
             text-align: center;
         }
+
+
+        @media screen and (max-width: 767px) {
+            .card-title a {
+                font-size: 15px;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            td {
+                font-size: 14px;
+            }
+
+            .text {
+                font-size: 14px;
+            }
+
+            .button {
+                margin-top: -0px !important;
+            }
+
+            .date {
+                margin-bottom: 15px;
+            }
+
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
     <div class="content-wrapper">
@@ -32,22 +60,19 @@
                             <div class="card-header bg-primary">
                                 <div class="row ">
                                     <div class="col-lg-10 col-sm-12 pt-2">
-                                        <h3 class="card-title" style="width:100%; text-align:center">Collection Entry</h3>
+                                        <h3 class="card-title" style="width:100%; text-align:center text">Collection Entry
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-header">
+                            {{-- <div class="card-header">
                                 <div class="row">
                                     <div class="col-lg-12" style="border: 1px solid #ddd">
                                         <form action="{{ route('income.store') }}" method="post">
                                             @csrf
                                             <div class="row my-4">
-                                                {{-- <div class="col-lg-3">
-                                                    <strong><span>Collection of Service Charge</span></strong>
-                                                </div> --}}
                                                 <div class="col-lg-3">
-                                                    {{-- <label for="" class="col-form-label">Select Year</label> --}}
-                                                    <select name="year" class="form-control" id="">
+                                                    <select name="year" class="form-control date" id="">
                                                         <option value="" selected disabled>Select Year</option>
                                                         <option value="2023"
                                                             @if ('2023' == date('Y')) selected @endif>Year 2023
@@ -75,9 +100,7 @@
                                                         </option>
                                                     </select>
                                                 </div>
-                                                {{-- 'month', date('m'))->where('year', date('Y') --}}
-                                                <div class="col-lg-3">
-                                                    {{-- <label for="" class="col-form-label">Select Month</label> --}}
+                                                <div class="col-lg-3 date">
                                                     <select name="month" class="form-control" id="">
                                                         <option value="" selected disabled>Select Month </option>
                                                         <option value="01"
@@ -121,38 +144,19 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <!-- /.card-header -->
                             <div class="card-body">
                                 @if (count($data) > 1)
                                     <div class="card">
-                                        <div class="card-header">
-                                            <strong> Total Collection for the Month of @if ('1' == date('m'))
-                                                    January
-                                                @elseif ('2' == date('m'))
-                                                    February
-                                                @elseif ('3' == date('m'))
-                                                    March
-                                                @elseif ('4' == date('m'))
-                                                    April
-                                                @elseif ('5' == date('m'))
-                                                    May
-                                                @elseif ('6' == date('m'))
-                                                    June
-                                                @elseif ('7' == date('m'))
-                                                    July
-                                                @elseif ('8' == date('m'))
-                                                    August
-                                                @elseif ('9' == date('m'))
-                                                    September
-                                                @elseif ('10' == date('m'))
-                                                    October
-                                                @elseif ('11' == date('m'))
-                                                    November
-                                                @elseif ('12' == date('m'))
-                                                    December
-                                                @endif - {{ date('Y') }}</strong>
+                                        <div class="card-header text">
+                                            <strong> Total Collection for the Month of
+                                                <?php
+                                                $currentMonth = date('F');
+                                                echo "$currentMonth";
+                                                ?>
+                                            </strong>
                                         </div>
                                     </div>
                                     <div class="table-responsive">
@@ -215,7 +219,7 @@
 
                                                     <form action="{{ route('income.collection.store') }}" method="POST">
                                                         @csrf
-                                                        <input type="hidden" name="flat_id" value="{{ $item->flat_id }}">
+                                                        <input type="text" name="flat_id" value="{{ $item->flat_id }}">
                                                         <tr>
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>{{ $item->flat_name }}</td>
@@ -270,7 +274,7 @@
                                         </table>
                                     </div>
                                 @else
-                                    <h5 class="text-center py-3">No Data Found</h5>
+                                    <h5 class="text-center py-3 text">No Data Found</h5>
                                 @endif
                             </div>
 

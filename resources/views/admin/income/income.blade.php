@@ -5,6 +5,33 @@
         input:focus {
             outline: none
         }
+
+        @media screen and (max-width: 767px) {
+            .card-title a {
+                font-size: 15px;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            td {
+                font-size: 15px;
+            }
+
+            .text {
+                font-size: 14px;
+            }
+
+            .button {
+                margin-top: -0px !important;
+            }
+            .date{
+                margin-bottom: 15px;
+            }
+
+        }
+
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
     <div class="content-wrapper">
@@ -17,7 +44,7 @@
                             <div class="card-header bg-primary">
                                 <div class="row ">
                                     <div class="col-lg-10 col-sm-12 pt-2">
-                                        <h3 class="card-title" style="width:100%; text-align:center">Service Charge</h3>
+                                        <h3 class="card-title text" style="width:100%; text-align:center">Service Charge</h3>
                                     </div>
                                 </div>
                             </div>
@@ -30,9 +57,9 @@
                                                 {{-- <div class="col-lg-3">
                                                     <strong><span>Service charge</span></strong>
                                                 </div> --}}
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3 date">
                                                     {{-- <label for="" class="col-form-label">Select Year</label> --}}
-                                                    <select name="year" class="form-control" id="">
+                                                    <select name="year" class="form-control text" id="">
                                                         <option value="" selected disabled>Select Year</option>
                                                         <option value="2023"
                                                             @if ('2023' == date('Y')) selected @endif>Year 2023
@@ -61,9 +88,9 @@
                                                     </select>
                                                 </div>
                                                 {{-- 'month', date('m'))->where('year', date('Y') --}}
-                                                <div class="col-lg-3">
+                                                <div class="col-lg-3 date">
                                                     {{-- <label for="" class="col-form-label">Select Month</label> --}}
-                                                    <select name="month" class="form-control" id="">
+                                                    <select name="month" class="form-control text" id="">
                                                         <option value="" selected disabled>Select Month </option>
                                                         <option value="1"
                                                             @if ('1' == date('m')) selected @endif>January
@@ -121,7 +148,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="row">
-                                                <div class="col-lg-8 col-sm-6">
+                                                <div class="col-lg-8 col-sm-6 text">
                                                     Service Charge for the Month of <strong>
                                                         @if ('1' == date('m'))
                                                             January
@@ -150,7 +177,7 @@
                                                         @endif - {{ date('Y') }}
                                                     </strong>
                                                 </div>
-                                                <div class="col-lg-8 col-sm-6">
+                                                <div class="col-lg-8 col-sm-6 text">
                                                     @if (isset($opening_balance) && !empty($data))
                                                         @if ($opening_balance->flag == 1)
                                                             <h3 class="card-title"><strong>Opening Balance
@@ -202,7 +229,7 @@
                                     </div>
                                 </div>
                             @else
-                                <h5 class="text-center py-3">Data Not Found</h5>
+                                <h5 class="text-center py-3 text">Data Not Found</h5>
                             @endif
                         </div>
                     </div>

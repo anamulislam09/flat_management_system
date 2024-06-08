@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Mail\ForgotPasswordMail;
+use App\Models\Balance;
 use App\Models\Client;
 use App\Models\Exp_process;
+use App\Models\Expense;
 use App\Models\ExpenseVoucher;
 use App\Models\ExpSetup;
 use App\Models\Flat;
@@ -14,6 +16,7 @@ use App\Models\OthersIncome;
 use App\Models\Package;
 use App\Models\SetupHistory;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Auth;
 use Carbon\Carbon;
@@ -266,7 +269,7 @@ class AdminController extends Controller
     public function ClientAll()
     {
         if (Auth::guard('admin')->user()->role == 0) {
-            $data = Client::where('role', 1)->get();
+            $data = Client::where('role', 1)->where('isVerified', 1)->get();
             return view('superadmin.clients.clientAll', compact('data'));
         } else {
             $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
@@ -279,18 +282,17 @@ class AdminController extends Controller
     {
         // dd($request->id);
         if (Auth::guard('admin')->user()->role == 0) {
-            Exp_detail::where('client_id', $request->id)->delete();
+            Expense::where('client_id', $request->id)->delete();
             ExpenseVoucher::where('client_id', $request->id)->delete();
             Exp_process::where('client_id', $request->id)->delete();
-            YearlyBlance::where('client_id', $request->id)->delete();
+            Balance::where('client_id', $request->id)->delete();
             Income::where('client_id', $request->id)->delete();
-            MonthlyBlance::where('client_id', $request->id)->delete();
             OpeningBalance::where('client_id', $request->id)->delete();
             OthersIncome::where('client_id', $request->id)->delete();
             User::where('client_id', $request->id)->delete();
             Flat::where('client_id', $request->id)->delete();
             // Flat::where('client_id', $request->id)->delete();
-            Addressbook::where('client_id', $request->id)->delete();
+            Vendor::where('client_id', $request->id)->delete();
             ExpSetup::where('client_id', $request->id)->delete();
             SetupHistory::where('client_id', $request->id)->delete();
 
@@ -308,11 +310,11 @@ class AdminController extends Controller
     {
 
         $data['flats'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
-        $data['expense'] = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
+        $data['expense'] = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
         $data['income'] = Income::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('paid');
         $manualOpeningBalance = DB::table('opening_balances')->where('client_id', Auth::guard('admin')->user()->id)->where('entry_datetime', $date)->first();
         $data['others_income'] = DB::table('others_incomes')->where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
-        $data['balance'] = MonthlyBlance::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
+        $data['balance'] = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
 
         return response()->json($data);
     }

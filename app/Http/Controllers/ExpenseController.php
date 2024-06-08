@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Exp_detail;
 use App\Models\Expense;
 use Illuminate\Http\Request;
@@ -10,47 +11,59 @@ use Carbon\Carbon;
 
 class ExpenseController extends Controller
 {
-    /**
+   /**
      * Display a listing of the resource.
      */
     public function Index()
     {
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
-        $expense = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->groupBy('cat_id')->get();
-        return view('admin.accounts.ladger_account', compact('expense'));
+        $expSummary = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->groupBy('cat_id')->get();
+        return view('admin.expenses.expense.expense_summary', compact('expSummary'));
     }
 
-    public function store(Request $request)
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function Create()
     {
-        // $month = Carbon::now()->month;
-        // $year = Carbon::now()->year;
-        // $isExist = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->exists();
-        // if ($isExist) {
-        //     return redirect()->back()->with('message', ' You have already close this month');
-        // } else {
-        //     $expenses = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->groupBy('cat_id')->get();
-        //     // $expenses = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->groupBy('cat_id')->get();
+        $exp_cat = Category::get();
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
+        $expense = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->orderBy('id', 'DESC')->get();
 
-        //     foreach ($expenses as $expense) {
-        //         $data['year'] = $expense->year;
-        //         $data['month'] = $expense->month;
-        //         $data['cat_id'] = $expense->cat_id;
-        //         $data['sub_total'] = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->where('cat_id', $expense->cat_id)->SUM('amount');
-        //         // $data['total'] = $expense->cat_id;
-        //         $data['client_id'] = $expense->client_id;
-        //         $data['auth_id'] = $expense->auth_id;
-        //         Expense::create($data);
-        //     }
+        return view('admin.expenses.expense.create', compact('exp_cat', 'expense'));
+    }
 
-        //     return redirect()->back()->with('message', 'Month close successfully');
-        // }
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function Store(Request $request)
+    {
+        $month = Carbon::now()->month;
+        $year = Carbon::now()->year;
+
+        $data['cat_id'] = $request->cat_id;
+        $data['client_id'] = Auth::guard('admin')->user()->id;
+        $data['year'] = $year;
+        $data['month'] = $month;
+        $data['amount'] = abs($request->amount);
+        $data['date'] = date('Y-m');
+        $data['auth_id'] = Auth::guard('admin')->user()->id;
+        // dd($data);
+        $exp = Expense::create($data);
+
+        if (!$exp) {
+            return redirect()->back()->with('message', 'Something went wrong');
+        } else {
+            return redirect()->back()->with('message', 'Expense creted successfully');
+        }
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Expense $expense)
+    public function show(Exp_detail $exp_detail)
     {
         //
     }
@@ -58,24 +71,34 @@ class ExpenseController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Expense $expense)
+    public function Edit($id)
     {
-        //
+        $data = Expense::findOrFail($id);
+        $exp_cat = Category::get();
+        return view('admin.expenses.expense.edit', compact('data', 'exp_cat'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Expense $expense)
+    public function Update(Request $request)
     {
-        //
+        $id = $request->id;
+        $data = Expense::findOrFail($id);
+        $data['cat_id'] = $request->cat_id;
+        $data['amount'] = abs($request->amount);
+        $data->save();
+        return redirect()->back()->with('message', 'Expense Updated Uuccessfully.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Expense $expense)
+    public function Delate($id)
     {
-        //
+        $data = Expense::findOrFail($id);
+        $data->delete();
+        return redirect()->back()->with('message', 'Expense deleted successfully.');
     }
 }
+

@@ -1,7 +1,25 @@
 @extends('layouts.admin')
 
 @section('admin_content')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
+    <style>
+        @media screen and (max-width: 767px) {
+          
+            table,
+            thead,
+            tbody,
+            tr,
+            td {
+                font-size: 15px;
+            }
+
+            .text {
+                font-size: 14px;
+            }
+            .button{
+                font-size: 14px;
+            }
+        }
+    </style>
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
@@ -11,8 +29,8 @@
                         <div class="card">
                             <div class="card-header bg-primary">
                                 <div class="row">
-                                    <div class="col-lg-10 col-sm-12">
-                                        <h3 class="card-title">Expense Summary for the Month of <strong>
+                                    <div class="col-lg-10 col-md-10 col-sm-9">
+                                        <h3 class="card-title text">Expense Summary for the Month of <strong>
                                                 @if ('1' == date('m'))
                                                     January
                                                 @elseif ('2' == date('m'))
@@ -42,9 +60,9 @@
 
                                     @if (count($expSummary) < 1)
                                     @else
-                                        <div class="col-lg-2 col-sm-12">
+                                        <div class="col-lg-2 col-md-2 col-sm-3">
                                             <a href="{{ route('expense.voucher.generateall') }}"
-                                                class="btn btn-light">General Voucher</a>
+                                                class="btn btn-sm btn-light button mt-2">General Voucher</a>
                                         </div>
                                     @endif
 
@@ -92,7 +110,7 @@
                                                         $data = DB::table('categories')
                                                             ->where('id', $item->cat_id)
                                                             ->first();
-                                                        $amount = App\Models\Exp_detail::where(
+                                                        $amount = App\Models\Expense::where(
                                                             'client_id',
                                                             Auth::guard('admin')->user()->id,
                                                         )
@@ -101,7 +119,7 @@
                                                             ->where('cat_id', $item->cat_id)
                                                             ->sum('amount');
                                                         // dd($amount);
-                                                        $total = App\Models\Exp_detail::where(
+                                                        $total = App\Models\Expense::where(
                                                             'client_id',
                                                             Auth::guard('admin')->user()->id,
                                                         )

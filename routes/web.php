@@ -95,8 +95,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 
     // users route 
     Route::get('/users', [UserController::class, 'Index'])->name('users.index');
-    Route::get('/users/create', [UserController::class, 'Create'])->name('users.create');
-    Route::post('/users/store', [UserController::class, 'Store'])->name('users.store');
+    // Route::get('/users/create', [UserController::class, 'Create'])->name('users.create');
+    // Route::post('/users/store', [UserController::class, 'Store'])->name('users.store');
     Route::get('/users/edit/{id}', [UserController::class, 'Edit']);
     Route::post('/users/update', [UserController::class, 'Update'])->name('users.update');
     Route::post('/users/delete', [UserController::class, 'Destroy'])->name('users.delete');
@@ -106,13 +106,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::post('/user/store', [UserController::class, 'SingleStore'])->name('user.store');
 
     // Expense-details route 
-    Route::get('/expense/create', [ExpDetailController::class, 'Create'])->name('expense.create');
-    Route::post('/expense/store', [ExpDetailController::class, 'Store'])->name('expense.store');
-    Route::get('/expense-details/edit/{id}', [ExpDetailController::class, 'Edit']);
-    Route::post('/expense-details/update', [ExpDetailController::class, 'Update'])->name('expense-details.update');
-    Route::get('/expense-details/delate/{id}', [ExpDetailController::class, 'Delate'])->name('expense-details.delate');
+    Route::get('/expense/create', [ExpenseController::class, 'Create'])->name('expense.create');
+    Route::post('/expense/store', [ExpenseController::class, 'Store'])->name('expense.store');
+    Route::get('/expense/edit/{id}', [ExpenseController::class, 'Edit']);
+    Route::post('/expense/update', [ExpenseController::class, 'Update'])->name('expense.update');
+    Route::get('/expense/delate/{id}', [ExpenseController::class, 'Delate'])->name('expense.delate');
 
-    Route::get('/expense-summary', [ExpDetailController::class, 'Index'])->name('expense-summary.index');
+    Route::get('/expense-summary', [ExpenseController::class, 'Index'])->name('expense-summary.index');
 
     // Expense setup route 
     Route::get('/expense-setup', [ExpSetupController::class, 'ExpenseSetupIndex'])->name('expense.setup');

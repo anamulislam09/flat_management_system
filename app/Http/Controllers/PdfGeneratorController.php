@@ -2,16 +2,13 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Addressbook;
 use App\Models\Category;
-use App\Models\Customer;
-use App\Models\CustomerDetail;
-use App\Models\Exp_detail;
+use App\Models\Client;
 use App\Models\Expense;
 use App\Models\ExpenseVoucher;
 use App\Models\Income;
 use App\Models\User;
-// use Barryvdh\DomPDF\PDF;
+use App\Models\Vendor;
 use PDF;
 
 use Illuminate\Http\Request;
@@ -24,8 +21,8 @@ class PdfGeneratorController extends Controller
     // Expense Management generate all voucher 
     public function CreateVoucher($id)
     {
-        $exp = Exp_detail::where('id', $id)->where('client_id', Auth::guard('admin')->user()->id)->first();
-        return view('admin.expense.exp_details.receiver_info', compact('exp'));
+        $exp = Expense::where('id', $id)->where('client_id', Auth::guard('admin')->user()->id)->first();
+        return view('admin.expenses.expense.receiver_info', compact('exp'));
     }
 
     public function CreateVoucherStore(Request $request)
@@ -37,15 +34,14 @@ class PdfGeneratorController extends Controller
         $data['name'] = $request->name;
         $data['phone'] = $request->phone;
         $data['address'] = $request->address;
-        Addressbook::create($data);
+        Vendor::create($data);
         return redirect()->back()->with('message', 'Successfully added');
-
     }
 
     public function GenerateVoucher(Request $request)
     {
-        $exp = Exp_detail::where('id', $request->exp_id)->where('client_id', Auth::guard('admin')->user()->id)->first();
-        
+        $exp = Expense::where('id', $request->exp_id)->where('client_id', Auth::guard('admin')->user()->id)->first();
+
         $v_id = 1;
         $isExist = ExpenseVoucher::where('client_id', Auth::guard('admin')->user()->id)->exists();
         if ($isExist) {
@@ -54,7 +50,7 @@ class PdfGeneratorController extends Controller
         } else {
             $data['voucher_id'] = $this->formatSrl($v_id);
         }
-
+        // dd($request);
 
         $data['month'] = $exp->month;
         $data['year'] = $exp->year;
@@ -63,26 +59,23 @@ class PdfGeneratorController extends Controller
         $data['auth_id'] = Auth::guard('admin')->user()->id;
         $data['cat_id'] = $exp->cat_id;
         $data['amount'] = abs($request->amount);
-        $data['receiver_id'] = $request->receiver_id;
+        $data['vendor_id'] = $request->vendor_id;
+        // dd($data);
         $voucher = ExpenseVoucher::create($data);
         if ($voucher) {
             $inv = ExpenseVoucher::where('client_id', Auth::guard('admin')->user()->id)->latest()->first();
             $exp_name = Category::where('id', $inv->cat_id)->first();
-            $receiver = Addressbook::where('client_id', Auth::guard('admin')->user()->id)->where('id', $inv->receiver_id)->first();
-            $customer = Customer::where('id', Auth::guard('admin')->user()->id)->first();
-            $custDetails = CustomerDetail::where('client_id', $customer->id)->first();
+            $vendor = Vendor::where('client_id', Auth::guard('admin')->user()->id)->where('id', $inv->vendor_id)->first();
+            $client = Client::where('id', Auth::guard('admin')->user()->id)->first();
 
             $data = [
                 'inv' => $inv,
                 'exp_name' => $exp_name,
-                'receiver' => $receiver,
-                'customer' => $customer,
-                'custDetails' => $custDetails,
+                'vendor' => $vendor,
+                'client' => $client,
             ];
-            // dd($data);
-            $pdf = PDF::loadView('admin.expense.voucher.index', $data);
+            $pdf = PDF::loadView('admin.expenses.voucher.index', $data);
             return $pdf->stream('sdl.pdf');
-            // return redirect()->back('expense.create')->$pdf->download('sdl.pdf');
         }
     }
 
@@ -115,38 +108,38 @@ class PdfGeneratorController extends Controller
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
 
-        $inv = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->groupBy('cat_id')->get();
-        $total = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('amount');
+        $inv = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->groupBy('cat_id')->get();
+        $total = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('amount');
         // $total = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month) ->where('year', $year)->sum('amount');
-        $customer = Customer::where('id', Auth::guard('admin')->user()->id)->first();
-        $custDetails = CustomerDetail::where('client_id', $customer->id)->first();
+        $client = Client::where('id', Auth::guard('admin')->user()->id)->first();
+        // $custDetails = CustomerDetail::where('client_id', $customer->id)->first();
 
         $data = [
             'inv' => $inv,
             'total' => $total,
-            'customer' => $customer,
-            'custDetails' => $custDetails,
+            'client' => $client,
+            // 'custDetails' => $custDetails,
         ];
-        $pdf = PDF::loadView('admin.expense.voucher.exp_all', $data);
+        $pdf = PDF::loadView('admin.expenses.voucher.exp_all', $data);
         return $pdf->stream('sdl.pdf');
     }
 
     // Account Expense generate all voucher 
     public function GenerateExpenseVoucherAll(Request $request)
     {
-        $inv = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
-        $total = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->sum('amount');
-        $month = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->first();
+        $inv = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
+        $total = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->sum('amount');
+        $month = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->first();
 
-        $customer = Customer::where('id', Auth::guard('admin')->user()->id)->first();
-        $custDetails = CustomerDetail::where('client_id', $customer->id)->first();
+        $client = Client::where('id', Auth::guard('admin')->user()->id)->first();
+        // $custDetails = CustomerDetail::where('client_id', $customer->id)->first();
 
         $data = [
             'inv' => $inv,
             'total' => $total,
             'month' => $month,
-            'customer' => $customer,
-            'custDetails' => $custDetails,
+            'client' => $client,
+            // 'custDetails' => $custDetails,
         ];
         $pdf = PDF::loadView('admin.accounts.exp_voucher_all', $data);
         return $pdf->stream('sdl_exp.pdf');
@@ -157,16 +150,16 @@ class PdfGeneratorController extends Controller
     {
         $inv = Income::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
         $user = User::where('client_id', Auth::guard('admin')->user()->id)->where('flat_id', $inv->flat_id)->first();
-        $customer = Customer::where('id', Auth::guard('admin')->user()->id)->first();
-        $custDetails = CustomerDetail::where('client_id', $customer->id)->first();
+        $client = Client::where('id', Auth::guard('admin')->user()->id)->first();
+        // $custDetails = CustomerDetail::where('client_id', $customer->id)->first();
 
         $data = [
             'inv' => $inv,
             'user' => $user,
-            'customer' => $customer,
-            'custDetails' => $custDetails,
+            'client' => $client,
+            // 'custDetails' => $custDetails,
         ];
-        $pdf = PDF::loadView('admin.expense.voucher.money_receipt', $data);
+        $pdf = PDF::loadView('admin.expenses.voucher.money_receipt', $data);
         return $pdf->stream('sdl_collection.pdf');
     }
 
@@ -176,17 +169,17 @@ class PdfGeneratorController extends Controller
         $inv = Income::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->get();
         $month = Income::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->first();
         // $user = User::where('client_id', Auth::guard('admin')->user()->id)->where('flat_id', $inv->flat_id)->first();
-        $customer = Customer::where('id', Auth::guard('admin')->user()->id)->first();
-        $custDetails = CustomerDetail::where('client_id', $customer->id)->first();
+        $client = Client::where('id', Auth::guard('admin')->user()->id)->first();
+        // $custDetails = CustomerDetail::where('client_id', $customer->id)->first();
 
         $data = [
             'inv' => $inv,
             'month' => $month,
-            'customer' => $customer,
-            'custDetails' => $custDetails,
+            'client' => $client,
+            // 'custDetails' => $custDetails,
         ];
         // dd($data);
-        $pdf = PDF::loadView('admin.expense.voucher.money_receipt_all', $data);
+        $pdf = PDF::loadView('admin.expenses.voucher.money_receipt_all', $data);
         return $pdf->stream('sdl_collection.pdf');
     }
     // Income Management generate all income voucher 

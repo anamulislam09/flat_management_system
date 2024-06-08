@@ -140,10 +140,10 @@
             </div> --}}
 
             <div class="header-text">
-                <h1>{{ $customer->name }}</h1>
-                <p>{{ $custDetails->address }}</p>
-                <p>{{ $custDetails->phone }}</p>
-                <p>{{ $customer->email }}</p>
+                <h1>{{ $client->name }}</h1>
+                <p>{{ $client->address }}</p>
+                <p>{{ $client->phone }}</p>
+                <p>{{ $client->email }}</p>
             </div>
 
             <div class="status">
@@ -153,9 +153,9 @@
 
         <div class="bodyInfo">
             <div class="left-text">
-                <p>Name : {{ $receiver->name }}</p>
-                <p>Phone : {{ $receiver->phone }}</p>
-                <p>Address : {{ $receiver->address }}</p>
+                <p>Name : {{ $vendor->name }}</p>
+                <p>Phone : {{ $vendor->phone }}</p>
+                <p>Address : {{ $vendor->address }}</p>
             </div>
             <div class="right-text">
                 <p>Voucher No : {{ $inv->voucher_id }}</p>

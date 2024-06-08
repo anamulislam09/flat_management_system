@@ -129,10 +129,10 @@
             {{-- </div> --}}
 
             <div class="header-text">
-                <h1>{{ $customer->name }}</h1>
-                <p>{{ $custDetails->address }}</p>
-                <p>{{ $custDetails->phone }}</p>
-                <p>{{ $customer->email }}</p>
+                <h1>{{ $client->name }}</h1>
+                <p>{{ $client->address }}</p>
+                <p>{{ $client->phone }}</p>
+                <p>{{ $client->email }}</p>
             </div>
 
             {{-- <div class="status" style="text-align: center"> --}}
@@ -334,12 +334,12 @@
         <div class="footer">
             <div class="Prepared">
                 @php
-                    $customer = App\Models\Customer::where('id', $inv->auth_id)->first();
+                    $client = App\Models\Client::where('id', $inv->auth_id)->first();
                     $user = App\Models\User::where('user_id', $inv->auth_id)->first();
                 @endphp
                 @if ($inv->auth_id == Auth::guard('admin')->user()->id)
                     <p style=" margin-bottom:-0px; text-align:center; width:40%">
-                        {{ $customer->name }}</p>
+                        {{ $client->name }}</p>
                 @else
                     <p style="margin-bottom:-0px; text-align:center; width:40%">
                         {{ $user->name }}</p>

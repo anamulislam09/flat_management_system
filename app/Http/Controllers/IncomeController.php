@@ -171,7 +171,7 @@ class IncomeController extends Controller
                                         'date' => date('Y-m'),
                                     ]);
                                 }
-                                return redirect()->back()->with('message', 'Service5 charge added successfully');
+                                return redirect()->back()->with('message', 'Service charge added successfully');
                             }
                         }
                     }
@@ -189,11 +189,13 @@ class IncomeController extends Controller
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
         $data = Income::where('month', $month)->where('year', $year)->where('client_id', Auth::guard('admin')->user()->id)->get();
+        dd($data);
         return view('admin.income.collection', compact('data'));
     }
 
     public function StoreCollection(Request $request)
     {
+        dd($request);
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
         $flat_id = $request->flat_id;

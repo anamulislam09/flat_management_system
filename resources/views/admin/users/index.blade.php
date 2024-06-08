@@ -2,6 +2,19 @@
 
 @section('admin_content')
     <style>
+           @media screen and (max-width: 767px) {
+    div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_filter, div.dataTables_wrapper div.dataTables_info, div.dataTables_wrapper div.dataTables_paginate{
+text-align: right !important;
+    }
+    
+    .card-title a{
+        font-size: 15px;
+    }
+    table, thead, tbody, tr, td{
+        font-size: 15px;
+    }
+
+    }
         a.disabled {
             pointer-events: none;
             cursor: default;
@@ -44,7 +57,7 @@
                                         @php
                                             $flat = DB::table('flats')
                                                 ->where('client_id', Auth::guard('admin')->user()->id)
-                                                ->where('flat_unique_id', $item->flat_id)
+                                                ->where('flat_id', $item->flat_id)
                                                 ->first();
                                         @endphp
                                         <tr>
@@ -90,7 +103,7 @@
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content" id="model-main">
-                {{-- <div class="modal-header">
+                <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">User Edit Form</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -99,7 +112,7 @@
 
                 <div id="modal_body">
 
-                </div> --}}
+                </div>
 
             </div>
         </div>
