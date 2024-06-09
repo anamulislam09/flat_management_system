@@ -46,9 +46,9 @@ class IncomeController extends Controller
                             Income::insert([
                                 'month' => $request->month,
                                 'year' => $request->year,
-                                'flat_id' => $flats[$i]->flat_unique_id,
+                                'flat_id' => $flats[$i]->flat_id,
                                 'client_id' => $flats[$i]->client_id,
-                                // 'auth_id' => Auth::guard('admin')->user()->id,
+                                'auth_id' => Auth::guard('admin')->user()->id,
                                 'flat_name' => $flats[$i]->flat_name,
                                 'charge' => $flats[$i]->charge,
                                 'amount' => $flats[$i]->amount,
@@ -81,9 +81,9 @@ class IncomeController extends Controller
                                     $income = Income::insert([
                                         'month' => $month,
                                         'year' => $year,
-                                        'flat_id' => $flats[$i]->flat_unique_id,
+                                        'flat_id' => $flats[$i]->flat_id,
                                         'client_id' => $flats[$i]->client_id,
-                                        // 'auth_id' => Auth::guard('admin')->user()->id,
+                                        'auth_id' => Auth::guard('admin')->user()->id,
                                         'flat_name' => $flats[$i]->flat_name,
                                         'charge' => $flats[$i]->charge,
                                         'amount' => $flats[$i]->amount,
@@ -106,9 +106,9 @@ class IncomeController extends Controller
                                     Income::insert([
                                         'month' => $month,
                                         'year' => $year,
-                                        'flat_id' => $flats[$i]->flat_unique_id,
+                                        'flat_id' => $flats[$i]->flat_id,
                                         'client_id' => $flats[$i]->client_id,
-                                        // 'auth_id' => Auth::guard('admin')->user()->id,
+                                        'auth_id' => Auth::guard('admin')->user()->id,
                                         'flat_name' => $flats[$i]->flat_name,
                                         'charge' => $flats[$i]->charge,
                                         'amount' => $flats[$i]->amount,
@@ -142,7 +142,7 @@ class IncomeController extends Controller
                                         'year' => $year,
                                         'flat_id' => $flats[$i]->flat_id,
                                         'client_id' => $flats[$i]->client_id,
-                                        // 'auth_id' => Auth::guard('admin')->user()->id,
+                                        'auth_id' => Auth::guard('admin')->user()->id,
                                         'flat_name' => $flats[$i]->flat_name,
                                         'charge' => $flats[$i]->charge,
                                         'amount' => $flats[$i]->amount,
@@ -161,9 +161,9 @@ class IncomeController extends Controller
                                     Income::insert([
                                         'month' => $month,
                                         'year' => $year,
-                                        'flat_id' => $flats[$i]->flat_unique_id,
+                                        'flat_id' => $flats[$i]->flat_id,
                                         'client_id' => $flats[$i]->client_id,
-                                        // 'auth_id' => Auth::guard('admin')->user()->id,
+                                        'auth_id' => Auth::guard('admin')->user()->id,
                                         'flat_name' => $flats[$i]->flat_name,
                                         'charge' => $flats[$i]->charge,
                                         'amount' => $flats[$i]->amount,
@@ -189,13 +189,12 @@ class IncomeController extends Controller
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
         $data = Income::where('month', $month)->where('year', $year)->where('client_id', Auth::guard('admin')->user()->id)->get();
-        dd($data);
+        // dd($data);
         return view('admin.income.collection', compact('data'));
     }
 
     public function StoreCollection(Request $request)
     {
-        dd($request);
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
         $flat_id = $request->flat_id;

@@ -1,3 +1,20 @@
+<style>
+    @media screen and (max-width: 767px) {
+
+        ul,
+        li,
+        a {
+            font-size: 13px !important;
+        }
+    }
+
+    ul,
+    li,
+    a {
+        font-size: 15px;
+    }
+</style>
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4 p-0">
     <!-- Brand Logo -->
     <a href="{{ route('admin.dashboard') }}" class="brand-link bg-success text-center">
@@ -12,18 +29,20 @@
     <div class="sidebar mt-3">
         <!-- Category start here -->
         <nav class=" mb-5">
-            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
-                data-accordion="false">
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                 <li class="nav-item ">
-                        <a href="{{ route('admin.dashboard') }}" class="nav-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-circle"></i>
-                            <p> Dashboard </p>
-                        </a>
-                       
-                    </li>
+                    <a href="{{ route('admin.dashboard') }}"
+                        class="nav-link {{ Request::routeIs('admin.dashboard') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p> Dashboard </p>
+                    </a>
+
+                </li>
                 @if (Auth::guard('admin')->user()->role == 0)
-                    <li class="nav-item {{ Request::routeIs('client.all') || Request::routeIs('client.edit') ? 'menu-open' : '' }}">
-                        <a href="#" class="nav-link {{ Request::routeIs('client.all') || Request::routeIs('client.edit') ? 'active' : '' }}">
+                    <li
+                        class="nav-item {{ Request::routeIs('client.all') || Request::routeIs('client.edit') ? 'menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ Request::routeIs('client.all') || Request::routeIs('client.edit') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>
                                 Clients
@@ -50,31 +69,33 @@
                         </a>
                     </li> --}}
 
-                    <li class="nav-item {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-circle"></i>
-                        <p>
-                            Expense Category
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview ml-3">
-                        <li class="nav-item">
-                            <a href="{{ route('category.index') }}"
-                                class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.edit') ? 'active' : '' }}">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>All Categories</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('category.create') }}"
-                                class="nav-link {{ Request::routeIs('category.create') ? 'active' : '' }}">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Add New</p>
-                            </a>
-                        </li>
-                    </ul>
-                </li>
+                    <li
+                        class="nav-item {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                Expense Category
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('category.index') }}"
+                                    class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.edit') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Categories</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('category.create') }}"
+                                    class="nav-link {{ Request::routeIs('category.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Add New</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
 
                     <li class="nav-item">
                         <a href="{{ route('client.index') }}"
@@ -86,32 +107,33 @@
                     {{-- expense category ends here --}}
                     {{-- Package route Srtart here --}}
                     <li
-                    class="nav-item {{ Request::routeIs('package.all') || Request::routeIs('package.create') || Request::routeIs('package.edit') ? 'menu-open' : '' }}">
-                    <a href="#" class="nav-link {{ Request::routeIs('package.all') || Request::routeIs('package.create') || Request::routeIs('package.edit') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-circle"></i>
-                        <p>
-                            Packages
-                            <i class="right fas fa-angle-left"></i>
-                        </p>
-                    </a>
-                    <ul class="nav nav-treeview ml-3">
-                        <li class="nav-item">
-                            <a href="{{ route('package.all') }}"
-                                class="nav-link {{ Request::routeIs('package.all') || Request::routeIs('package.edit') ? 'active' : '' }}">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>All packages</p>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{{ route('package.create') }}"
-                                class="nav-link {{Request::routeIs('package.create') ? 'active' : '' }}">
-                                <i class="far fa-dot-circle nav-icon"></i>
-                                <p>Add New</p>
-                            </a>
-                        </li>
+                        class="nav-item {{ Request::routeIs('package.all') || Request::routeIs('package.create') || Request::routeIs('package.edit') ? 'menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ Request::routeIs('package.all') || Request::routeIs('package.create') || Request::routeIs('package.edit') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                Packages
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('package.all') }}"
+                                    class="nav-link {{ Request::routeIs('package.all') || Request::routeIs('package.edit') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All packages</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('package.create') }}"
+                                    class="nav-link {{ Request::routeIs('package.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Add New</p>
+                                </a>
+                            </li>
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
 
                     {{-- Package route ends here --}}
                 @endif
@@ -373,61 +395,72 @@
 
                     {{-- All Setup history  start here --}}
                     <li class="nav-item ">
-                        <a href="{{route('expense.setup.history')}}" class="nav-link {{ Request::routeIs('expense.setup.history') ? 'active' : '' }}">
+                        <a href="{{ route('expense.setup.history') }}"
+                            class="nav-link {{ Request::routeIs('expense.setup.history') ? 'active' : '' }}">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>Setup History
                             </p>
                         </a>
                     </li>
 
-                     {{-- All Vendors mewnu start here --}}
-                     <li
-                     class="nav-item {{ Request::routeIs('vendor.all') || Request::routeIs('vendor.create') || Request::routeIs('vendor.edit') ? 'menu-open' : '' }}">
-                     <a href="#" class="nav-link">
-                         <i class="nav-icon fas fa-circle"></i>
-                         <p>Vendors<i class="right fas fa-angle-left"></i>
-                         </p>
-                     </a>
-                     <ul class="nav nav-treeview ml-3">
-                         <li class="nav-item">
-                             <a href="{{ route('vendor.create') }}"
-                                 class="nav-link {{ Request::routeIs('vendor.create') ? 'active' : '' }}">
-                                 <i class="far fa-dot-circle nav-icon"></i>
-                                 <p>Add New Vendor</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ route('vendor.all') }}"
-                                 class="nav-link {{ Request::routeIs('vendor.all') ? 'active' : '' }}">
-                                 <i class="far fa-dot-circle nav-icon"></i>
-                                 <p>All Vendors</p>
-                             </a>
-                         </li>
-                     </ul>
-                 </li>
-                 {{-- All Vendors menu ends here --}}
-
-                    {{-- All Setup history ends here --}}
-
-                    {{-- Roles & Parmission start here --}}
-                    {{-- <li class="nav-item">
+                    {{-- All Vendors mewnu start here --}}
+                    <li
+                        class="nav-item {{ Request::routeIs('vendor.all') || Request::routeIs('vendor.create') || Request::routeIs('vendor.edit') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
-                            <p>
-                                Roles & Permission
-                                <i class="right fas fa-angle-left"></i>
+                            <p>Vendors<i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-3">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('vendor.create') }}"
+                                    class="nav-link {{ Request::routeIs('vendor.create') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>All Permission</p>
+                                    <p>Add New Vendor</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('vendor.all') }}"
+                                    class="nav-link {{ Request::routeIs('vendor.all') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Vendors</p>
                                 </a>
                             </li>
                         </ul>
-                    </li> --}}
-                    {{-- Roles & Parmission ends here --}}
+                    </li>
+                    {{-- All Vendors mewnu start here --}}
+                    <li
+                        class="nav-item {{ Request::routeIs('guestBook.index') || Request::routeIs('guestBook.create') || Request::routeIs('guestBook.edit') || Request::routeIs('guestBook.history') ? 'menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ Request::routeIs('guestBook.index') || Request::routeIs('guestBook.create') || Request::routeIs('guestBook.edit') || Request::routeIs('guestBook.history') ? 'Active' : '' }}">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>Guest Manage<i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('guestBook.create') }}"
+                                    class="nav-link {{ Request::routeIs('guestBook.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Add New</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('guestBook.index') }}"
+                                    class="nav-link {{ Request::routeIs('guestBook.index') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Guests</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('guestBook.history') }}"
+                                    class="nav-link {{ Request::routeIs('guestBook.history') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Guest History</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 @endif
             </ul>
         </nav>

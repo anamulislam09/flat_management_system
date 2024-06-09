@@ -56,16 +56,33 @@
             font-size: 14px
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
     <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Guest</h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Dashboard</a></li>
+                            <li class="breadcrumb-item active">Guest</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
         <!-- Main content -->
-        <section class="content mt-3">
+        <section class="content">
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header bg-primary text-center text">
-                                <h3 class="card-title" style="width:100%; text-align:center; font-size:14px">All Users</h3>
+                            <div class="card-header bg-primary text-center text p-1">
+                                <h3 class="card-title">
+                                    <a href="{{ route('guestBook.create') }}"class="btn btn-light shadow rounded m-0"><i
+                                            class="fas fa-plus"></i><span>Add New</span></a>
+                                </h3>
                             </div>
                             {{-- </div> --}}
                             <!-- /.card-header -->
@@ -73,49 +90,26 @@
                                 <table id="example1" class="table table-bordered table-striped">
                                     <thead>
                                         <tr>
-                                            <th>User Id</th>
-                                            {{-- <th width="10%">client_id</th> --}}
-                                            <th>User Name</th>
-                                            <th>Flat Name</th>
-                                            <th>Phone/Passport</th>
-                                            <th>Email</th>
-                                            <th>NID/NRC</th>
-                                            <th>Status</th>
-                                            {{-- <th>Role_id</th> --}}
-                                            <th> Action</th>
+                                            <th>SL</th>
+                                            <th>Guest Name</th>
+                                            <th>Phone</th>
+                                            <th>Address</th>
+                                            <th>Image</th>
+                                            {{-- <th>Created By</th> --}}
+                                            <th>Action</th>
                                     </thead>
                                     <tbody>
-                                        @foreach ($data as $key => $item)
-                                            @php
-                                                $flat = DB::table('flats')
-                                                    ->where('client_id', Auth::guard('admin')->user()->id)
-                                                    ->where('flat_id', $item->flat_id)
-                                                    ->first();
-                                            @endphp
+                                        @foreach ($guests as $key => $item)
                                             <tr>
-                                                <td>{{ $item->user_id }}</td>
                                                 <td>{{ $item->name }}</td>
-                                                @if (!empty($flat))
-                                                    <td>{{ $flat->flat_name }}</td>
-                                                @else
-                                                    <td class="text-center">-----</td>
-                                                @endif
                                                 <td>{{ $item->phone }}</td>
-                                                <td>{{ $item->email }}</td>
-                                                <td>{{ $item->nid_no }}</td>
-                                                <td>
-                                                    @if ($item->status == 0)
-                                                        <span class="badge badge-danger">Deactive</span>
-                                                    @else
-                                                        <span class="badge badge-primary">Active</span>
-                                                    @endif
-                                                </td>
+                                                <td>{{ $item->image }}</td>
+                                                <td>{{ $item->address }}</td>
+                                                <td>{{ $item->address }}</td>
                                                 <td>
                                                     <a href="" class="btn btn-sm btn-info edit"
                                                         data-id="{{ $item->id }}" data-toggle="modal"
                                                         data-target="#editUser"><i class="fas fa-edit"></i></a>
-                                                    {{-- <a href="{{ route('user.delete', $item->id) }}"
-                                                    class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a> --}}
                                                 </td>
                                             </tr>
                                         @endforeach

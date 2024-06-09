@@ -24,8 +24,9 @@
                         <div class="card">
                             <div class="card-header bg-primary p-1">
                                 <h3 class="card-title">
-                                    <a href="{{route('client.all')}}"class="btn btn-light shadow rounded m-0"> <span>Cancel Edit
-                                            </span></a>
+                                    <a href="{{ route('client.all') }}"class="btn btn-light shadow rounded m-0">
+                                        <span>Cancel Edit
+                                        </span></a>
                                 </h3>
                             </div>
                             <div class="card-body">
@@ -37,14 +38,14 @@
                                             <div class="modal-body">
                                                 <div class="mb-3 mt-3">
                                                     <label for="user_name" class="form-label"> Client Name:</label>
-                                                    <input type="text" readonly class="form-control" value="{{ $data->name }}"
-                                                        name="name">
+                                                    <input type="text" readonly class="form-control"
+                                                        value="{{ $data->name }}" name="name">
                                                 </div>
 
                                                 <div class="mb-3 mt-3">
                                                     <label for="user_phone" class="form-label">Phone:</label>
-                                                    <input type="text" readonly class="form-control" value="{{ $data->phone }}"
-                                                        name="phone">
+                                                    <input type="text" readonly class="form-control"
+                                                        value="{{ $data->phone }}" name="phone">
                                                 </div>
 
                                                 <div class="mb-3 mt-3">
@@ -54,20 +55,16 @@
                                                 </div>
 
                                                 <div class="mb-3 mt-3">
-                                                    <label for="exampleInputEmail1"> Flat Name </label>
-                                                    @if (isset($sequence) && !empty($sequence))
-                                                        <select name="status" id="" class="form-control">
-                                                            <option value="1"
-                                                                @if ($flat->sequence == 1) selected @endif>
-                                                                A1,A2,A3</option>
-                                                            <option value="2"
-                                                                @if ($flat->sequence == 2) selected @endif>
-                                                                A1,B1,C1</option>
-                                                            <option value="3"
-                                                                @if ($flat->sequence == 3) selected @endif>
-                                                                1A,2A,3A</option>
-                                                        </select>
-                                                    @else
+                                                    <label for="exampleInputEmail1"> Flat Sequence </label>
+                                                    {{-- @if (isset($flat->sequence) && !empty($flat->sequence)) --}}
+                                                    <input type="text" class="form-control"
+                                                        value="@if ($flat->sequence == 1)  A1,A2,A3
+                                                @elseif ($flat->sequence == 2)A1,B1,C1
+                                                @elseif ($flat->sequence == 3)1A,2A,3A
+                                                @else ----- @endif" readonly>
+
+
+                                                    {{-- @else
                                                         <select name="status" id="" class="form-control">
                                                             <option value="" selected disabled>Select Once</option>
                                                             <option value="1">
@@ -77,7 +74,7 @@
                                                             <option value="3">
                                                                 1A,2A,3A</option>
                                                         </select>
-                                                    @endif
+                                                    @endif --}}
                                                 </div>
 
                                                 <div class="mb-3 mt-3">

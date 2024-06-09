@@ -93,13 +93,13 @@
                                                         @endif - {{ $months->year }}</strong>
                                                 </div>
                                                 <div class="col-2">
-                                                    <form action="{{ route('income.voucher.generateall') }}" method="post">
+                                                    <form action="{{ route('income.voucher.generateall') }}" method="post"  >
                                                         @csrf
                                                         <input type="hidden" name="month" value="{{ $months->month }}">
                                                         <input type="hidden" name="year" value="{{ $months->year }}">
 
                                                         <label for="" class="col-form-label"></label>
-                                                        <input type="submit" class="btn btn-info text-end"
+                                                        <input type="submit" formtarget="_blank" class="btn btn-info text-end"
                                                             value="Generate all">
                                                     </form>
                                                 </div>
@@ -168,7 +168,7 @@
                                                     @endif
                                                     <td class="text-right"> {{ $item->paid }}</td>
                                                     <td class="text-center"><a
-                                                            href="{{ route('income.voucher.generate', $item->id) }}"
+                                                            href="{{ route('income.voucher.generate', $item->id) }}" target="_blank"
                                                             class="btn btn-sm btn-info">Voucher</a></td>
                                                 </tr>
                                             @endforeach
@@ -223,7 +223,7 @@
                                                                 value="{{ $month->year }}">
 
                                                             <label for="" class="col-form-label"></label>
-                                                            <input type="submit" class="btn btn-info text-end"
+                                                            <input type="submit" class="btn btn-info text-end" formtarget="_blank"
                                                                 value="Generate all">
                                                         </form>
                                                     </div>
@@ -293,7 +293,7 @@
                                                             <td class="text-right"> {{ $item->paid }}</td>
                                                             <td class="text-center"><a
                                                                     href="{{ route('income.voucher.generate', $item->id) }}"
-                                                                    class="btn btn-sm btn-info">Voucher</a></td>
+                                                                    class="btn btn-sm btn-info" target="_blank">Voucher</a></td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>

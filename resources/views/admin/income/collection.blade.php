@@ -219,7 +219,7 @@
 
                                                     <form action="{{ route('income.collection.store') }}" method="POST">
                                                         @csrf
-                                                        <input type="text" name="flat_id" value="{{ $item->flat_id }}">
+                                                        <input type="hidden" name="flat_id" value="{{ $item->flat_id }}">
                                                         <tr>
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>{{ $item->flat_name }}</td>

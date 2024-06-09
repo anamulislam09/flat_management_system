@@ -8,6 +8,7 @@ use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\ExpProcessController;
 use App\Http\Controllers\ExpSetupController;
 use App\Http\Controllers\FlatController;
+use App\Http\Controllers\GuestController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\OthersIncomeController;
 use App\Http\Controllers\PackageController;
@@ -211,6 +212,13 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/balance-sheet', [BlanceController::class, 'BalanceSheet'])->name('blance.index');
     // Route::get('/all-expenses', [BlanceController::class, 'Expenses'])->name('expense-all.index');
 
+     // Guest Manage 
+     Route::get('/guest-book/all', [GuestController::class, 'Index'])->name('guestBook.index');
+     Route::get('/guest-book/create', [GuestController::class, 'Create'])->name('guestBook.create');
+     Route::post('/guest-book/store', [GuestController::class, 'Store'])->name('guestBook.store');
+     Route::get('/guest-book/{id}', [GuestController::class, 'Edit'])->name('guestBook.edit');
+     Route::post('/guest-book/update', [GuestController::class, 'Update'])->name('guestBook.update');
+     Route::get('/guest-book/history', [GuestController::class, 'ShowHistory'])->name('guestBook.history');
     
 });
 

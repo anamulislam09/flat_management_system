@@ -13,24 +13,30 @@
             }
 
             .text {
-                font-size: 14px;
+                font-size: 14px !important;
             }
             .button{
                 font-size: 14px;
             }
+            .voucher{
+                margin-top: 7px;
+            }
         }
+        .text {
+                font-size: 14px !important;
+            }
     </style>
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-7 col-md-7 col-sm-12">
                         <div class="card">
                             <div class="card-header bg-primary">
-                                <div class="row">
-                                    <div class="col-lg-10 col-md-10 col-sm-9">
-                                        <h3 class="card-title text">Expense Summary for the Month of <strong>
+                                <div class="row"> 
+                                    <div class="col-lg-10 col-md-10 col-sm-8">
+                                        <h3 class="card-title d-block text">Expense Summary for the Month of <strong>
                                                 @if ('1' == date('m'))
                                                     January
                                                 @elseif ('2' == date('m'))
@@ -60,9 +66,9 @@
 
                                     @if (count($expSummary) < 1)
                                     @else
-                                        <div class="col-lg-2 col-md-2 col-sm-3">
-                                            <a href="{{ route('expense.voucher.generateall') }}"
-                                                class="btn btn-sm btn-light button mt-2">General Voucher</a>
+                                        <div class="col-lg-2 col-md-2 col-sm-4 voucher">
+                                            <a href="{{ route('expense.voucher.generateall') }}" target="_blank"
+                                                class="btn btn-sm btn-light button">Voucher</a>
                                         </div>
                                     @endif
 
@@ -79,7 +85,7 @@
                                                     <div class="row">
                                                         <div class="col-md-12 col-md-12 col-sm-12">
                                                             <div class="col-sm-12 text-center">
-                                                                <div class="contant_box_404">
+                                                                <div class="contant_box_404 text">
                                                                     <h3 class="h2">
                                                                         Expense Not Found!
                                                                     </h3>
@@ -151,7 +157,7 @@
     </section>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    {{-- <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -163,7 +169,7 @@
                 </div>
 
                 <div id="modal_body">
-                    {{-- <form action="{{ route('expense.voucher') }}" method="POST"> --}}
+                    <form action="{{ route('expense.voucher') }}" method="POST">
                     @csrf
                     <input type="hidden" name="id" value="">
                     <div class="modal-body">
@@ -198,5 +204,5 @@
     </div>
 
     <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> --}}
 @endsection
