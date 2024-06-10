@@ -13,15 +13,12 @@ return new class extends Migration
     {
         Schema::create('guest_histories', function (Blueprint $table) {
             $table->id();
+            $table->integer('guest_id')->nullable();
             $table->integer('client_id')->nullable();
             $table->string('flat_id')->nullable();
-            $table->string('name')->nullable();
-            $table->string('phone')->nullable();
-            $table->string('image')->nullable();
-            $table->text('address')->nullable();
             $table->text('purpose')->nullable();
-            $table->date('entry_date')->nullable();
-            $table->date('exit_date')->nullable();
+            $table->string('entry_date')->nullable();
+            $table->string('exit_date')->nullable();
             $table->string('create_by')->nullable();
             $table->timestamps();
         });

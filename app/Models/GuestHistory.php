@@ -11,10 +11,6 @@ class GuestHistory extends Model
     protected $fillable = [
         'client_id',
         'flat_id',
-        'name',
-        'phone',
-        'image',
-        'address',
         'purpose',
         'entry_date',
         'exit_date',

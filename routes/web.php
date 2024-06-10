@@ -216,7 +216,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
      Route::get('/guest-book/all', [GuestController::class, 'Index'])->name('guestBook.index');
      Route::get('/guest-book/create', [GuestController::class, 'Create'])->name('guestBook.create');
      Route::post('/guest-book/store', [GuestController::class, 'Store'])->name('guestBook.store');
-     Route::get('/guest-book/{id}', [GuestController::class, 'Edit'])->name('guestBook.edit');
+     Route::get('/guest-book/edit/{id}', [GuestController::class, 'Edit'])->name('guestBook.edit');
      Route::post('/guest-book/update', [GuestController::class, 'Update'])->name('guestBook.update');
      Route::get('/guest-book/history', [GuestController::class, 'ShowHistory'])->name('guestBook.history');
     
