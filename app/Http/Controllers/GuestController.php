@@ -72,12 +72,24 @@ class GuestController extends Controller
 
     public function Update(Request $request)
     {
-        $data['guest_id'] = $request->guest_id;
-        $data['client_id'] = Auth()->guard('admin')->user()->id;
-        $data['flat_id'] = $request->flat_id;
-        $data['purpose'] = $request->purpose;
-        $data['entry_date'] = date('Y-d-m h:i:s');
-        $data['create_by'] = Auth()->guard('admin')->user()->id;   
+        // $data['guest_id'] = $request->guest_id;
+        // $data['client_id'] = Auth()->guard('admin')->user()->id;
+        // $data['flat_id'] = $request->flat_id;
+        // $data['purpose'] = $request->purpose;
+        // $data['entry_date'] = date('Y-d-m h:i:s');
+        // $data['create_by'] = Auth()->guard('admin')->user()->id;   
+        // GuestHistory::create($data);
+
+        $data = [
+            'guest_id' => $request->guest_id,
+            'client_id' => auth()->guard('admin')->user()->id,
+            'flat_id' => $request->flat_id,
+            'purpose' => $request->purpose,
+            'entry_date' => now(),
+            'create_by' => auth()->guard('admin')->user()->id,
+        ];
+    
+        // Insert the data into the GuestHistory table
         GuestHistory::create($data);
 
         return redirect()->back()->with('message', 'Successfully Inserted.');
