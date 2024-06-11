@@ -79,7 +79,8 @@ class GuestController extends Controller
         // $data['entry_date'] = date('Y-d-m h:i:s');
         // $data['create_by'] = Auth()->guard('admin')->user()->id;   
         // GuestHistory::create($data);
-
+        // dd(gettype($request->guest_id));
+        // dd($request->guest_id);
         $data = [
             'guest_id' => $request->guest_id,
             'client_id' => auth()->guard('admin')->user()->id,
@@ -89,8 +90,11 @@ class GuestController extends Controller
             'create_by' => auth()->guard('admin')->user()->id,
         ];
     
+        // dd($data);
         // Insert the data into the GuestHistory table
         GuestHistory::create($data);
+
+        // dd($text);
 
         return redirect()->back()->with('message', 'Successfully Inserted.');
     }

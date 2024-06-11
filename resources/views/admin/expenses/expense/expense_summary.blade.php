@@ -9,7 +9,7 @@
             tbody,
             tr,
             td {
-                font-size: 15px;
+                font-size: 14px;
             }
 
             .text {
@@ -24,6 +24,13 @@
         }
         .text {
                 font-size: 14px !important;
+            }
+            table,
+            thead,
+            tbody,
+            tr,
+            td {
+                font-size: 14px;
             }
     </style>
     <div class="content-wrapper">

@@ -45,7 +45,7 @@ class BlanceController extends Controller
             $data['month'] = $month;
             $data['profit'] = $profit;
             $data['loss'] = $loss;
-            $data['entry_datetime'] = date('Y-m');
+            $data['entry_datetime'] = date('Y-m-d');
 
             if ($request->profit > 0) {
                 $data['flag'] = 1;

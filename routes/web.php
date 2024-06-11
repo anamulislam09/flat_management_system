@@ -5,11 +5,11 @@ use App\Http\Controllers\BlanceController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ExpDetailController;
 use App\Http\Controllers\ExpenseController;
-use App\Http\Controllers\ExpProcessController;
 use App\Http\Controllers\ExpSetupController;
 use App\Http\Controllers\FlatController;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\IncomeController;
+use App\Http\Controllers\LadgerController;
 use App\Http\Controllers\OthersIncomeController;
 use App\Http\Controllers\PackageController;
 use App\Http\Controllers\PdfGeneratorController;
@@ -138,8 +138,8 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/expenses/month', [ExpDetailController::class, 'MonthlyExpense'])->name('expenses.month');
 
     // account route start here 
-    Route::get('/ledger-posting', [ExpenseController::class, 'Index'])->name('ledgerPosting.index');
-    Route::get('/ledger-posting/store', [ExpProcessController::class, 'Store'])->name('ledger-posting.store');
+    Route::get('/ledger-posting', [LadgerController::class, 'Index'])->name('ledgerPosting.index');
+    Route::get('/ledger-posting/store', [LadgerController::class, 'Store'])->name('ledger-posting.store');
     // Route::get('/expense-process/store', [ExpProcessController::class, 'Store'])->name('expense_process.store');
     Route::get('/opening-balance/create', [BlanceController::class, 'OpeningBalance'])->name('opening.balance.create');
     Route::post('/opening-balance/store', [BlanceController::class, 'OpeningBalanceStore'])->name('opening.balance.store');

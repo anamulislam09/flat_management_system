@@ -5,6 +5,49 @@
         input:focus {
             outline: none
         }
+
+        table,
+        thead,
+        tbody,
+        tr,
+        td {
+            font-size: 14px;
+            padding: 5px !important;
+            text-align: center;
+        }
+
+        .text {
+            font-size: 15px;
+        }
+
+        @media screen and (max-width: 767px) {
+            .card-title a {
+                font-size: 15px;
+            }
+
+            table,
+        thead,
+        tbody,
+        tr,
+        td {
+            font-size: 14px;
+            padding: 5px !important;
+            text-align: center;
+        }
+
+            .text {
+                font-size: 14px;
+            }
+
+            .button {
+                margin-top: 10px !important;
+            }
+
+            .date {
+                margin-bottom: 15px;
+            }
+
+        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
     <div class="content-wrapper">
@@ -16,7 +59,7 @@
                         <div class="card">
 
                             <div class="card-header bg-primary text-center">
-                                <h3 class="card-title pt-2" style="width:100%; text-align:center">Create Voucher </h3>
+                                <h3 class="card-title pt-2 text" style="width:100%; text-align:center">Create Voucher </h3>
                             </div>
                             <div class="card-header">
                                 <div class="row">
@@ -24,15 +67,15 @@
                                         <form action="{{ route('income.collection.all') }}" method="post">
                                             @csrf
                                             <div class="row my-4">
-                                                <div class="col-lg-3">
-                                                    <select name="year" class="form-control" id="year" required>
+                                                <div class="col-lg-3 date">
+                                                    <select name="year" class="form-control text" id="year" required>
                                                         @foreach (range(date('Y'), 2010) as $year)
                                                             <option value="{{ $year }}">{{ $year }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-3">
-                                                    <select name="month" class="form-control" id="month" required>
+                                                    <select name="month" class="form-control text date" id="month" required>
                                                         @for ($i = 1; $i <= 12; $i++)
                                                             <option value="{{ $i }}"
                                                                 @if ($i == date('m')) selected @endif>
@@ -41,8 +84,8 @@
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-2">
-                                                    <label for="" class="col-form-label"></label>
-                                                    <input type="submit" class="btn btn-primary" value="Submit">
+                                                    <label for="" class="col-form-label text"></label>
+                                                    <input type="submit" class="btn btn-primary btn-sm text" value="Submit">
                                                 </div>
                                             </div>
                                         </form>
@@ -65,7 +108,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="row">
-                                                <div class="col-10">
+                                                <div class="col-10 text">
                                                     <strong> Total Collection for the Month dfgdsfgd of @if ($months->month == 1)
                                                             January
                                                         @elseif ($months->month == 2)
@@ -99,7 +142,7 @@
                                                         <input type="hidden" name="year" value="{{ $months->year }}">
 
                                                         <label for="" class="col-form-label"></label>
-                                                        <input type="submit" formtarget="_blank" class="btn btn-info text-end"
+                                                        <input type="submit" formtarget="_blank" class="btn btn-info text-end btn-sm text button"
                                                             value="Generate all">
                                                     </form>
                                                 </div>
@@ -107,14 +150,14 @@
                                         </div>
                                     </div>
 
-                                    <table id="dataTable" class="table table-bordered table-striped mt-3">
+                                    <table id="" class="table table-bordered table-striped mt-3">
                                         <thead>
                                             <tr>
                                                 <th style="width: 8%">SL</th>
-                                                <th>Flat Name</th>
-                                                <th style="width: 15%" class="text-center">Payable</th>
-                                                <th style="width: 15%" class="text-center">Paid Amount</th>
-                                                <th style="width: 15%" class="text-center">Action</th>
+                                                <th style="width: 20%">Flat Name</th>
+                                                <th style="width: 20%" class="text-center">Payable</th>
+                                                <th style="width: 20%" class="text-center">Paid Amount</th>
+                                                <th style="width: 20%" class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -186,7 +229,7 @@
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="row">
-                                                    <div class="col-10">
+                                                    <div class="col-lg-10 col-md-9 col-sm-12 text">
                                                         <strong> Total Collection for the Month of @if ($month->month == 1)
                                                                 January
                                                             @elseif ($month->month == 2)
@@ -213,7 +256,7 @@
                                                                 December
                                                             @endif - {{ $month->year }}</strong>
                                                     </div>
-                                                    <div class="col-2">
+                                                    <div class="col-lg-2 col-md-3 col-sm-12">
                                                         <form action="{{ route('income.voucher.generateall') }}"
                                                             method="post">
                                                             @csrf
@@ -223,7 +266,7 @@
                                                                 value="{{ $month->year }}">
 
                                                             <label for="" class="col-form-label"></label>
-                                                            <input type="submit" class="btn btn-info text-end" formtarget="_blank"
+                                                            <input type="submit" class="btn btn-info text-end btn-sm text button" formtarget="_blank"
                                                                 value="Generate all">
                                                         </form>
                                                     </div>
@@ -231,14 +274,14 @@
                                             </div>
                                         </div>
                                         <div class="table-responsive">
-                                            <table id="dataTable" class="table table-bordered table-striped mt-3">
+                                            <table id="" class="table table-bordered table-striped mt-3">
                                                 <thead>
                                                     <tr>
                                                         <th style="width: 8%">SL</th>
-                                                        <th>Flat Name</th>
-                                                        <th style="width: 15%" class="text-center">Payable</th>
-                                                        <th style="width: 15%" class="text-center">Paid Amount</th>
-                                                        <th style="width: 15%" class="text-center">Action</th>
+                                                        <th style="width: 20%">Flat Name</th>
+                                                        <th style="width: 20%" class="text-center">Payable</th>
+                                                        <th style="width: 20%" class="text-center">Paid Amount</th>
+                                                        <th style="width: 20%" class="text-center">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -308,7 +351,7 @@
                                             </table>
                                         </div>
                                     @else
-                                        <h5 class="text-center py-3">No Data Found</h5>
+                                        <h5 class="text-center py-3 text">No Data Found</h5>
                                     @endif
                                 @endif
                             </div>

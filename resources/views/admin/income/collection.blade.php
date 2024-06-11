@@ -6,21 +6,19 @@
             outline: none
         }
 
-        .table td,
-        .table th {
-            padding: 0.4rem;
-            vertical-align: top;
-            border-top: 1px solid #dee2e6;
-        }
-
-        .table tr td {
+        table,
+        thead,
+        tbody,
+        tr,
+        td {
+            font-size: 14px;
+            padding: 5px !important;
             text-align: center;
         }
 
-        .table tr th {
-            text-align: center;
+        .text {
+            font-size: 15px;
         }
-
 
         @media screen and (max-width: 767px) {
             .card-title a {
@@ -28,12 +26,14 @@
             }
 
             table,
-            thead,
-            tbody,
-            tr,
-            td {
-                font-size: 14px;
-            }
+        thead,
+        tbody,
+        tr,
+        td {
+            font-size: 14px;
+            padding: 5px !important;
+            text-align: center;
+        }
 
             .text {
                 font-size: 14px;
@@ -151,7 +151,7 @@
                                 @if (count($data) > 1)
                                     <div class="card">
                                         <div class="card-header text">
-                                            <strong> Total Collection for the Month of
+                                            Total Collection for the Month of<strong> 
                                                 <?php
                                                 $currentMonth = date('F');
                                                 echo "$currentMonth";
@@ -160,20 +160,18 @@
                                         </div>
                                     </div>
                                     <div class="table-responsive">
-                                        <table id="dataTable" class="table table-bordered table-striped mt-3">
+                                        <table id="" class="table table-bordered table-striped mt-3">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 8%">SL</th>
-                                                    <th style="width: 10%">Flat Name</th>
-                                                    {{-- <th style="width: 15%">Charge</th> --}}
-                                                    <th style="width: 15%">Current Amount</th>
-                                                    <th style="width: 12%">Previous Due</th>
-                                                    <th style="width: 10%">Payable</th>
-                                                    <th style="width: 10%">Balance</th>
-                                                    <th style="width: 10%">Paid</th>
-                                                    <th style="width: 15%">Action</th>
-                                                </tr>
-                                            </thead>
+                                                    <th>SL</th>
+                                                    <th>Flat Name</th>
+                                                    <th>Current Amount</th>
+                                                    <th>Previous Due</th>
+                                                    <th>Payable</th>
+                                                    <th>Balance</th>
+                                                    <th>Paid</th>
+                                                    <th>Action</th>
+                                                </tr>                                            </thead>
 
                                             <tbody>
                                                 @foreach ($data as $key => $item)
@@ -244,7 +242,7 @@
                                                                 @if ($item->status == 1)
                                                                     <span class="badge badge-success">Paid</span>
                                                                     <a
-                                                                        href="{{ route('income.voucher.generate', $item->id) }}"><span
+                                                                        href="{{ route('income.voucher.generate', $item->id) }}" target="_blank"><span
                                                                             class="badge badge-info">Voucher</span></a>
                                                                 @elseif($item->status == 2)
                                                                     <span class="badge badge-warning">Due</span>

@@ -6,9 +6,19 @@
             outline: none
         }
 
+        table,
+        thead,
+        tbody,
+        tr,
+        td {
+            font-size: 14px;
+            padding: 5px !important;
+            /* padding: .30rem; */
+        }
+
         @media screen and (max-width: 767px) {
             .card-title a {
-                font-size: 15px;
+                font-size: 14px;
             }
 
             table,
@@ -16,22 +26,22 @@
             tbody,
             tr,
             td {
-                font-size: 15px;
+                font-size: 14px;
+                padding: 5px !important;
             }
 
             .text {
-                font-size: 14px;
+                font-size: 15px;
             }
 
             .button {
                 margin-top: -0px !important;
             }
-            .date{
+
+            .date {
                 margin-bottom: 15px;
             }
-
         }
-
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
     <div class="content-wrapper">
@@ -44,7 +54,8 @@
                             <div class="card-header bg-primary">
                                 <div class="row ">
                                     <div class="col-lg-10 col-sm-12">
-                                        <h3 class="card-title text" style="width:100%; text-align:center">Service Charge</h3>
+                                        <h3 class="card-title text" style="width:100%; text-align:center">Service Charge
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
@@ -133,7 +144,7 @@
                                                 @if (Route::current()->getName() == 'income.create')
                                                     <div class="col-lg-2">
                                                         <label for="" class="col-form-label"></label>
-                                                        <input type="submit" class="btn btn-primary" value="Generate">
+                                                        <input type="submit" class="btn btn-sm btn-primary text" value="Generate">
                                                     </div>
                                                 @else
                                                 @endif
@@ -148,7 +159,7 @@
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="row">
-                                                <div class="col-lg-8 col-sm-6 text">
+                                                <div class="col-lg-6 col-md-6 col-sm-12 text">
                                                     Service Charge for the Month of <strong>
                                                         @if ('1' == date('m'))
                                                             January
@@ -177,7 +188,7 @@
                                                         @endif - {{ date('Y') }}
                                                     </strong>
                                                 </div>
-                                                <div class="col-lg-8 col-sm-6 text">
+                                                <div class="col-lg-6 col-md-6 col-sm-12 text">
                                                     @if (isset($opening_balance) && !empty($data))
                                                         @if ($opening_balance->flag == 1)
                                                             <h3 class="card-title"><strong>Opening Balance
@@ -192,40 +203,48 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="table-responsive">
-                                        <table id="" class="table table-bordered table-striped mt-3">
-                                            <thead>
-                                                <tr>
-                                                    <th> SL</th>
-                                                    <th>Flat Name</th>
-                                                    {{-- <th>Charge</th> --}}
-                                                    <th class="text-right">Amount</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {{-- @if (isset($data) && !empty($data)) --}}
-                                                @foreach ($data as $key => $item)
-                                                    @php
-                                                        $total = App\Models\Income::where('month', $item->month)
-                                                            ->where('year', $item->year)
-                                                            ->where('client_id', Auth::guard('admin')->user()->id)
-                                                            ->sum('amount');
-                                                    @endphp
-                                                    <tr>
-                                                        <td class="text-center">{{ $key + 1 }}</td>
-                                                        <td>{{ $item->flat_name }}</td>
-                                                        {{-- <td>{{ $item->charge }}</td> --}}
-                                                        <td class="text-right">{{ $item->amount }}</td>
-                                                    </tr>
-                                                @endforeach
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="2" class="text-right"> <strong>Total :</strong></td>
-                                                    <td class="text-right"><strong>{{ $total }}</strong></td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                    <div class="row">
+                                        <div class="col-lg-6 col-md-6 col-sm-12">
+                                            <div class="table-responsive">
+                                                <table id="" class="table table-bordered table-striped mt-3">
+                                                    <thead>
+                                                        <tr>
+                                                            <th> SL</th>
+                                                            <th>Flat Name</th>
+                                                            {{-- <th>Charge</th> --}}
+                                                            <th class="text-right">Amount</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{-- @if (isset($data) && !empty($data)) --}}
+                                                        @foreach ($data as $key => $item)
+                                                            @php
+                                                                $total = App\Models\Income::where('month', $item->month)
+                                                                    ->where('year', $item->year)
+                                                                    ->where(
+                                                                        'client_id',
+                                                                        Auth::guard('admin')->user()->id,
+                                                                    )
+                                                                    ->sum('amount');
+                                                            @endphp
+                                                            <tr>
+                                                                <td class="text-center">{{ $key + 1 }}</td>
+                                                                <td>{{ $item->flat_name }}</td>
+                                                                {{-- <td>{{ $item->charge }}</td> --}}
+                                                                <td class="text-right">{{ $item->amount }}</td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="2" class="text-right"> <strong>Total :</strong>
+                                                            </td>
+                                                            <td class="text-right"><strong>{{ $total }}</strong></td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             @else
