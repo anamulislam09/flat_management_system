@@ -188,10 +188,17 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     /*--------------- Report route start here ------------------*/
     Route::get('/expenses/month', [ReportController::class, 'MonthlyExpense'])->name('expenses.month');
     Route::post('/expenses-all/month', [ReportController::class, 'MonthlyAllExpense'])->name('expensesall.month');
+
     Route::get('/expenses/yearly', [ReportController::class, 'YearlyExpense'])->name('expenses.year');
     Route::post('/expenses-all/year', [ReportController::class, 'YearlyAllExpense'])->name('expensesall.year');
 
-    Route::get('/incomes/month', [ReportController::class, 'MonthlyIncome'])->name('incomes.month');
+    // Route::get('/incomes/month', [ReportController::class, 'MonthlyIncome'])->name('incomes.month');
+    // Route::post('/monthly-income', 'ReportControllerMonthlyIncome')->name('incomesall.month');
+
+    Route::get('/monthly-income', [ReportController::class, 'showMonthlyIncome'])->name('incomes.month');
+Route::post('/monthly-income', [ReportController::class, 'handleMonthlyIncome'])->name('handle.monthly.income');
+
+
     Route::post('/incomes-all/month', [ReportController::class, 'MonthlyAllIncome'])->name('incomesall.month');
     Route::get('/incomes/yearly', [ReportController::class, 'YearlyIncome'])->name('incomes.year');
     Route::post('/incomes-all/yearly', [ReportController::class, 'YearlyAllIncome'])->name('incomesall.year');

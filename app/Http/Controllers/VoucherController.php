@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Balance;
 use App\Models\Exp_detail;
 use App\Models\Exp_process;
 use App\Models\Expense;
@@ -42,20 +43,20 @@ class VoucherController extends Controller
     {
         $months = Carbon::now()->month;
         $year = Carbon::now()->year;
-        $exp = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $months)->where('year', $year)->groupBy('cat_id')->get();
-        $month = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $months)->where('year', $year)->first();
+        $exp = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $months)->where('year', $year)->groupBy('cat_id')->get();
+        $month = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $months)->where('year', $year)->first();
         return view('admin.accounts.expense_voucher', compact('exp', 'month'));
     }
 
     // show collection 
     public function ExpenseAll(Request $request)
     {
-        $isExist = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->exists();
+        $isExist = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->exists();
         if (!$isExist) {
             return redirect()->back()->with('message', 'Data Not Found');
         } else {
-            $data = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
-            $months = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->first();
+            $data = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
+            $months = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->first();
             //    dd($month->month);
             // return view('admin.accounts.expense_voucher', compact('data', 'months'));
             return redirect()->back()->with(['data' => $data, 'months' => $months]);
@@ -73,7 +74,7 @@ class VoucherController extends Controller
         $month = $month;
         $year = $year;
         if ($month == date('m') && $year == date('Y')) {
-            $expense = Exp_detail::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('amount');
+            $expense = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('amount');
             $income = Income::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('paid');
             $others_income = OthersIncome::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('amount');
 
@@ -81,7 +82,7 @@ class VoucherController extends Controller
             // $year = $previousDate[0];
             // $month = $previousDate[1];
 
-            $monthlyOB = MonthlyBlance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month-1)->where('year', $year)->first();
+            $monthlyOB = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month-1)->where('year', $year)->first();
 
             if ($monthlyOB) {
                 $income += $monthlyOB->amount;
@@ -95,7 +96,7 @@ class VoucherController extends Controller
             $income += $others_income;
         } else {
             // dd($month);
-            $data = MonthlyBlance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->first();
+            $data = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->first();
             $income = isset($data) ? $data->total_income : 0;
             $expense = isset($data) ? $data->total_expense : 0;
         }
@@ -113,4 +114,5 @@ class VoucherController extends Controller
         $data = Income::where('client_id', Auth::guard('admin')->user()->id)->orderBy('month', 'DESC')->get();
         return view('admin.accounts.incomes', compact('data'));
     }
+
 }

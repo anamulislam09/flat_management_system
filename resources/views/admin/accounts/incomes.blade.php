@@ -6,20 +6,54 @@
             outline: none
         }
 
-        .table td,
-        .table th {
-            padding: 0.4rem;
-            vertical-align: top;
-            border-top: 1px solid #dee2e6;
+        table,
+        thead,
+        tbody,
+        tr,
+        td,
+        th {
+            font-size: 14px !important;
+            padding: 5px !important;
         }
 
-        .table tr td {
-            text-align: center;
-
+        .text {
+            font-size: 14px !important;
         }
 
-        .table tr th {
-            text-align: center;
+        @media screen and (max-width: 767px) {
+
+            div.dataTables_wrapper div.dataTables_length,
+            div.dataTables_wrapper div.dataTables_filter,
+            div.dataTables_wrapper div.dataTables_info,
+            div.dataTables_wrapper div.dataTables_paginate {
+                text-align: right !important;
+            }
+
+            .card-title a {
+                font-size: 15px;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            td,
+            th {
+                font-size: 13px !important;
+                padding: 5px !important;
+            }
+
+            .card-header {
+                padding: .25rem 1.25rem;
+            }
+
+            .text {
+                font-size: 14px !important;
+            }
+
+            .button {
+                margin-top: -0px !important;
+            }
         }
     </style>
     <div class="content-wrapper">
@@ -30,11 +64,12 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card">
-                                <div class="card-header bg-primary text-center">
-                                    <h3 class="card-title pt-2" style="width:100%; text-align:center">Income Statement </h3>
+                                <div class="card-header bg-primary text-center ">
+                                    <h3 class="card-title text" style="width:100%; text-align:center">Income Statement </h3>
                                 </div>
                                 <!-- /.card-header -->
                                 <div class="card-body">
+
                                     <div class="table-responsive">
                                         <table id="example1" class="table table-bordered table-striped">
                                             <thead>
@@ -60,7 +95,7 @@
                                                             ->where('user_id', $item->auth_id)
                                                             ->first();
 
-                                                        $customer = DB::table('customers')
+                                                        $customer = DB::table('clients')
                                                             ->where('id', $item->client_id)
                                                             ->exists();
 
@@ -147,6 +182,4 @@
                 </div>
         </section>
     </div>
-
-    {{-- <script src="{{ asset('backend/plugins/jquery/jquery.min.js') }}"></script> --}}
 @endsection

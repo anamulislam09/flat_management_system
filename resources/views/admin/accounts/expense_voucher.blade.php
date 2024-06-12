@@ -4,7 +4,45 @@
     <style>
         input:focus {
             outline: none
+        } 
+        @media screen and (max-width: 767px) {
+            .card-title a {
+                font-size: 15px;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            td,
+            th {
+                font-size: 13px !important;
+                padding: 5px !important;
+            }
+
+            .card-header {
+                padding: .25rem 1.25rem;
+            }
+
+            .text {
+                font-size: 14px !important;
+            }
+
+            .form {
+                margin-bottom: 9px !important;
+            }
         }
+
+        .table td,
+        .table th {
+            padding: .30rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+            font-size: 14px;
+        }
+        .text {
+                font-size: 14px !important;
+            }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
     <div class="content-wrapper">
@@ -12,7 +50,7 @@
         <section class="content mt-3">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-8 col-md-9 col-sm-12">
                         <div class="card">
                             <div class="card-header bg-primary text-center">
                                 <h3 class="card-title pt-2" style="width:100%; text-align:center">Expense Voucher</h3>
@@ -23,15 +61,15 @@
                                         <form action="{{ route('account.expense.all') }}" method="post">
                                             @csrf
                                             <div class="row my-4">
-                                                <div class="col-lg-3">
-                                                    <select name="year" class="form-control" id="year" required>
+                                                <div class="col-lg-4 col-md-4 col-sm-12 form">
+                                                    <select name="year" class="form-control text" id="year" required>
                                                         @foreach (range(date('Y'), 2010) as $year)
                                                             <option value="{{ $year }}">{{ $year }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
-                                                <div class="col-lg-3">
-                                                    <select name="month" class="form-control" id="month" required>
+                                                <div class="col-lg-4 col-md-4 col-sm-12 form">
+                                                    <select name="month" class="form-control text" id="month" required>
                                                         @for ($i = 1; $i <= 12; $i++)
                                                             <option value="{{ $i }}"
                                                                 @if ($i == date('m')) selected @endif>
@@ -39,10 +77,9 @@
                                                         @endfor
                                                     </select>
                                                 </div>
-
-                                                <div class="col-lg-2">
+                                                <div class="col-lg-3 col-md-4 col-sm-12">
                                                     <label for="" class="col-form-label"></label>
-                                                    <input type="submit" class="btn btn-primary" value="Submit">
+                                                    <input type="submit" class="btn btn-primary text" value="Submit">
                                                 </div>
                                             </div>
                                         </form>
@@ -57,16 +94,12 @@
                                 @endphp
 
                                 @if (isset($data) && !empty($data))
-                                    {{-- @php   
-                    @foreach ($data as $key => $item)
-                    $month = Ap\Models\Income::where('month', $item->month)->where('year', $item->year)->where('client_id', Auth::guard('admin')->user()->id)->first();
-                    @endforeach
-             @endphp --}}
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="row">
-                                                <div class="col-lg-10 col-md-9 col-sm-8">
-                                                    <strong> Total Expenses For the Month of @if ($months->month == 1)
+                                                <div class="col-lg-9 col-md-8 col-sm-12 text form">
+                                                    Total Expenses for the Month of
+                                                    <strong class="text">  @if ($months->month == 1)
                                                             January
                                                         @elseif ($months->month == 2)
                                                             February
@@ -92,7 +125,7 @@
                                                             December
                                                         @endif </strong>
                                                 </div>
-                                                <div class="col-lg-2 col-md-3 col-sm-4">
+                                                <div class="col-lg-3 col-md-3 col-sm-12">
                                                     <form action="{{ route('account.expense.voucher.generateall') }}"
                                                         method="post">
                                                         @csrf
@@ -100,7 +133,7 @@
                                                         <input type="hidden" name="year" value="{{ $months->year }}">
 
                                                         <label for="" class="col-form-label"></label>
-                                                        <input type="submit" class="btn btn-sm btn-info text-end"
+                                                        <input type="submit" class="btn btn-sm btn-info text-end text"
                                                             value="Generate all">
                                                     </form>
                                                 </div>
@@ -112,10 +145,9 @@
                                         <table id="dataTable" class="table table-bordered table-striped mt-3">
                                             <thead>
                                                 <tr>
-                                                    <th style="width: 8%">SL</th>
+                                                    <th>SL</th>
                                                     <th>Expense</th>
-                                                    <th style="width: 20%" class="text-right">Amount</th>
-                                                    {{-- <th style="width: 20%" class="text-center">Action</th> --}}
+                                                    <th class="text-right">Amount</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -124,7 +156,7 @@
                                                         $data = DB::table('categories')
                                                             ->where('id', $item->cat_id)
                                                             ->first();
-                                                        $sub_total = App\Models\Exp_detail::where(
+                                                        $sub_total = App\Models\Expense::where(
                                                             'client_id',
                                                             Auth::guard('admin')->user()->id,
                                                         )
@@ -132,7 +164,7 @@
                                                             ->where('year', $item->year)
                                                             ->where('cat_id', $item->cat_id)
                                                             ->sum('amount');
-                                                        $total = App\Models\Exp_detail::where(
+                                                        $total = App\Models\Expense::where(
                                                             'client_id',
                                                             Auth::guard('admin')->user()->id,
                                                         )
@@ -146,8 +178,6 @@
                                                         <td class="text-right">
                                                             {{ $sub_total }}
                                                         </td>
-                                                        {{-- <td class="text-center"><a href="#" class="btn btn-sm btn-info">Voucher</a>
-                          </td> --}}
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -160,16 +190,13 @@
                                         </table>
                                     </div>
                                 @else
-                                    {{-- @php
-                                        $month = Carbon\Carbon::now()->month;
-                                        $year = Carbon\Carbon::now()->year;
-                                    @endphp --}}
                                     @if (isset($month->month) && !empty($month->month))
                                         <div class="card">
                                             <div class="card-header">
                                                 <div class="row">
-                                                    <div class="col-lg-10 col-md-9 col-sm-8">
-                                                        <strong> Total Expenses For the month of @if ($month->month == 1)
+                                                    <div class="col-lg-9 col-md-8 col-sm-12 text form">
+                                                        Total Expenses for the month of
+                                                        <strong class="text"> @if ($month->month == 1)
                                                                 January
                                                             @elseif ($month->month == 2)
                                                                 February
@@ -195,7 +222,7 @@
                                                                 December
                                                             @endif </strong>
                                                     </div>
-                                                    <div class="col-lg-2 col-md-3 col-sm-4">
+                                                    <div class="col-lg-3 col-md-3 col-sm-12">
                                                         <form action="{{ route('account.expense.voucher.generateall') }}"
                                                             method="post">
                                                             @csrf
@@ -204,9 +231,9 @@
                                                             <input type="hidden" name="year"
                                                                 value="{{ $month->year }}">
 
-                                                            <label for="" class="col-form-label"></label>
-                                                            <input type="submit" class="btn btn-sm btn-info text-end"
-                                                                value="Generate all">
+                                                            <label for="" class="col-form-label "></label>
+                                                            <input type="submit" class="btn btn-sm btn-info text-end text"
+                                                                value="Voucher all">
                                                         </form>
                                                     </div>
                                                 </div>
@@ -217,10 +244,9 @@
                                             <table id="dataTable" class="table table-bordered table-striped mt-3">
                                                 <thead>
                                                     <tr>
-                                                        <th style="width: 8%">SL</th>
+                                                        <th>SL</th>
                                                         <th>Expense</th>
-                                                        <th style="width: 20%" class="text-right">Amount</th>
-                                                        {{-- <th style="width: 20%" class="text-center">Action</th> --}}
+                                                        <th class="text-right">Amount</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -229,7 +255,7 @@
                                                             $data = DB::table('categories')
                                                                 ->where('id', $exp_item->cat_id)
                                                                 ->first();
-                                                            $sub_total = App\Models\Exp_detail::where(
+                                                            $sub_total = App\Models\Expense::where(
                                                                 'client_id',
                                                                 Auth::guard('admin')->user()->id,
                                                             )
@@ -237,7 +263,7 @@
                                                                 ->where('year', $exp_item->year)
                                                                 ->where('cat_id', $exp_item->cat_id)
                                                                 ->sum('amount');
-                                                            $total = App\Models\Exp_detail::where(
+                                                            $total = App\Models\Expense::where(
                                                                 'client_id',
                                                                 Auth::guard('admin')->user()->id,
                                                             )
@@ -251,8 +277,6 @@
                                                             <td class="text-right">
                                                                 {{ $sub_total }}
                                                             </td>
-                                                            {{-- <td class="text-center"><a href="#" class="btn btn-sm btn-info">Voucher</a>
-                        </td> --}}
                                                         </tr>
                                                     @endforeach
                                                 </tbody>

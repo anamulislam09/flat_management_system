@@ -152,15 +152,15 @@
     <div class="container">
         <div class="header-section">
             <div class="logo">
-                <h4>{{ $customer->name }}</h4>
-                {{-- <img src="" alt="$customer->name "> --}}
+                <h4>{{ $client->name }}</h4>
+                {{-- <img src="" alt="$client->name "> --}}
             </div>
 
             <div class="header-text">
-                <h2>{{ $customer->name }}</h2>
-                <p>{{ $custDetails->address }}</p>
-                <p>{{ $custDetails->phone }}, {{ $customer->email }}</p>
-                {{-- <p>{{ $customer->email }}</p> --}}
+                <h2>{{ $client->name }}</h2>
+                <p>{{ $client->address }}</p>
+                <p>{{ $client->phone }}, {{ $client->email }}</p>
+                {{-- <p>{{ $client->email }}</p> --}}
             </div>
 
             <div class="status">
@@ -230,7 +230,7 @@
                         @php
                             $exp_name = App\Models\Category::where('id', $item->cat_id)->first();
                             // $user = App\Models\User::where('user_id', Auth::guard('admin')->user()->user_id)->first();
-                            $amount = App\Models\Exp_detail::where('client_id', Auth::guard('admin')->user()->id)
+                            $amount = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
                                 ->where('month', $item->month)
                                 ->where('year', $item->year)
                                 ->where('cat_id', $item->cat_id)
