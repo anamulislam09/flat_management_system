@@ -18,7 +18,7 @@
     <section class="content mt-3">
         <div class="container-fluid">
             <div class="row">
-                <div class="col-12">
+                <div class="col-lg-8 col-md-9 col-sm-12">
                     <div class="card">
                         <div class="card-header bg-primary text-center">
                             <h3 class="card-title pt-2">Monthly Income</h3>
@@ -26,7 +26,7 @@
                         <div class="card-header">
                             <form action="{{ route('handle.monthly.income') }}" method="post" class="row my-4">
                                 @csrf
-                                <div class="col-lg-3">
+                                <div class="col-lg-4 col-md-4 col-sm-12 form">
                                     <select name="year" class="form-control" required>
                                         <option value="" disabled>Select Year</option>
                                         @foreach (range(date("Y"), 2010) as $yearOption)
@@ -34,7 +34,7 @@
                                         @endforeach
                                     </select>
                                 </div>
-                                <div class="col-lg-3">
+                                <div class="col-lg-4 col-md-4 col-sm-12 form">
                                     <select name="month" class="form-control" required>
                                         <option value="" disabled>Select Month</option>
                                         @for ($i = 1; $i <= 12; $i++)
@@ -42,7 +42,7 @@
                                         @endfor
                                     </select>
                                 </div>
-                                <div class="col-lg-2">
+                                <div class="col-lg-4 col-md-3 col-sm-12">
                                     <input type="submit" class="btn btn-primary" value="Submit">
                                 </div>
                             </form>

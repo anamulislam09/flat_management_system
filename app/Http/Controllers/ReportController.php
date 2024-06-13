@@ -79,8 +79,6 @@ public function YearlyAllExpense(Request $request)
     return redirect()->route('expenses.year')->with(['yearly_expense' => $yearly_expense, 'years' => $year, 'currentYear' => $request->year]);
 }
 
-
-
     public function showMonthlyIncome(Request $request)
     {
         $months = $request->input('month', Carbon::now()->month);
@@ -115,36 +113,28 @@ public function YearlyAllExpense(Request $request)
         return redirect()->route('incomes.month', ['month' => $months, 'year' => $year]);
     }
 
+    // Display current year data by default
+public function YearlyIncome()
+{
+    $currentYear = Carbon::now()->year;
+    $y_income = Income::where('year', $currentYear)->where('client_id', Auth::guard('admin')->user()->id)->sum('paid');
+    $years = Income::where('year', $currentYear)->where('client_id', Auth::guard('admin')->user()->id)->first();
+    $y_opening_balance = OpeningBalance::where('year', $currentYear)->where('client_id', Auth::guard('admin')->user()->id)->first();
+    $y_other_income = OthersIncome::where('year', $currentYear)->where('client_id', Auth::guard('admin')->user()->id)->get();
 
+    return view('admin.report.yearly_incomes', compact('y_income', 'years', 'y_opening_balance', 'y_other_income', 'currentYear'));
+}
 
+// Handle filtering by year
+public function YearlyAllIncome(Request $request)
+{
+    $yearly_income = Income::where('year', $request->year)->where('client_id', Auth::guard('admin')->user()->id)->sum('paid');
+    $year = Income::where('year', $request->year)->where('client_id', Auth::guard('admin')->user()->id)->first();
+    $opening_balance = OpeningBalance::where('year', $request->year)->where('client_id', Auth::guard('admin')->user()->id)->first();
+    $others_income = OthersIncome::where('year', $request->year)->where('client_id', Auth::guard('admin')->user()->id)->get();
 
-    // Report for yearly income
-    public function YearlyIncome()
-    {
+    return redirect()->route('incomes.year')->with(['yearly_income' => $yearly_income, 'opening_balance' => $opening_balance, 'year' => $year, 'others_income' => $others_income, 'currentYear' => $request->year]);
+}
 
-        $months = Carbon::now()->month;
-        $year = Carbon::now()->year;
-        $y_income = Income::where('year', $year)->where('client_id', Auth::guard('admin')->user()->id)->sum('paid');
-        $years = Income::where('year', $year)->where('client_id', Auth::guard('admin')->user()->id)->first();
-        $y_opening_balance = OpeningBalance::where('year', $year)->where('client_id', Auth::guard('admin')->user()->id)->first();
-        $y_other_income = OthersIncome::where('year', $year)->where('client_id', Auth::guard('admin')->user()->id)->get();
-
-        return view('admin.report.yearly_incomes', compact('y_income', 'years', 'y_opening_balance', 'y_other_income'));
-    }
-
-    public function YearlyAllIncome(Request $request)
-    {
-        $isExist = Income::where('year', $request->year)->where('status', '!=', 0)->where('client_id', Auth::guard('admin')->user()->id)->exists();
-        if (!$isExist) {
-            return redirect()->back()->with('message', 'No Income Available of This Year');
-        } else {
-            $yearly_income = Income::where('year', $request->year)->where('client_id', Auth::guard('admin')->user()->id)->sum('paid');
-            $year = Income::where('year', $request->year)->where('client_id', Auth::guard('admin')->user()->id)->first();
-            $opening_balance = OpeningBalance::where('year', $request->year)->where('client_id', Auth::guard('admin')->user()->id)->first();
-            $others_income = OthersIncome::where('year', $request->year)->where('client_id', Auth::guard('admin')->user()->id)->get();
-            // dd($months);
-            return redirect()->back()->with(['yearly_income' => $yearly_income, 'opening_balance' => $opening_balance, 'year' => $year, 'others_income' => $others_income]);
-        }
-    }
     // Report for yearly income
 }

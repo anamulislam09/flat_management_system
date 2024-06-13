@@ -175,9 +175,11 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     // collection
     Route::get('/income/collection-voucher', [VoucherController::class, 'Index'])->name('income.collection.index');
     Route::post('/income/collection-all', [VoucherController::class, 'CollectionAll'])->name('income.collection.all');
-    //expense
+
+    // accont expense route
     Route::get('/account/expense-voucher', [VoucherController::class, 'ExpenseIndex'])->name('account.expense.index');
     Route::post('/account/expense-all', [VoucherController::class, 'ExpenseAll'])->name('account.expense.all');
+
     //Balance sheet
     Route::get('/account/balance', [VoucherController::class, 'balanceSheetIndex'])->name('account.balancesheet');
     Route::get('/account/balance-sheet/{year}/{month}', [VoucherController::class, 'balanceSheet'])->name('account.allbalancesheet');
@@ -199,7 +201,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
 Route::post('/monthly-income', [ReportController::class, 'handleMonthlyIncome'])->name('handle.monthly.income');
 
 
-    Route::post('/incomes-all/month', [ReportController::class, 'MonthlyAllIncome'])->name('incomesall.month');
+    // Route::post('/incomes-all/month', [ReportController::class, 'MonthlyAllIncome'])->name('incomesall.month');
     Route::get('/incomes/yearly', [ReportController::class, 'YearlyIncome'])->name('incomes.year');
     Route::post('/incomes-all/yearly', [ReportController::class, 'YearlyAllIncome'])->name('incomesall.year');
 

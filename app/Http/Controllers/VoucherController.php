@@ -38,29 +38,34 @@ class VoucherController extends Controller
         }
     }
 
-    //show voucher page
-    public function ExpenseIndex()
+    // Show voucher page
+    public function ExpenseIndex(Request $request)
     {
-        $months = Carbon::now()->month;
-        $year = Carbon::now()->year;
-        $exp = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $months)->where('year', $year)->groupBy('cat_id')->get();
-        $month = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $months)->where('year', $year)->first();
-        return view('admin.accounts.expense_voucher', compact('exp', 'month'));
+        $months = $request->input('month', Carbon::now()->month);
+        $year = $request->input('year', Carbon::now()->year);
+        $clientId = Auth::guard('admin')->user()->id;
+
+        $monthly_exp = Expense::where('client_id', $clientId)
+            ->where('month', $months)
+            ->where('year', $year)
+            ->groupBy('cat_id')
+            ->get();
+        $month = Expense::where('client_id', $clientId)
+            ->where('month', $months)
+            ->where('year', $year)
+            ->first();
+
+        return view('admin.report.monthly_expenses', compact('monthly_exp', 'month', 'months', 'year'));
     }
 
-    // show collection 
+    // Show filtered collection by year
     public function ExpenseAll(Request $request)
     {
-        $isExist = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->exists();
-        if (!$isExist) {
-            return redirect()->back()->with('message', 'Data Not Found');
-        } else {
-            $data = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
-            $months = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $request->month)->where('year', $request->year)->first();
-            //    dd($month->month);
-            // return view('admin.accounts.expense_voucher', compact('data', 'months'));
-            return redirect()->back()->with(['data' => $data, 'months' => $months]);
-        }
+        $months = $request->input('month');
+        $year = $request->input('year');
+        $clientId = Auth::guard('admin')->user()->id;
+
+        return redirect()->route('account.expense.index', ['month' => $months, 'year' => $year]);
     }
 
     // BalanceSheet
@@ -82,14 +87,14 @@ class VoucherController extends Controller
             // $year = $previousDate[0];
             // $month = $previousDate[1];
 
-            $monthlyOB = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month-1)->where('year', $year)->first();
+            $monthlyOB = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month - 1)->where('year', $year)->first();
 
             if ($monthlyOB) {
                 $income += $monthlyOB->amount;
             } else {
                 $manualOpeningBalance = OpeningBalance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->first();
                 // dd($manualOpeningBalance);
-                if($manualOpeningBalance){
+                if ($manualOpeningBalance) {
                     $income += ($manualOpeningBalance->flag == 1 ? $manualOpeningBalance->profit : -$manualOpeningBalance->loss);
                 }
             }
@@ -102,7 +107,7 @@ class VoucherController extends Controller
         }
 
         $data['income'] = $income;
-        $data['expense'] = $expense; 
+        $data['expense'] = $expense;
         $data['balance'] = $data['income'] - $data['expense'];
         $data['flag'] = $data['balance'] >= 0 ? 'Profit' : 'Loss';
         return response()->json($data, 200);
@@ -114,5 +119,4 @@ class VoucherController extends Controller
         $data = Income::where('client_id', Auth::guard('admin')->user()->id)->orderBy('month', 'DESC')->get();
         return view('admin.accounts.incomes', compact('data'));
     }
-
 }
