@@ -46,7 +46,7 @@
                                             </div>
                                             <div class="col-lg-4 col-md-3 col-sm-12">
                                                 <label for="" class="col-form-label"></label>
-                                                <input type="submit" class="btn btn-primary text" value="Submit">
+                                                <input type="submit" class="btn btn-primary text" value="Filter">
                                             </div>
                                         </div>
                                     </form>

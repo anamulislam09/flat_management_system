@@ -14,7 +14,7 @@ class FlatController extends Controller
     public function Index()
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $data = Flat::where('customer_id', $user->customer_id)->get();
+        $data = Flat::where('client_id', $user->client_id)->get();
         return view('user.flat.index', compact('data'));
     }
 
@@ -29,16 +29,16 @@ class FlatController extends Controller
     public function SingleStore(Request $request)
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $unique_name = Flat::where('customer_id', $user->customer_id)->where('flat_name', $request->flat_name)->exists();
+        $unique_name = Flat::where('client_id', $user->client_id)->where('flat_name', $request->flat_name)->exists();
         if ($unique_name) {
             return redirect()->back()->with('message', 'Flat name already taken.');
         } else {
-            $unique_id = Flat::where('customer_id', $user->customer_id)->max('flat_unique_id');
-            $flat = Flat::where('customer_id', $user->customer_id)->first();
+            $unique_id = Flat::where('client_id', $user->client_id)->max('flat_id');
+            $flat = Flat::where('client_id', $user->client_id)->first();
 
             $zeroo = '0';
-            $data['flat_unique_id'] = ($zeroo) . ++$unique_id;
-            $data['customer_id'] = $user->customer_id;
+            $data['flat_id'] = ($zeroo) . ++$unique_id;
+            $data['client_id'] = $user->client_id;
             $data['flat_name'] = $request->flat_name;
             $data['floor_no'] = $request->floor_no;
             $data['charge'] = "Service Charge";
@@ -49,11 +49,11 @@ class FlatController extends Controller
 
             $flat = Flat::create($data);
             if ($flat) {
-                $latest_flat = Flat::where('customer_id', $user->customer_id)->latest()->first();
+                $latest_flat = Flat::where('client_id', $user->client_id)->latest()->first();
                 $user = User::insert([
-                    'user_id' => $latest_flat->customer_id . $latest_flat->flat_unique_id,
-                    'customer_id' => $latest_flat->customer_id,
-                    'flat_id' => $latest_flat->flat_unique_id,
+                    'user_id' => $latest_flat->client_id . $latest_flat->flat_id,
+                    'client_id' => $latest_flat->client_id,
+                    'flat_id' => $latest_flat->flat_id,
                     'charge' => $latest_flat->charge,
                     'amount' => $latest_flat->amount,
                 ]);
@@ -71,12 +71,12 @@ class FlatController extends Controller
     public function UserIndex()
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $flat = Flat::where('customer_id', $user->customer_id)->get();;
+        $flat = Flat::where('client_id', $user->client_id)->get();;
         if (!empty($flat)) {
-            $data = User::where('customer_id', $user->customer_id)->get();
+            $data = User::where('client_id', $user->client_id)->get();
             return view('user.users.index', compact('data'));
         }
-        // $data = User::where('customer_id', Auth::guard('admin')->user()->id)->get();;
+        // $data = User::where('client_id', Auth::guard('admin')->user()->id)->get();;
         return view('user.users.index');
         //end method
     }
@@ -85,7 +85,7 @@ class FlatController extends Controller
   public function Edit($id)
   {
     $user = User::where('user_id', Auth::user()->user_id)->first();
-    $data = User::where('customer_id', $user->customer_id)->where('id', $id)->first();
+    $data = User::where('client_id', $user->client_id)->where('id', $id)->first();
     // $roles = Role::all();
     return view('user.users.edit', compact('data'));
     //end method
@@ -95,8 +95,8 @@ class FlatController extends Controller
   {
     $user = User::where('user_id', Auth::user()->user_id)->first();
     $id = $request->id;
-    $customer_id = $request->customer_id;
-    $data = User::where('customer_id', $user->customer_id)->where('id', $id)->first();
+    $client_id = $request->client_id;
+    $data = User::where('client_id', $user->client_id)->where('id', $id)->first();
     $data['name'] = $request->name;
     $data['email'] = $request->email;
     $data['phone'] = $request->phone;

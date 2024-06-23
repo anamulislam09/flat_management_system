@@ -16,27 +16,33 @@ use Illuminate\Support\Facades\Auth;
 
 class VoucherController extends Controller
 {
-    public function Index()
-    {   //show voucher page
-        $months = Carbon::now()->month;
-        $year = Carbon::now()->year;
-        $income = Income::where('client_id', Auth::guard('admin')->user()->id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->get();
-        $month = Income::where('client_id', Auth::guard('admin')->user()->id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->first();
-        return view('admin.income.collection_voucher', compact('income', 'month'));
-    }
-
-    public function CollectionAll(Request $request)
-    { // show collection 
-        $isExist = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', Auth::guard('admin')->user()->id)->exists();
-        if (!$isExist) {
-            return redirect()->back()->with('message', 'Data Not Found');
-        } else {
-            $data = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', Auth::guard('admin')->user()->id)->get();
-            $months = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', Auth::guard('admin')->user()->id)->first();
-
-            return redirect()->back()->with(['data' => $data, 'months' => $months]);
-        }
-    }
+   // show current month data 
+   public function Index(Request $request)
+   {   $months = $request->input('month', Carbon::now()->month);
+       $year = $request->input('year', Carbon::now()->year);
+       $clientId = Auth::guard('admin')->user()->id;
+   
+       $income = Income::where('client_id', $clientId)
+                       ->where('month', $months)
+                       ->where('year', $year)
+                       ->where('status', '!=', 0)
+                       ->get();
+   
+       $month = Income::where('client_id', $clientId)
+                       ->where('month', $months)
+                       ->where('year', $year)
+                       ->where('status', '!=', 0)
+                       ->first();
+   
+       return view('admin.income.collection_voucher', compact('income', 'month', 'months', 'year'));
+   }
+   // show filter data 
+   public function CollectionAll(Request $request)
+   {
+       $months = $request->input('month');
+       $year = $request->input('year');
+       return redirect()->route('income.collection.index', ['month' => $months, 'year' => $year]);
+   }
 
     // Show voucher page
     public function ExpenseIndex(Request $request)

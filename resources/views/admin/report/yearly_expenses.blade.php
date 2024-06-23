@@ -73,7 +73,7 @@
                                             </div>
                                             <div class="col-lg-3 col-md-3 col-sm-4 form2">
                                                 <label for="" class="col-form-label"></label>
-                                                <input type="submit" class="btn btn-sm btn-primary text" value="Submit">
+                                                <input type="submit" class="btn btn-sm btn-primary text" value="Filter">
                                             </div>
                                         </div>
                                     </form>

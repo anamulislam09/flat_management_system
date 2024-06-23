@@ -69,7 +69,7 @@
                           $month = Carbon\Carbon::now()->month;
                           $year = Carbon\Carbon::now()->year;
                           $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
-                          $total = App\Models\Exp_detail::where('client_id', $user->client_id)
+                          $total = App\Models\Expense::where('client_id', $user->client_id)
                               ->where('month', $month)
                               ->where('year', $year)
                               ->sum('amount');

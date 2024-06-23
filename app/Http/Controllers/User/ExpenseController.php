@@ -3,13 +3,12 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Addressbook;
 use App\Models\Category;
-use App\Models\Customer;
-use App\Models\CustomerDetail;
-use App\Models\Exp_detail;
+use App\Models\Client;
+use App\Models\Expense;
 use App\Models\ExpenseVoucher;
 use App\Models\User;
+use App\Models\Vendor;
 use PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -24,7 +23,7 @@ class ExpenseController extends Controller
         $user = User::where('user_id', Auth::user()->user_id)->first();
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
-        $expSummary = Exp_detail::where('customer_id', $user->customer_id)->where('month', $month)->where('year', $year)->groupBy('cat_id')->get();
+        $expSummary = Expense::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->groupBy('cat_id')->get();
         return view('user.expenses.expense_summary', compact('expSummary'));
     }
 
@@ -37,7 +36,7 @@ class ExpenseController extends Controller
         $exp_cat = Category::get();
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
-        $expDetails = Exp_detail::where('customer_id', $user->customer_id)->where('month', $month)->where('year', $year)->orderBy('id', 'DESC')->get();
+        $expDetails = Expense::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->orderBy('id', 'DESC')->get();
 
         return view('user.expenses.create', compact('exp_cat', 'expDetails'));
     }
@@ -53,12 +52,12 @@ class ExpenseController extends Controller
         $year = Carbon::now()->year;
 
         $data['cat_id'] = $request->cat_id;
-        $data['customer_id'] = $user->customer_id;
+        $data['client_id'] = $user->client_id;
         $data['year'] = $year;
         $data['month'] = $month;
         $data['amount'] = abs($request->amount);
         $data['auth_id'] = $user->user_id;
-        $exp = Exp_detail::create($data);
+        $exp = Expense::create($data);
 
         if (!$exp) {
             return redirect()->back()->with('message', 'Something went wrong');
@@ -68,7 +67,7 @@ class ExpenseController extends Controller
 
     public function Edit($id)
     {
-        $data = Exp_detail::findOrFail($id);
+        $data = Expense::findOrFail($id);
         $exp_cat = Category::get();
         return view('user.expenses.edit', compact('data', 'exp_cat'));
     }
@@ -79,7 +78,7 @@ class ExpenseController extends Controller
     public function Update(Request $request)
     {
         $id = $request->id;
-        $data = Exp_detail::findOrFail($id);
+        $data = Expense::findOrFail($id);
         $data['cat_id'] = $request->cat_id;
         $data['amount'] = abs($request->amount);
         $data->save();
@@ -91,7 +90,7 @@ class ExpenseController extends Controller
      */
     public function Delate($id)
     {
-        $data = Exp_detail::findOrFail($id);
+        $data = Expense::findOrFail($id);
         $data->delete();
         return redirect()->back()->with('message', 'Expense deleted successfully.');
     }
@@ -102,7 +101,7 @@ class ExpenseController extends Controller
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
 
-        $exp = Exp_detail::where('id', $id)->where('customer_id', $user->customer_id)->first();
+        $exp = Expense::where('id', $id)->where('client_id', $user->client_id)->first();
         return view('user.expenses.receiver_info', compact('exp'));
     }
 
@@ -110,12 +109,12 @@ class ExpenseController extends Controller
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
         $data['date'] = date('m/d/y');
-        $data['customer_id'] = $user->customer_id;
+        $data['client_id'] = $user->client_id;
         $data['auth_id'] = $user->user_id;
         $data['name'] = $request->name;
         $data['phone'] = $request->phone;
         $data['address'] = $request->address;
-        Addressbook::create($data);
+        Vendor::create($data);
         return redirect()->back()->with('message', 'Successfully added');
 
     }
@@ -123,12 +122,12 @@ class ExpenseController extends Controller
     public function GenerateVoucher(Request $request)
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $exp = Exp_detail::where('id', $request->exp_id)->where('customer_id', $user->customer_id)->first();
+        $exp = Expense::where('id', $request->exp_id)->where('client_id', $user->client_id)->first();
 
         $v_id = 1;
-        $isExist = ExpenseVoucher::where('customer_id', $user->customer_id)->exists();
+        $isExist = ExpenseVoucher::where('client_id', $user->client_id)->exists();
         if ($isExist) {
-            $voucher_id = ExpenseVoucher::where('customer_id', $user->customer_id)->max('voucher_id');
+            $voucher_id = ExpenseVoucher::where('client_id', $user->client_id)->max('voucher_id');
             $data['voucher_id'] = $this->formatSrl(++$voucher_id);
         } else {
             $data['voucher_id'] = $this->formatSrl($v_id);
@@ -137,26 +136,25 @@ class ExpenseController extends Controller
         $data['month'] = $exp->month;
         $data['year'] = $exp->year;
         $data['date'] = date('m/d/y');
-        $data['customer_id'] = $exp->customer_id;
+        $data['client_id'] = $exp->client_id;
         $data['auth_id'] = $user->user_id;
         $data['cat_id'] = $exp->cat_id;
         $data['amount'] = abs($request->amount);
-        $data['receiver_id'] = $request->receiver_id;
+        $data['vendor_id'] = $request->vendor_id;
         $voucher = ExpenseVoucher::create($data);
         if ($voucher) {
-            $inv = ExpenseVoucher::where('customer_id', $user->customer_id)->latest()->first();
+            $inv = ExpenseVoucher::where('client_id', $user->client_id)->latest()->first();
             $exp_name = Category::where('id', $inv->cat_id)->first();
-            $receiver = Addressbook::where('customer_id', $exp->customer_id)->where('id', $inv->receiver_id)->first();
-            $customer = Customer::where('id', $user->customer_id)->first();
-            $custDetails = CustomerDetail::where('customer_id', $customer->id)->first();
+            $vendor = Vendor::where('client_id', $exp->client_id)->where('id', $inv->vendor_id)->first();
+            $client = Client::where('id', $user->client_id)->first();
 
             $data = [
                 'inv' => $inv,
                 'exp_name' => $exp_name,
-                'receiver' => $receiver,
-                'customer' => $customer,
-                'custDetails' => $custDetails,
+                'vendor' => $vendor,
+                'client' => $client,
             ];
+            // dd($data);
             $pdf = PDF::loadView('user.voucher.index', $data);
             return $pdf->stream('sdl.pdf');
         }
@@ -193,18 +191,16 @@ class ExpenseController extends Controller
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
 
-        $inv = Exp_detail::where('customer_id', $user->customer_id)->where('month', $month)->where('year', $year)->groupBy('cat_id')->get();
-        $total = Exp_detail::where('customer_id', $user->customer_id)->where('month', $month)->where('year', $year)->sum('amount');
-        // $total = Exp_detail::where('customer_id', Auth::guard('admin')->user()->id)->where('month', $month) ->where('year', $year)->sum('amount');
+        $inv = Expense::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->groupBy('cat_id')->get();
+        $total = Expense::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->sum('amount');
+        // $total = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month) ->where('year', $year)->sum('amount');
 
-        $customer = Customer::where('id', $user->customer_id)->first();
-        $custDetails = CustomerDetail::where('customer_id', $customer->id)->first();
+        $client = Client::where('id', $user->client_id)->first();
 
         $data = [
             'inv' => $inv,
             'total' => $total,
-            'customer' => $customer,
-            'custDetails' => $custDetails,
+            'client' => $client,
         ];
         $pdf = PDF::loadView('user.voucher.exp_all', $data);
         return $pdf->stream('sdl.pdf');
@@ -215,20 +211,18 @@ class ExpenseController extends Controller
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
 
-        $inv = Exp_detail::where('customer_id', $user->customer_id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
-        $total = Exp_detail::where('customer_id', $user->customer_id)->where('month', $request->month)->where('year', $request->year)->sum('amount');
-        $month = Exp_detail::where('customer_id', $user->customer_id)->where('month', $request->month)->where('year', $request->year)->first();
+        $inv = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
+        $total = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->sum('amount');
+        $month = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->first();
 
 
-        $customer = Customer::where('id', $user->customer_id)->first();
-        $custDetails = CustomerDetail::where('customer_id', $customer->id)->first();
+        $client = Client::where('id', $user->client_id)->first();
 
         $data = [
             'inv' => $inv,
             'total' => $total,
             'month' => $month,
-            'customer' => $customer,
-            'custDetails' => $custDetails,
+            'client' => $client,
         ];
         $pdf = PDF::loadView('user.voucher.exp_voucher_all', $data);
         return $pdf->stream('sdl_exp.pdf');

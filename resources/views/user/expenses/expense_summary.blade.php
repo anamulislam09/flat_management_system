@@ -41,7 +41,7 @@
                   @if (count($expSummary) < 1)
                   @else
                   <div class="col-lg-2 col-sm-12">
-                    <a href="{{route('manager.expense.voucher.generateall')}}" class="btn btn-light">General Voucher</a>
+                    <a href="{{route('manager.expense.voucher.generateall')}}" target="_blank" class="btn btn-light">General Voucher</a>
                   </div>
                   @endif
                 </div>
@@ -90,13 +90,13 @@
                               ->where('id', $item->cat_id)
                               ->first();
                               $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
-                          $amount = App\Models\Exp_detail::where('client_id', $user->client_id)
+                          $amount = App\Models\Expense::where('client_id', $user->client_id)
                               ->where('month', $item->month)
                               ->where('year', $item->year)
                               ->where('cat_id', $item->cat_id)
                               ->sum('amount');
                           // dd($amount);
-                          $total = App\Models\Exp_detail::where('client_id', $user->client_id)
+                          $total = App\Models\Expense::where('client_id', $user->client_id)
                               ->where('month', $item->month)
                               ->where('year', $item->year)
                               ->sum('amount');

@@ -31,21 +31,21 @@
                                         <div class="row my-4">
                                             <div class="col-lg-4 col-md-4 col-sm-12 form">
                                                 <select name="year" class="form-control text" id="year" required>
-                                                    @foreach (range(date('Y'), 2010) as $year)
-                                                        <option value="{{ $year }}" @if($year == $year) selected @endif>{{ $year }}</option>
+                                                    @foreach (range(date('Y'), 2010) as $yearOption)
+                                                        <option value="{{ $yearOption }}" @if($yearOption == $year) selected @endif>{{ $yearOption }}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
                                             <div class="col-lg-4 col-md-4 col-sm-12 form">
                                                 <select name="month" class="form-control text" id="month" required>
                                                     @for ($i = 1; $i <= 12; $i++)
-                                                        <option value="{{ $i }}" @if($i == date('m')) selected @endif>{{ date('F', mktime(0, 0, 0, $i, 10)) }}</option>
+                                                        <option value="{{ $i }}" @if($i == $months) selected @endif>{{ date('F', mktime(0, 0, 0, $i, 10)) }}</option>
                                                     @endfor
                                                 </select>
                                             </div>
                                             <div class="col-lg-3 col-md-4 col-sm-12">
                                                 <label for="" class="col-form-label"></label>
-                                                <input type="submit" class="btn btn-primary text" value="Submit">
+                                                <input type="submit" class="btn btn-primary text" value="Filter">
                                             </div>
                                         </div>
                                     </form>
@@ -53,30 +53,25 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            @php
-                                $data = Session::get('data', $exp ?? collect());
-                                $months = Session::get('months', (object)['month' => $months, 'year' => $year]);
-                            @endphp
-
                             @if (session('message'))
                                 <div class="alert alert-warning">{{ session('message') }}</div>
                             @endif
 
-                            @if ($data->isNotEmpty())
+                            @if ($monthly_exp->isNotEmpty())
                                 <div class="card">
                                     <div class="card-header">
                                         <div class="row">
                                             <div class="col-lg-9 col-md-8 col-sm-12 text form">
                                                 Total Expenses for the Month of
                                                 <strong class="text">
-                                                    {{ date('F', mktime(0, 0, 0, $months->month, 10)) }}
+                                                    {{ date('F', mktime(0, 0, 0, $months, 10)) }}
                                                 </strong>
                                             </div>
                                             <div class="col-lg-3 col-md-3 col-sm-12">
                                                 <form action="{{ route('account.expense.voucher.generateall') }}" method="post">
                                                     @csrf
-                                                    <input type="hidden" name="month" value="{{ $months->month }}">
-                                                    <input type="hidden" name="year" value="{{ $months->year }}">
+                                                    <input type="hidden" name="month" value="{{ $months }}">
+                                                    <input type="hidden" name="year" value="{{ $year }}">
                                                     <label for="" class="col-form-label"></label>
                                                     <input type="submit" class="btn btn-sm btn-info text-end text" value="Generate all">
                                                 </form>
@@ -95,36 +90,27 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($data as $key => $item)
+                                            @foreach ($monthly_exp as $key => $item)
                                                 @php
                                                     $category = DB::table('categories')->where('id', $item->cat_id)->first();
-                                                    $sub_total = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
-                                                                                  ->where('month', $item->month)
-                                                                                  ->where('year', $item->year)
-                                                                                  ->where('cat_id', $item->cat_id)
-                                                                                  ->sum('amount');
-                                                    $total = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
-                                                                              ->where('month', $item->month)
-                                                                              ->where('year', $item->year)
-                                                                              ->sum('amount');
                                                 @endphp
                                                 <tr>
                                                     <td class="text-center">{{ $key + 1 }}</td>
                                                     <td>{{ $category->name }}</td>
-                                                    <td class="text-right">{{ $sub_total }}</td>
+                                                    <td class="text-right">{{ $item->total }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
                                         <tfoot>
                                             <tr>
                                                 <td colspan="2" class="text-right"> <strong>Total :</strong></td>
-                                                <td class="text-right"><strong>{{ $total }}</strong></td>
+                                                <td class="text-right"><strong>{{ $monthly_exp->sum('total') }}</strong></td>
                                             </tr>
                                         </tfoot>
                                     </table>
                                 </div>
                             @else
-                                <h5 class="text-center py-3">No Data Found</h5>
+                                <h5 class="text-center py-3 text">No Data Found</h5>
                             @endif
                         </div>
                     </div>

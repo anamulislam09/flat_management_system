@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\ExpSetup;
 use App\Models\SetupHistory;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Response;
@@ -19,8 +20,8 @@ class ExpSetupController extends Controller
     {
         $expenses = Category::get();
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $vendor = Addressbook::where('customer_id', $user->customer_id)->get();
-        $data = ExpSetup::where('customer_id', $user->customer_id)->get();
+        $vendor = Vendor::where('client_id', $user->client_id)->get();
+        $data = ExpSetup::where('client_id', $user->client_id)->get();
         return view('user.expense-setup.index', compact('expenses', 'data', 'vendor'));
     }
 
@@ -32,7 +33,7 @@ class ExpSetupController extends Controller
         $date = Carbon::today();
         $user = User::where('user_id', Auth::user()->user_id)->first();
 
-        $datas['customer_id'] = $user->customer_id;
+        $datas['client_id'] = $user->client_id;
         $datas['auth_id'] = Auth::user()->user_id;
         $datas['exp_id'] = $request->exp_id;
         $datas['vendor_id'] = $request->vendor_id;
@@ -42,8 +43,8 @@ class ExpSetupController extends Controller
         $setup = ExpSetup::create($datas);
 
         if ($setup) {
-            $history = ExpSetup::where('customer_id', $user->customer_id)->latest()->first();
-            $data['customer_id'] = $history->customer_id;
+            $history = ExpSetup::where('client_id', $user->client_id)->latest()->first();
+            $data['client_id'] = $history->client_id;
             $data['auth_id'] = $history->auth_id;
             $data['exp_id'] = $history->exp_id;
             $data['vendor_id'] = $history->vendor_id;
@@ -59,8 +60,8 @@ class ExpSetupController extends Controller
     {
         $expenses = Category::get();
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $vendor = Addressbook::where('customer_id', $user->customer_id)->get();
-        $exp = ExpSetup::where('customer_id', $user->customer_id)->where('id', $id)->first();
+        $vendor = Vendor::where('client_id', $user->client_id)->get();
+        $exp = ExpSetup::where('client_id', $user->client_id)->where('id', $id)->first();
         return view('user.expense-setup.edit', compact('expenses', 'exp', 'vendor'));
     }
 
@@ -72,7 +73,7 @@ class ExpSetupController extends Controller
         $id = $request->id;
         $date = Carbon::today();
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $exp = ExpSetup::where('customer_id', $user->customer_id)->where('id', $id)->first();
+        $exp = ExpSetup::where('client_id', $user->client_id)->where('id', $id)->first();
 
         $exp['start_date'] = date('Y-m-d');
         $exp['vendor_id'] = $request->vendor_id;
@@ -80,9 +81,9 @@ class ExpSetupController extends Controller
         $exp['end_date'] = $date->addDays(abs($request->days))->toDateString();
         $setup = $exp->save();
         if ($setup) {
-            // $history = ExpSetup::where('customer_id', $user->customer_id)->latest()->first();
+            // $history = ExpSetup::where('client_id', $user->client_id)->latest()->first();
             // dd($history);
-            $data['customer_id'] = $user->customer_id;
+            $data['client_id'] = $user->client_id;
             $data['auth_id'] = Auth::user()->user_id;
             $data['exp_id'] = $request->exp_id;
             $data['vendor_id'] = $request->vendor_id;
@@ -103,11 +104,11 @@ class ExpSetupController extends Controller
     public function ExpenseSetupHistoryAll($exp_id)
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $data['history'] = SetupHistory::where('customer_id', $user->customer_id)
+        $data['history'] = SetupHistory::where('client_id', $user->client_id)
             ->where('exp_id', $exp_id)->get();
         foreach ($data['history'] as $key => $history) {
             $data['history'][$key]->name = Category::where('id', $history->exp_id)->first()->name;
-            $data['history'][$key]->vName = Addressbook::where('customer_id', $user->customer_id)->where('id', $history->vendor_id)->first()->name;
+            $data['history'][$key]->vName = Vendor::where('client_id', $user->client_id)->where('id', $history->vendor_id)->first()->name;
         }
         return response()->json($data, 200);
     }

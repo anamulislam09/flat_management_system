@@ -43,7 +43,7 @@
                                     </select>
                                 </div>
                                 <div class="col-lg-4 col-md-3 col-sm-12">
-                                    <input type="submit" class="btn btn-primary" value="Submit">
+                                    <input type="submit" class="btn btn-primary" value="Filter">
                                 </div>
                             </form>
                         </div>

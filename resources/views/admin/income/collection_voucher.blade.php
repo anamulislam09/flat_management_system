@@ -77,15 +77,14 @@
                                                 <div class="col-lg-3">
                                                     <select name="month" class="form-control text date" id="month" required>
                                                         @for ($i = 1; $i <= 12; $i++)
-                                                            <option value="{{ $i }}"
-                                                                @if ($i == date('m')) selected @endif>
+                                                            <option value="{{ $i }}" @if($i == $months) selected @endif>
                                                                 {{ date('F', strtotime(date('Y') . '-' . $i . '-01')) }}</option>
                                                         @endfor
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label for="" class="col-form-label text"></label>
-                                                    <input type="submit" class="btn btn-primary btn-sm text" value="Submit">
+                                                    <input type="submit" class="btn btn-primary btn-sm text" value="Filter">
                                                 </div>
                                             </div>
                                         </form>
@@ -100,40 +99,15 @@
                                 @endphp
 
                                 @if (isset($data) && !empty($data))
-                                    {{-- @php   
-                    @foreach ($data as $key => $item)
-                    $month = Ap\Models\Income::where('month', $item->month)->where('year', $item->year)->where('client_id', Auth::guard('admin')->user()->id)->first();
-                    @endforeach
-             @endphp --}}
                                     <div class="card">
                                         <div class="card-header">
                                             <div class="row">
                                                 <div class="col-10 text">
-                                                    <strong> Total Collection for the Month dfgdsfgd of @if ($months->month == 1)
-                                                            January
-                                                        @elseif ($months->month == 2)
-                                                            February
-                                                        @elseif ($months->month == 3)
-                                                            March
-                                                        @elseif ($months->month == 4)
-                                                            April
-                                                        @elseif ($months->month == 5)
-                                                            May
-                                                        @elseif ($months->month == 6)
-                                                            June
-                                                        @elseif ($months->month == 7)
-                                                            July
-                                                        @elseif ($months->month == 8)
-                                                            August
-                                                        @elseif ($months->month == 9)
-                                                            September
-                                                        @elseif ($months->month == 10)
-                                                            October
-                                                        @elseif ($months->month == 11)
-                                                            November
-                                                        @elseif ($months->month == 12)
-                                                            December
-                                                        @endif - {{ $months->year }}</strong>
+                                                    <strong> Total Collection for the Month dfgdsfgd of 
+                                                        <strong>
+                                                            {{ date('F', mktime(0, 0, 0, $months->month, 10)) }}
+                                                        </strong>
+                                                    </strong>
                                                 </div>
                                                 <div class="col-2">
                                                     <form action="{{ route('income.voucher.generateall') }}" method="post"  >

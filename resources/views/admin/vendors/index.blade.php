@@ -43,7 +43,7 @@
                                                             <td>{{ $item->date }}</td>
                                                             <td>
                                                                 @php
-                                                                    $customer_name = App\Models\Customer::where(
+                                                                    $client_name = App\Models\Client::where(
                                                                         'id',
                                                                         $item->auth_id,
                                                                     )->first();
@@ -55,7 +55,7 @@
                                                                         ->first();
                                                                 @endphp
                                                                 @if ($item->auth_id == Auth::guard('admin')->user()->id)
-                                                                    {{ $customer_name->name }}
+                                                                    {{ $client_name->name }}
                                                                 @else
                                                                     {{ $user_name->name }}
                                                                 @endif

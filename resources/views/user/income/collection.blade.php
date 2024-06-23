@@ -36,17 +36,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="card-header">
+                            {{-- <div class="card-header">
                                 <div class="row">
                                     <div class="col-lg-12" style="border: 1px solid #ddd">
                                         <form action="{{ route('manager.income.collection.store') }}" method="post">
                                             @csrf
                                             <div class="row my-4">
-                                                {{-- <div class="col-lg-3">
-                                                    <strong><span>Collection of Service charge</span></strong>
-                                                </div> --}}
                                                 <div class="col-lg-3">
-                                                    {{-- <label for="" class="col-form-label">Select Year</label> --}}
                                                     <select name="year" class="form-control" id="">
                                                         <option value="" selected disabled>Select Year</option>
                                                         <option value="2023"
@@ -75,9 +71,7 @@
                                                         </option>
                                                     </select>
                                                 </div>
-                                                {{-- 'month', date('m'))->where('year', date('Y') --}}
                                                 <div class="col-lg-3">
-                                                    {{-- <label for="" class="col-form-label">Select Month</label> --}}
                                                     <select name="month" class="form-control" id="">
                                                         <option value="" selected disabled>Select Month </option>
                                                         <option value="01"
@@ -121,7 +115,7 @@
                                         </form>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
 
                             <!-- /.card-header -->
                             <div class="card-body">

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Models\Client;
 use App\Models\Customer;
 use App\Models\CustomerDetail;
 use App\Models\Flat;
@@ -21,7 +22,7 @@ class IncomeController extends Controller
         $user = User::where('user_id', Auth::user()->user_id)->first();
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
-        $data = Income::where('month', $month)->where('year', $year)->where('customer_id', $user->customer_id)->get();
+        $data = Income::where('month', $month)->where('year', $year)->where('client_id', $user->client_id)->get();
         return view('user.income.income', compact('data'));
     }
 
@@ -30,7 +31,7 @@ class IncomeController extends Controller
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
 
-        $isExists = Flat::where('customer_id', $user->customer_id)->exists();
+        $isExists = Flat::where('client_id', $user->client_id)->exists();
         if (!$isExists) {
             return redirect()->back()->with('message', 'Flat not found!');  // User has no exist
         } else {
@@ -41,18 +42,18 @@ class IncomeController extends Controller
                 return redirect()->back()->with('message', "OPS! It is not possible to add data for advance month. Please select the current month or year.");
             } else {
                 if (($month - 1 == $request->month) && ($year == $request->year)) {
-                    $previousData = Income::where('month', $request->month)->where('year', $request->year)->where('customer_id', $user->customer_id)->exists();
+                    $previousData = Income::where('month', $request->month)->where('year', $request->year)->where('client_id', $user->client_id)->exists();
                     if ($previousData) {
                         return redirect()->back()->with('message', 'You have already created!');
                     } else {
-                        $flats = Flat::where('customer_id', $user->customer_id)->get();
+                        $flats = Flat::where('client_id', $user->client_id)->get();
 
                         for ($i = 0; $i < count($flats); $i++) {
                             Income::insert([
                                 'month' => $request->month,
                                 'year' => $request->year,
                                 'flat_id' => $flats[$i]->flat_unique_id,
-                                'customer_id' => $flats[$i]->customer_id,
+                                'client_id' => $flats[$i]->client_id,
                                 'auth_id' => $user->user_id,
                                 'flat_name' => $flats[$i]->flat_name,
                                 'charge' => $flats[$i]->charge,
@@ -69,24 +70,24 @@ class IncomeController extends Controller
                     if (($request->month == 1)) {
                         $month = $request->month;
                         $year = $request->year;
-                        $data = Income::where('month', $month)->where('year', $year)->where('customer_id', $user->customer_id)->exists();
+                        $data = Income::where('month', $month)->where('year', $year)->where('client_id', $user->client_id)->exists();
                         if ($data) {
                             return redirect()->back()->with('message', 'You have already create!');
                         } else {
-                            $data = Income::where('customer_id', $user->customer_id)->exists();
+                            $data = Income::where('client_id', $user->client_id)->exists();
                             if ($data) {
                                 $lastYear = date('Y') - 1;
                                 $lastmonth = 12;
 
-                                $flats = Income::where('month', $lastmonth)->where('year', $lastYear)->where('customer_id', $user->customer_id)->get();
+                                $flats = Income::where('month', $lastmonth)->where('year', $lastYear)->where('client_id', $user->client_id)->get();
                                 for ($i = 0; $i < count($flats); $i++) {
-                                    $previousMonthData = Income::where('month', $lastmonth)->where('year', $lastYear)->where('user_id', $flats[$i]->flat_id)->where('customer_id', $user->customer_id)->first();
+                                    $previousMonthData = Income::where('month', $lastmonth)->where('year', $lastYear)->where('user_id', $flats[$i]->flat_id)->where('client_id', $user->client_id)->first();
 
                                     $income = Income::insert([
                                         'month' => $month,
                                         'year' => $year,
                                         'flat_id' => $flats[$i]->flat_unique_id,
-                                        'customer_id' => $flats[$i]->customer_id,
+                                        'client_id' => $flats[$i]->client_id,
                                         'auth_id' => $user->user_id,
                                         'flat_name' => $flats[$i]->flat_name,
                                         'charge' => $flats[$i]->charge,
@@ -101,7 +102,7 @@ class IncomeController extends Controller
                                     return redirect()->back()->with('message', 'something went wrong');
                                 }
                             } else {
-                                $flats = Flat::where('customer_id', $user->customer_id)->get();
+                                $flats = Flat::where('client_id', $user->client_id)->get();
                                 $month = $request->month;
                                 $year = $request->year;
 
@@ -110,7 +111,7 @@ class IncomeController extends Controller
                                         'month' => $month,
                                         'year' => $year,
                                         'flat_id' => $flats[$i]->flat_unique_id,
-                                        'customer_id' => $flats[$i]->customer_id,
+                                        'client_id' => $flats[$i]->client_id,
                                         'auth_id' => $user->user_id,
                                         'flat_name' => $flats[$i]->flat_name,
                                         'charge' => $flats[$i]->charge,
@@ -125,25 +126,25 @@ class IncomeController extends Controller
                     /*-------------------if previous year has data ends here --------------*/ else {
                         $month = $request->month;
                         $year = $request->year;
-                        $data = Income::where('month', $month)->where('year', $year)->where('customer_id', $user->customer_id)->exists();
+                        $data = Income::where('month', $month)->where('year', $year)->where('client_id', $user->client_id)->exists();
                         if ($data) {
                             return redirect()->back()->with('message', 'You have already create!');
                         } else {
-                            $data = Income::where('customer_id', $user->customer_id)->exists();
+                            $data = Income::where('client_id', $user->client_id)->exists();
                             if ($data) {
                                 $month = $request->month;
                                 $year = $request->year;
 
                                 $previousDate = explode('-', date('Y-m', strtotime(date('Y-m') . " -1 month")));
-                                $flats = Income::where('month', $month - 1)->where('year', date('Y'))->where('customer_id', $user->customer_id)->get();
+                                $flats = Income::where('month', $month - 1)->where('year', date('Y'))->where('client_id', $user->client_id)->get();
 
                                 for ($i = 0; $i < count($flats); $i++) {
-                                    $previousMonthData = Income::where('month', $month - 1)->where('year', $previousDate[0])->where('flat_id', $flats[$i]->flat_id)->where('customer_id', $user->customer_id)->first();
+                                    $previousMonthData = Income::where('month', $month - 1)->where('year', $previousDate[0])->where('flat_id', $flats[$i]->flat_id)->where('client_id', $user->client_id)->first();
                                     Income::insert([
                                         'month' => $month,
                                         'year' => $year,
                                         'flat_id' => $flats[$i]->flat_id,
-                                        'customer_id' => $flats[$i]->customer_id,
+                                        'client_id' => $flats[$i]->client_id,
                                         'auth_id' => $user->user_id,
                                         'flat_name' => $flats[$i]->flat_name,
                                         'charge' => $flats[$i]->charge,
@@ -154,7 +155,7 @@ class IncomeController extends Controller
                                 // dd($previousMonthData);
                                 return redirect()->back()->with('message', 'Service charged added successfully');
                             } else {
-                                $flats = Flat::where('customer_id', $user->customer_id)->get();
+                                $flats = Flat::where('client_id', $user->client_id)->get();
                                 $month = $request->month;
                                 $year = $request->year;
 
@@ -163,7 +164,7 @@ class IncomeController extends Controller
                                         'month' => $month,
                                         'year' => $year,
                                         'flat_id' => $flats[$i]->flat_unique_id,
-                                        'customer_id' => $flats[$i]->customer_id,
+                                        'client_id' => $flats[$i]->client_id,
                                         'auth_id' => $user->user_id,
                                         'flat_name' => $flats[$i]->flat_name,
                                         'charge' => $flats[$i]->charge,
@@ -190,7 +191,7 @@ class IncomeController extends Controller
 
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
-        $data = Income::where('month', $month)->where('year', $year)->where('customer_id', $user->customer_id)->get();
+        $data = Income::where('month', $month)->where('year', $year)->where('client_id', $user->client_id)->get();
         return view('user.income.collection', compact('data'));
     }
 
@@ -202,7 +203,7 @@ class IncomeController extends Controller
         $year = Carbon::now()->year;
         $flat_id = $request->flat_id;
         $paid = $request->paid;
-        $data = Income::where('month', $month)->where('year', $year)->where('customer_id', $user->customer_id)->where('flat_id', $flat_id)->first();
+        $data = Income::where('month', $month)->where('year', $year)->where('client_id', $user->client_id)->where('flat_id', $flat_id)->first();
 
         if ($paid > $data->due) {
             return redirect()->back()->with('message', 'Something went wrong!');
@@ -211,9 +212,9 @@ class IncomeController extends Controller
             $previousMonthData = Income::where('month', $month - 1)
                 ->where('year', $year)
                 ->where('flat_id', $flat_id)
-                ->where('customer_id', $user->customer_id)
+                ->where('client_id', $user->client_id)
                 ->first();
-            $data = Income::where('month', $month)->where('year', $year)->where('customer_id', $user->customer_id)->where('flat_id', $flat_id)->first();
+            $data = Income::where('month', $month)->where('year', $year)->where('client_id', $user->client_id)->where('flat_id', $flat_id)->first();
             if (isset($previousMonthData->due)) {
                 $amount = $previousMonthData->due + $data->amount;
 
@@ -221,10 +222,10 @@ class IncomeController extends Controller
                 $item['due'] = $data->due - abs($paid);
                 $item['auth_id'] = Auth::user()->user_id;
 
-                $isExist = Income::where('customer_id', $user->customer_id)->exists();
+                $isExist = Income::where('client_id', $user->client_id)->exists();
                 $inv_id = 1;
                 if ($isExist) {
-                    $invoice_id = Income::where('customer_id', $user->customer_id)->max('invoice_id');
+                    $invoice_id = Income::where('client_id', $user->client_id)->max('invoice_id');
                     $item['invoice_id'] = $this->formatSrl(++$invoice_id);
                 } else {
                     $item['invoice_id'] = $this->formatSrl($inv_id);
@@ -243,10 +244,10 @@ class IncomeController extends Controller
 
                 $item['auth_id'] = Auth::user()->user_id;
 
-                $isExist = Income::where('customer_id', $user->customer_id)->exists();
+                $isExist = Income::where('client_id', $user->client_id)->exists();
                 $inv_id = 1;
                 if ($isExist) {
-                    $invoice_id = Income::where('customer_id', )->max('invoice_id');
+                    $invoice_id = Income::where('client_id', )->max('invoice_id');
                     $item['invoice_id'] = $this->formatSrl(++$invoice_id);
                 } else {
                     $item['invoice_id'] = $this->formatSrl($inv_id);
@@ -259,7 +260,7 @@ class IncomeController extends Controller
                 }
             }
 
-            Income::where('month', $month)->where('year', $year)->where('customer_id', $user->customer_id)->where('flat_id', $flat_id)->update($item);
+            Income::where('month', $month)->where('year', $year)->where('client_id', $user->client_id)->where('flat_id', $flat_id)->update($item);
             return redirect()->route('manager.income.collection')->with('message', 'Collection successful');
         }
     }
@@ -294,8 +295,8 @@ class IncomeController extends Controller
         $months = Carbon::now()->month;
         $year = Carbon::now()->year;
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $income = Income::where('customer_id', $user->customer_id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->get();
-        $current_month = Income::where('customer_id', $user->customer_id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->first();
+        $income = Income::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->get();
+        $current_month = Income::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->first();
         // dd($income);
         return view('user.income.collection_voucher', compact('income', 'current_month'));
     }
@@ -304,12 +305,12 @@ class IncomeController extends Controller
     { // show collection 
 
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $isExist = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('customer_id', $user->customer_id)->exists();
+        $isExist = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', $user->client_id)->exists();
         if (!$isExist) {
             return redirect()->back()->with('message', 'Data Not Found');
         } else {
-            $data = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('customer_id', $user->customer_id)->get();
-            $months = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('customer_id', $user->customer_id)->first();
+            $data = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', $user->client_id)->get();
+            $months = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', $user->client_id)->first();
             return redirect()->back()->with(['data' => $data, 'months' => $months]);
         }
     }
@@ -319,16 +320,14 @@ class IncomeController extends Controller
     {
         $users = User::where('user_id', Auth::user()->user_id)->first();
 
-        $inv = Income::where('customer_id', $users->customer_id)->where('id', $id)->first();
-        $user = User::where('customer_id', $users->customer_id)->where('flat_id', $inv->flat_id)->first();
-        $customer = Customer::where('id', $users->customer_id)->first();
-        $custDetails = CustomerDetail::where('customer_id', $customer->id)->first();
+        $inv = Income::where('client_id', $users->client_id)->where('id', $id)->first();
+        $user = User::where('client_id', $users->client_id)->where('flat_id', $inv->flat_id)->first();
+        $client = Client::where('id', $users->client_id)->first();
 
         $data = [
             'inv' => $inv,
             'user' => $user,
-            'customer' => $customer,
-            'custDetails' => $custDetails,
+            'client' => $client,
         ];
         $pdf = PDF::loadView('user.voucher.money_receipt', $data);
         return $pdf->stream('sdl_collection.pdf');
@@ -340,17 +339,15 @@ class IncomeController extends Controller
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
 
-        $inv = Income::where('customer_id', $user->customer_id)->where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->get();
-        $month = Income::where('customer_id', $user->customer_id)->where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->first();
-        // $user = User::where('customer_id', Auth::guard('admin')->user()->id)->where('flat_id', $inv->flat_id)->first();
-        $customer = Customer::where('id', $user->customer_id)->first();
-        $custDetails = CustomerDetail::where('customer_id', $customer->id)->first();
+        $inv = Income::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->get();
+        $month = Income::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->first();
+        // $user = User::where('client_id', Auth::guard('admin')->user()->id)->where('flat_id', $inv->flat_id)->first();
+        $client = Client::where('id', $user->client_id)->first();
 
         $data = [
             'inv' => $inv,
             'month' => $month,
-            'customer' => $customer,
-            'custDetails' => $custDetails,
+            'client' => $client,
         ];
         // dd($data);
         // for($i=0; $i< count($inv); $i++){
@@ -370,12 +367,12 @@ class IncomeController extends Controller
     public function SingleUserPaid()
     {   //show voucher page
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        // $isExist = Income::where('customer_id', $user->customer_id)->where('flat_id', $user->flat_id)->exists();
+        // $isExist = Income::where('client_id', $user->client_id)->where('flat_id', $user->flat_id)->exists();
         // if (!$isExist) {
         //     return redirect()->back()->with('message', 'Data Not Found');
         // } else {
-            $data = Income::where('customer_id', $user->customer_id)->where('flat_id', $user->flat_id)->get();
-            $months = Income::where('customer_id', $user->customer_id)->where('flat_id', $user->flat_id)->first();
+            $data = Income::where('client_id', $user->client_id)->where('flat_id', $user->flat_id)->get();
+            $months = Income::where('client_id', $user->client_id)->where('flat_id', $user->flat_id)->first();
 
             return view('user.normal_user.total_paid', compact('data', 'months'));
         // }
@@ -385,12 +382,12 @@ class IncomeController extends Controller
     { // show collection 
 
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        // $isExist = Income::where('customer_id', $user->customer_id)->where('flat_id', $user->flat_id)->exists();
+        // $isExist = Income::where('client_id', $user->client_id)->where('flat_id', $user->flat_id)->exists();
         // if (!$isExist) {
         //     return redirect()->back()->with('message', 'Data Not Found');
         // } else {
-            $data = Income::where('customer_id', $user->customer_id)->where('flat_id', $user->flat_id)->get();
-            $months = Income::where('customer_id', $user->customer_id)->where('flat_id', $user->flat_id)->first();
+            $data = Income::where('client_id', $user->client_id)->where('flat_id', $user->flat_id)->get();
+            $months = Income::where('client_id', $user->client_id)->where('flat_id', $user->flat_id)->first();
 
             // dd($data);
             return view('user.normal_user.total_paid', compact('data', 'months'));
@@ -401,7 +398,7 @@ class IncomeController extends Controller
     public function PasswordReset()
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $data = User::where('customer_id', $user->customer_id)->where('user_id', $user->user_id)->first();
+        $data = User::where('client_id', $user->client_id)->where('user_id', $user->user_id)->first();
 
         return view('user.user_profile.reset_password', compact('data'));
     }
@@ -413,7 +410,7 @@ class IncomeController extends Controller
     {
         $user_id = $request->user_id;
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $data = User::where('user_id', $user_id)->where('customer_id', $user->customer_id)->first();
+        $data = User::where('user_id', $user_id)->where('client_id', $user->client_id)->first();
         $data['phone'] = $request->password;
         $data['password'] = Hash::make($request->password);
         $data->save();

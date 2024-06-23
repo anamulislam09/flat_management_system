@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\ExpSetup;
 use App\Models\SetupHistory;
 use App\Models\User;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Response;
 use Auth;
@@ -21,9 +22,9 @@ class ExpSetupController extends Controller
     public function ExpenseSetupIndex()
     {
         $expenses = Category::get();
-        $vendor = Addressbook::where('client_id', Auth::guard('admin')->user()->id)->get();
+        $vendor = Vendor::where('client_id', Auth::guard('admin')->user()->id)->get();
         $data = ExpSetup::where('client_id', Auth::guard('admin')->user()->id)->get();
-        return view('admin.expense.expense-setup.index', compact('expenses', 'data', 'vendor'));
+        return view('admin.expenses.expense-setup.index', compact('expenses', 'data', 'vendor'));
     }
 
     /**
@@ -77,9 +78,9 @@ class ExpSetupController extends Controller
     public function ExpenseSetupEdit($id)
     {
         $expenses = Category::get();
-        $vendor = Addressbook::where('client_id', Auth::guard('admin')->user()->id)->get();
+        $vendor = Vendor::where('client_id', Auth::guard('admin')->user()->id)->get();
         $exp = ExpSetup::where('client_id', Auth::guard('admin')->user()->id)->where('id', $id)->first();
-        return view('admin.expense.expense-setup.edit', compact('expenses', 'exp', 'vendor'));
+        return view('admin.expenses.expense-setup.edit', compact('expenses', 'exp', 'vendor'));
     }
 
     /**
@@ -119,7 +120,7 @@ class ExpSetupController extends Controller
     {
         $user = User::where('user_id', Auth::guard('admin')->user()->user_id)->first();
         $exp = Category::get();
-        return view('admin.expense.expense-setup.setup_history', compact('user', 'exp'));
+        return view('admin.expenses.expense-setup.setup_history', compact('user', 'exp'));
     }
 
     public function ExpenseSetupHistoryAll($exp_id)
@@ -128,7 +129,7 @@ class ExpSetupController extends Controller
             ->where('exp_id', $exp_id)->get();
         foreach ($data['history'] as $key => $history) {
             $data['history'][$key]->name = Category::where('id', $history->exp_id)->first()->name;
-            $data['history'][$key]->vName = Addressbook::where('client_id', Auth::guard('admin')->user()->id)->where('id', $history->vendor_id)->first()->name;
+            $data['history'][$key]->vName = Vendor::where('client_id', Auth::guard('admin')->user()->id)->where('id', $history->vendor_id)->first()->name;
         }
         return response()->json($data, 200);
     }

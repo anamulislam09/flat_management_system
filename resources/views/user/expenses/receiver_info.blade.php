@@ -21,7 +21,7 @@
                                 <div class="row">
                                     @php
                                         $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
-                                        $receivers = App\Models\Addressbook::where(
+                                        $receivers = App\Models\Vendor::where(
                                             'client_id',
                                             $user->client_id,
                                         )
@@ -29,12 +29,12 @@
                                             ->get();
                                     @endphp
                                     <div class="col-8 m-auto p-5">
-                                        <form action="{{ route('manager.expense.voucher.generate') }}" method="post">
+                                        <form action="{{ route('manager.expense.voucher.generate') }}" method="post" target="_blank">
                                             @csrf
                                             <input type="hidden" name="exp_id" value="{{ $exp->id }}">
                                             <input type="hidden" name="amount" value="{{ $exp->amount }}">
                                             <div class="form-group">
-                                                <select name="receiver_id" id="" class="form-control" required>
+                                                <select name="vendor_id" id="" class="form-control" required>
                                                     <option value="" selected disabled>Select one</option>
                                                     @foreach ($receivers as $receiver)
                                                         <option value="{{ $receiver->id }}">{{ $receiver->name }}</option>
@@ -42,7 +42,7 @@
                                                 </select>
                                             </div>
                                             <div class="">
-                                                <button type="submit" class="btn btn-sm btn-primary"
+                                                <button type="submit" class="btn btn-sm btn-primary" 
                                                     id="generate">Generate</button>
                                             </div>
                                         </form>
@@ -78,7 +78,7 @@
                                             </div>
                                             <div class="">
                                                 <button type="submit" class="btn btn-sm btn-primary"
-                                                    id="generate">Generate</button>
+                                                    id="generate">Submit</button>
                                             </div>
                                         </form>
                                     </div>

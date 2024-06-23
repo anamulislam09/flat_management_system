@@ -250,15 +250,14 @@
     @foreach ($inv as $voucher)
         @php
         $word = numberToWord($voucher->paid);
-            $customer = App\Models\Customer::where('id', $voucher->client_id)->first();
-            $custDetails = App\Models\CustomerDetail::where('client_id', $customer->id)->first();
+            $client = App\Models\Client::where('id', $voucher->client_id)->first();
         @endphp
         <div class="container">
             <div class="border">
                 <div class="header-text">
-                    <h1>{{ $customer->name }}</h1>
-                    <p>{{ $custDetails->address }}</p>
-                    <p>{{ $custDetails->phone }}, {{ $customer->email }}</p>
+                    <h1>{{ $client->name }}</h1>
+                    <p>{{ $client->address }}</p>
+                    <p>{{ $client->phone }}, {{ $client->email }}</p>
                 </div>
 
                 <div class="bodyInfo">
@@ -322,7 +321,7 @@
                 <div class="footer" style="padding-bottom:40px">
                     <div class="Prepared">
                         @php
-                            $customer = App\Models\Customer::where('id', $voucher->auth_id)->first();
+                            $client = App\Models\Client::where('id', $voucher->auth_id)->first();
                             $user = App\Models\User::where('user_id', $voucher->auth_id)->first();
                         @endphp
                         @if ($voucher->auth_id == Auth::user()->user_id)
@@ -330,7 +329,7 @@
                                 {{ $user->name }}</p>
                         @else
                             <p style="margin-bottom:-0px; text-align:center; width:40%">
-                                {{ $customer->name }}</p>
+                                {{ $client->name }}</p>
                         @endif
                         <h4>Prepared by</h4>
                     </div>

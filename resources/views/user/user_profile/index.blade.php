@@ -22,7 +22,7 @@
 
             $user = App\Models\User::where('client_id', $user_id->client_id)->count();
             $flat = App\Models\Flat::where('client_id', $user_id->client_id)->count();
-            $total_exp = App\Models\Exp_detail::where('client_id', $user_id->client_id)->sum('amount');
+            $total_exp = App\Models\Expense::where('client_id', $user_id->client_id)->sum('amount');
             $total_income = App\Models\Income::where('client_id', $user_id->client_id)->sum('paid');
             $manualOpeningBlance = DB::table('opening_balances')
                 ->where('client_id', $user_id->client_id)
@@ -31,8 +31,8 @@
                 ->where('client_id', $user_id->client_id)
                 ->sum('amount');
 
-            $balance = App\Models\MonthlyBlance::where('client_id', $user_id->client_id)->sum('amount');
-            $Customers = App\Models\Customer::where('role', 1)->count();
+            $balance = App\Models\Balance::where('client_id', $user_id->client_id)->sum('amount');
+            $clients = App\Models\Client::where('role', 1)->count();
             $category = App\Models\Category::count();
             $superAdmin = Auth::user()->user_id;
 
@@ -47,10 +47,10 @@
 
              // this month transactions 
             $flats = App\Models\Flat::where('client_id', $user_id->client_id)->count();
-            $expense = App\Models\Exp_detail::where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('amount');
+            $expense = App\Models\Expense::where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('amount');
             $income = App\Models\Income::where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('paid');
             $others_income = DB::table('others_incomes')->where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('amount');
-            $balance = App\Models\MonthlyBlance::where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('amount');
+            $balance = App\Models\Balance::where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('amount');
 
         @endphp
 

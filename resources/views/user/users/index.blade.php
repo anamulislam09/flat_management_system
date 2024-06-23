@@ -45,7 +45,7 @@
                                             $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
                                             $flat = DB::table('flats')
                                                 ->where('client_id', $user->client_id)
-                                                ->where('flat_unique_id', $item->flat_id)
+                                                ->where('flat_id', $item->flat_id)
                                                 ->first();
                                         @endphp
                                         <tr>

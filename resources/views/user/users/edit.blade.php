@@ -6,7 +6,7 @@
         ->first();
     $flat = DB::table('flats')
         ->where('client_id', $user->client_id)
-        ->where('flat_unique_id', $data->flat_id)
+        ->where('flat_id', $data->flat_id)
         ->first();
 @endphp
 <div class="modal-header">

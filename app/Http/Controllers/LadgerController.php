@@ -205,47 +205,49 @@ class LadgerController extends Controller
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
         $clientId = Auth::guard('admin')->user()->id;
-    
+
         if (Exp_process::where('client_id', $clientId)->where('month', $month)->where('year', $year)->exists()) {
             return redirect()->back()->with('message', 'You have already submitted');
         }
-    
+
         $expenses = Expense::where('client_id', $clientId)->where('month', $month)->where('year', $year)->groupBy('month')->get();
+        // $openingBalance = DB::table('balances')->where('month', $month - 1)->where('year', $year)->where('client_id', $clientId)->first();
+        // $manualOpeningBalance = DB::table('opening_balances')->where('month', $month)->where('year', $year)->where('client_id', $clientId)->first();
+        // dd($manualOpeningBalance);
         foreach ($expenses as $expense) {
             $data = [
                 'year' => $expense->year,
                 'month' => $expense->month,
-                'total' => (double) Expense::where('client_id', $clientId)->where('month', $expense->month)->where('year', $expense->year)->sum('amount'),
+                'total' => (float) Expense::where('client_id', $clientId)->where('month', $expense->month)->where('year', $expense->year)->sum('amount'),
                 'client_id' => $expense->client_id,
                 'auth_id' => $expense->auth_id,
             ];
             $exp_process = Exp_process::create($data);
         }
-    
+
         if (!$exp_process) {
             return redirect()->back()->with('message', 'Something went wrong!');
         }
-    
+
         $monthExp = Exp_process::where('client_id', $clientId)->where('month', $month)->where('year', $year)->first();
-        $income = (double) DB::table('incomes')->where('month', $month)->where('year', $year)->where('client_id', $clientId)->sum('paid');
-        $othersIncome = (double) DB::table('others_incomes')->where('month', $month)->where('year', $year)->where('client_id', $clientId)->sum('amount');
-    
+        $income = (float) DB::table('incomes')->where('month', $month)->where('year', $year)->where('client_id', $clientId)->sum('paid');
+        $othersIncome = (float) DB::table('others_incomes')->where('month', $month)->where('year', $year)->where('client_id', $clientId)->sum('amount');
+
         $openingBalance = DB::table('balances')->where('month', $month - 1)->where('year', $year)->where('client_id', $clientId)->first();
         $manualOpeningBalance = DB::table('opening_balances')->where('month', $month)->where('year', $year)->where('client_id', $clientId)->first();
-    
-        if (!$openingBalance && !$manualOpeningBalance) {
-            $totalIncome = $income + $othersIncome;
+
+        if (!isset($manualOpeningBalance) && !isset($openingBalance)) {
+            $totalIncome = $income + $othersIncome; 
             $totalExpense = $monthExp->total;
             $balance = $totalIncome - $totalExpense;
         } else {
             if ($manualOpeningBalance) {
-                $openingAmount = (double) ($manualOpeningBalance->amount ?? 0);
+                $openingAmount = (float) ($manualOpeningBalance->flag ==1 ? $manualOpeningBalance->profit : $manualOpeningBalance->loss);
                 $flag = $manualOpeningBalance->flag;
             } else {
-                $openingAmount = (double) ($openingBalance->amount ?? 0);
+                $openingAmount = (float) ($openingBalance->amount ?? 0);
                 $flag = $openingBalance->flag;
             }
-    
             if ($flag == 1) {
                 $totalIncome = $openingAmount + $income + $othersIncome;
                 $totalExpense = $monthExp->total;
@@ -256,7 +258,7 @@ class LadgerController extends Controller
                 $balance = $totalIncome - $totalExpense;
             }
         }
-    
+
         $data = [
             'year' => $year,
             'month' => $month,
@@ -268,16 +270,13 @@ class LadgerController extends Controller
             'date' => date('Y-m-d'),
             'flag' => $balance >= 0 ? 1 : 0,
         ];
-    
+
         $balanceData = Balance::create($data);
-    
+
         if ($balanceData) {
             return redirect()->back()->with('message', 'Ledger Posting successfully');
         } else {
             return redirect()->back()->with('message', 'Something went wrong!');
         }
     }
-    
-    
-    
 }
