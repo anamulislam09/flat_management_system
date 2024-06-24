@@ -45,7 +45,7 @@
                                                             <td>
                                                                 @php
                                                                     //  $user = User::where('user_id', Auth::user()->user_id)->first();
-                                                                    $customer_name = App\Models\Customer::where(
+                                                                    $client_name = App\Models\Client::where(
                                                                         'id',
                                                                         $item->auth_id,
                                                                     )->first();
@@ -60,7 +60,7 @@
                                                                 @if ($item->auth_id == Auth::user()->user_id)
                                                                 {{ $user_name->name }}
                                                                 @else
-                                                                {{ $customer_name->name }}
+                                                                {{ $client_name->name }}
                                                                 @endif
 
 

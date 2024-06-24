@@ -61,7 +61,7 @@ class VoucherController extends Controller
             ->where('year', $year)
             ->first();
 
-        return view('admin.report.monthly_expenses', compact('monthly_exp', 'month', 'months', 'year'));
+        return view('admin.accounts.expense_voucher', compact('monthly_exp', 'month', 'months', 'year'));
     }
 
     // Show filtered collection by year

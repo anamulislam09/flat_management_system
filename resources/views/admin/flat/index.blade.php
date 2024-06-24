@@ -1,28 +1,39 @@
 @extends('layouts.admin')
 
 @section('admin_content')
-<style>
-          @media screen and (max-width: 767px) {
-    div.dataTables_wrapper div.dataTables_length, div.dataTables_wrapper div.dataTables_filter, div.dataTables_wrapper div.dataTables_info, div.dataTables_wrapper div.dataTables_paginate{
-text-align: right !important;
-    }
-    
-    .card-title a{
-        font-size: 10px !important;
-    }
-    table, thead, tbody, tr, th, td{
-        font-size: 13px !important;
-        padding: 5px !important;
-    }
-}
+    <style>
+        @media screen and (max-width: 767px) {
 
-.table td, .table th {
-    padding: .30rem;
-    vertical-align: top;
-    border-top: 1px solid #dee2e6;
-    font-size: 14px;
-}
-</style>
+            div.dataTables_wrapper div.dataTables_length,
+            div.dataTables_wrapper div.dataTables_filter,
+            div.dataTables_wrapper div.dataTables_info,
+            div.dataTables_wrapper div.dataTables_paginate {
+                text-align: right !important;
+            }
+
+            .card-title a {
+                font-size: 10px !important;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            th,
+            td {
+                font-size: 13px !important;
+                padding: 5px !important;
+            }
+        }
+
+        .table td,
+        .table th {
+            padding: .30rem;
+            vertical-align: top;
+            border-top: 1px solid #dee2e6;
+            font-size: 14px;
+        }
+    </style>
 
     <div class="content-wrapper">
         <!-- Main content -->
@@ -33,7 +44,8 @@ text-align: right !important;
                         <div class="card">
 
                             <div class="card-header bg-primary text-center">
-                                <h3 class="card-title" style="width:100%; text-align:center; font-size:14px !important">All Flats </h3>
+                                <h3 class="card-title" style="width:100%; text-align:center; font-size:14px !important">All
+                                    Flats </h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -43,10 +55,9 @@ text-align: right !important;
                                         'client_id',
                                         Auth::guard('admin')->user()->id,
                                     )->exists();
-                                    $total = App\Models\Flat::where(
-                                        'client_id',
-                                        Auth::guard('admin')->user()->id,
-                                    )->sum('amount');
+                                    $total = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->sum(
+                                        'amount',
+                                    );
                                 @endphp
 
                                 @if (!$flat)
@@ -70,46 +81,42 @@ text-align: right !important;
                                         </div>
                                     </section>
                                 @else
-                                            <table id="dataTable" class="table table-bordered table-striped">
-                                                <thead>
-                                                    <tr>
-                                                        <th class="text-center">SL</th>
-                                                        <th class="text-center">Customer ID</th>
-                                                        <th class="text-center">Flat Name</th>
-                                                        <th class="text-center">Service Charge</th>
-                                                        <th class="text-center">Status</th>
-                                                        {{-- <th>Action</th> --}}
-                                                    </tr>
-                                                </thead>
-        
-                                                <tbody>
-                                                    @foreach ($data as $key => $item)
-                                                        <tr>
-                                                            <td>{{ $key + 1 }}</td>
-                                                            <td>{{ $item->client_id }}</td>
-                                                            <td>{{ $item->flat_name }}</td>
-                                                            <td class="text-right">{{ $item->amount }}</td>
-                                                            <td class="text-center">
-                                                                @if ($item->status == 1)
-                                                                    <span class="badge badge-primary">Active</span>
-                                                                @else
-                                                                    <span class="badge badge-danger">Deactive</span>
-                                                                @endif
-                                                            </td>
-                                                            {{-- <td>
-                                                            <a href="{{ route('customer.edit', $item->id) }}"
-                                                                class="btn btn-sm btn-info edit"><i class="fas fa-edit"></i></a>
-                                                        </td> --}}
-                                                        </tr>
-                                                    @endforeach
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <td colspan="3" class="text-right"> <strong>Total :</strong></td>
-                                                        <td class="text-right"><strong>{{ $total }}</strong></td>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
+                                    <table id="dataTable" class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">SL</th>
+                                                <th class="text-center">Customer ID</th>
+                                                <th class="text-center">Flat Name</th>
+                                                <th class="text-center">Service Charge</th>
+                                                <th class="text-center">Status</th>
+                                                {{-- <th>Action</th> --}}
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            @foreach ($data as $key => $item)
+                                                <tr>
+                                                    <td>{{ $key + 1 }}</td>
+                                                    <td>{{ $item->client_id }}</td>
+                                                    <td>{{ $item->flat_name }}</td>
+                                                    <td class="text-right">{{ $item->amount }}</td>
+                                                    <td class="text-center">
+                                                        @if ($item->status == 1)
+                                                            <span class="badge badge-primary">Active</span>
+                                                        @else
+                                                            <span class="badge badge-danger">Deactive</span>
+                                                        @endif
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="3" class="text-right"> <strong>Total :</strong></td>
+                                                <td class="text-right"><strong>{{ $total }}</strong></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
                                 @endif
                             </div>
                         </div>

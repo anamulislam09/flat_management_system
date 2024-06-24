@@ -232,7 +232,7 @@
                         @php
                         $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
                             $exp_name = App\Models\Category::where('id', $item->cat_id)->first();
-                            $amount = App\Models\Exp_detail::where('client_id', $user->client_id)
+                            $amount = App\Models\Expense::where('client_id', $user->client_id)
                                 ->where('month', $item->month)
                                 ->where('year', $item->year)
                                 ->where('cat_id', $item->cat_id)

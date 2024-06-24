@@ -1,26 +1,61 @@
 @extends('user.user_layouts.user')
 
 @section('user_content')
-    <style>
-        input:focus {
-            outline: none
+<style>
+    input:focus {
+        outline: none
+    }
+
+    table,
+    thead,
+    tbody,
+    tr,
+    td,
+    th {
+        font-size: 14px !important;
+        padding: 5px !important;
+    }
+
+    .text {
+        font-size: 14px !important;
+    }
+
+    @media screen and (max-width: 767px) {
+
+        div.dataTables_wrapper div.dataTables_length,
+        div.dataTables_wrapper div.dataTables_filter,
+        div.dataTables_wrapper div.dataTables_info,
+        div.dataTables_wrapper div.dataTables_paginate {
+            text-align: right !important;
         }
 
-        .table td,
-        .table th {
-            padding: 0.4rem;
-            vertical-align: top;
-            border-top: 1px solid #dee2e6;
+        .card-title a {
+            font-size: 15px;
         }
 
-        .table tr td {
-            text-align: center;
+        table,
+        thead,
+        tbody,
+        tr,
+        td,
+        th {
+            font-size: 13px !important;
+            padding: 5px !important;
         }
 
-        .table tr th {
-            text-align: center;
+        .card-header {
+            padding: .25rem 1.25rem;
         }
-    </style>
+
+        .text {
+            font-size: 14px !important;
+        }
+
+        .button {
+            margin-top: -0px !important;
+        }
+    }
+</style>
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
@@ -28,13 +63,8 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header">
-                                <div class="col-lg-12">
-                                    <h3 class="card-title">Income Statement</h3>
-                                </div>
-                            </div>
                             <div class="card-header bg-primary text-center">
-                                <h3 class="card-title pt-2" style="width:100%; text-align:center">Income Statement </h3>
+                                <h3 class="card-title text" style="width:100%; text-align:center">Income Statement </h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -63,7 +93,7 @@
                                                         ->where('user_id', $item->auth_id)
                                                         ->first();
 
-                                                    $customer = DB::table('customers')
+                                                    $client = DB::table('clients')
                                                         ->where('id', $item->client_id)
                                                         ->exists();
 
@@ -121,7 +151,7 @@
                                                     <td>{{ $item->due }}</td>
                                                     @if ($user)
                                                         <td>{{ $userName->name }}</td>
-                                                    @elseif ($customer)
+                                                    @elseif ($client)
                                                         <td><span class="badge badge-success">Admin</span></td>
                                                     @endif
 

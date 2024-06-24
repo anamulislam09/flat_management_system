@@ -290,30 +290,62 @@ class IncomeController extends Controller
 
     /*-------------------Collection voucher start here--------------*/
 
-    public function Index()
-    {   //show voucher page
-        $months = Carbon::now()->month;
-        $year = Carbon::now()->year;
-        $user = User::where('user_id', Auth::user()->user_id)->first();
-        $income = Income::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->get();
-        $current_month = Income::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->first();
-        // dd($income);
-        return view('user.income.collection_voucher', compact('income', 'current_month'));
-    }
+    // public function Index()
+    // {   //show voucher page
+    //     $months = Carbon::now()->month;
+    //     $year = Carbon::now()->year;
+    //     $user = User::where('user_id', Auth::user()->user_id)->first();
+    //     $income = Income::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->get();
+    //     $current_month = Income::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->where('status', '!=', 0)->first();
+    //     // dd($income);
+    //     return view('user.income.collection_voucher', compact('income', 'current_month'));
+    // }
 
-    public function CollectionAll(Request $request)
-    { // show collection 
+    // public function CollectionAll(Request $request)
+    // { // show collection 
+
+    //     $user = User::where('user_id', Auth::user()->user_id)->first();
+    //     $isExist = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', $user->client_id)->exists();
+    //     if (!$isExist) {
+    //         return redirect()->back()->with('message', 'Data Not Found');
+    //     } else {
+    //         $data = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', $user->client_id)->get();
+    //         $months = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', $user->client_id)->first();
+    //         return redirect()->back()->with(['data' => $data, 'months' => $months]);
+    //     }
+    // }
+
+     // show current month data 
+     public function Index(Request $request)
+     {   $months = $request->input('month', Carbon::now()->month);
+         $year = $request->input('year', Carbon::now()->year);
+        //  $clientId = Auth::guard('admin')->user()->id;
 
         $user = User::where('user_id', Auth::user()->user_id)->first();
-        $isExist = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', $user->client_id)->exists();
-        if (!$isExist) {
-            return redirect()->back()->with('message', 'Data Not Found');
-        } else {
-            $data = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', $user->client_id)->get();
-            $months = Income::where('month', $request->month)->where('year', $request->year)->where('status', '!=', 0)->where('client_id', $user->client_id)->first();
-            return redirect()->back()->with(['data' => $data, 'months' => $months]);
-        }
-    }
+
+         $income = Income::where('client_id', $user->client_id)
+                         ->where('month', $months)
+                         ->where('year', $year)
+                         ->where('status', '!=', 0)
+                         ->get();
+     
+         $month = Income::where('client_id', $user->client_id)
+                         ->where('month', $months)
+                         ->where('year', $year)
+                         ->where('status', '!=', 0)
+                         ->first();
+     
+         return view('user.income.collection_voucher', compact('income', 'month', 'months', 'year'));
+     }
+     
+     // show filter data 
+     public function CollectionAll(Request $request)
+     {
+         $months = $request->input('month');
+         $year = $request->input('year');
+         return redirect()->route('manager.income.collection.index', ['month' => $months, 'year' => $year]);
+     }
+    
 
     // Income Management generate income voucher 
     public function GenerateIncomeVoucher($id)

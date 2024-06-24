@@ -18,18 +18,9 @@
                                 <h3 class="card-title pt-2" style="width:100%; text-align:center">Vendore Entry Form</h3>
                             </div>
                             <div class="card">
-                                {{-- <div class="card-header" id="headingTwo">
-                                    <h5 class="mb-0">
-                                        Add New Receiver Info
-                                        <button class="btn btn-link collapsed" data-toggle="collapse"
-                                            data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                            Click here
-                                        </button>
-                                    </h5>
-                                </div> --}}
                                     <div class="card-body">
                                         <div class="row py-4">
-                                            <div class="col-8 m-auto border p-5" style="background: #ddd">
+                                            <div class="col-lg-8 col-md-12 col-sm-12 m-auto border p-5" style="background: #ddd">
                                                 <form action="{{ route('vendor.store') }}" method="POST">
                                                     @csrf
                                                     {{-- <input type="hidden" name="exp_id" value="{{ $exp->id }}">

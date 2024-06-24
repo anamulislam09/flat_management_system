@@ -36,7 +36,6 @@
                         <i class="nav-icon fas fa-circle"></i>
                         <p> Dashboard </p>
                     </a>
-
                 </li>
                 @if (Auth::guard('admin')->user()->role == 0)
                     <li

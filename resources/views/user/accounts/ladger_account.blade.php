@@ -1,7 +1,51 @@
 @extends('user.user_layouts.user')
 
 @section('user_content')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
+<style>
+    input:focus {
+        outline: none
+    }
+
+    table,
+    thead,
+    tbody,
+    tr,
+    td {
+        font-size: 14px;
+        padding: 5px !important;
+        /* padding: .30rem; */
+    }
+    .text {
+            font-size: 15px;
+        }
+
+    @media screen and (max-width: 767px) {
+        .card-title a {
+            font-size: 14px;
+        }
+
+        table,
+        thead,
+        tbody,
+        tr,
+        td {
+            font-size: 14px;
+            padding: 5px !important;
+        }
+
+        .text {
+            font-size: 14px;
+        }
+
+        .button {
+            margin-top: 5px !important;
+        }
+
+        .date {
+            margin-bottom: 15px;
+        }
+    }
+</style>
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
@@ -9,17 +53,25 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
-                            <div class="card-header bg-primary text-center">
-                                <h3 class="card-title pt-2" style="width:100%; text-align:center">Ledger Account </h3>
+                            <div class="card-header bg-primary text-center text">
+                                <h3 class="card-title" style="width:100%; text-align:center">Ledger Account </h3>
                             </div>
                             <div class="card-header">
                                 <div class="row">
-                                    <div class="col-lg-10 col-sm-12">
-                                        <h3 class="card-title">Ledger Account</h3>
+                                    <div class="col-lg-10 col-md-9 col-sm-12">
+                                        @php
+                                            $month = Carbon\Carbon::now()->month;
+                                            $year = Carbon\Carbon::now()->year;
+                                        @endphp
+                                        <h3 class="card-title text">Account for the Month of
+                                            <strong>{{ date('F', strtotime(date('Y'))) }} -{{ date('Y') }}</strong>
+
+                                            </strong>
+                                        </h3>
                                     </div>
-                                    <div class="col-lg-2 col-sm-12">
+                                    <div class="col-lg-2 col-md-3 col-sm-12">
                                         <a href="{{ route('manager.ledger-posting.store') }}"
-                                            class="btn btn-sm btn-outline-primary">Ledger
+                                            class="btn btn-sm btn-primary button">Ledger
                                             Posting</a>
                                     </div>
                                 </div>
@@ -31,8 +83,6 @@
                                         <thead>
                                             <tr>
                                                 <th>SL</th>
-                                                {{-- <th>Year</th>
-                      <th>Month</th> --}}
                                                 <th>Expense</th>
                                                 <th>SubTotal</th>
                                                 <th>Total Cost</th>
@@ -47,10 +97,9 @@
                                                 '-',
                                                 date('Y-m', strtotime(date('Y-m') . ' -1 month')),
                                             );
-
                                             $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
 
-                                            $openingBlance = DB::table('monthly_blances')
+                                            $openingBlance = DB::table('balances')
                                                 ->where('month', $month - 1)
                                                 ->where('year', $previousDate[0])
                                                 ->where('client_id', $user->client_id)
@@ -66,7 +115,7 @@
                                             $lastYear = date('Y') - 1;
                                             $lastmonth = 12;
 
-                                            $lastYopeningBlance = DB::table('monthly_blances')
+                                            $lastYopeningBlance = DB::table('balances')
                                                 ->where('month', $lastmonth)
                                                 ->where('year', $lastYear)
                                                 ->where('client_id', $user->client_id)
@@ -121,22 +170,18 @@
                                             @if (count($expense) > 0)
                                                 @foreach ($expense as $key => $item)
                                                     @php
-                                                        $user = App\Models\User::where(
-                                                            'user_id',
-                                                            Auth::user()->user_id,
-                                                        )->first();
+                                                    $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
                                                         $data = DB::table('categories')
                                                             ->where('id', $item->cat_id)
                                                             ->first();
-                                                        $total_exp = App\Models\Exp_detail::where(
-                                                            'client_id',
-                                                            $user->client_id,
+                                                        $total_exp = App\Models\Expense::where(
+                                                            'client_id',$user->client_id,
                                                         )
                                                             ->where('month', $item->month)
                                                             ->where('year', $item->year)
                                                             ->where('cat_id', $item->cat_id)
                                                             ->sum('amount');
-                                                        $total = App\Models\Exp_detail::where(
+                                                        $total = App\Models\Expense::where(
                                                             'client_id',
                                                             $user->client_id,
                                                         )
@@ -159,7 +204,7 @@
                                                 </tr>
                                             @endif
                                             <tr>
-                                                <td colspan="3"><strong>Total Cost of this Month
+                                                <td colspan="3"><strong>Total Cost of This Month
                                                     </strong></td>
                                                 @if (count($expense) > 0)
                                                     <td><strong>{{ $total }}</strong></td>
@@ -182,8 +227,7 @@
                                                 <td></td>
                                             </tr>
                                             <tr>
-                                                <td colspan="5"><strong>Balance of This
-                                                        Month
+                                                <td colspan="5"><strong>Balance of This Month
                                                     </strong></td>
                                                 <td>
                                                     @if (count($expense) > 0)

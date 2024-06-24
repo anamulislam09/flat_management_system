@@ -1,7 +1,53 @@
 @extends('user.user_layouts.user')
-
 @section('user_content')
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
+<style>
+  @media screen and (max-width: 767px) {
+
+      div.dataTables_wrapper div.dataTables_length,
+      div.dataTables_wrapper div.dataTables_filter,
+      div.dataTables_wrapper div.dataTables_info,
+      div.dataTables_wrapper div.dataTables_paginate {
+          text-align: right !important;
+      }
+
+      .card-title a {
+          font-size: 15px;
+      }
+
+      table,
+      thead,
+      tbody,
+      tr,
+      td,
+      th {
+          font-size: 13px !important;
+          padding: 5px !important;
+      }
+
+      .card-header {
+          padding: .25rem 1.25rem;
+      }
+
+      .text {
+          font-size: 14px !important;
+      }
+
+      .button {
+          margin-top: -0px !important;
+      }
+  }
+
+  .table td,
+  .table th {
+      padding: .30rem;
+      vertical-align: top;
+      border-top: 1px solid #dee2e6;
+      font-size: 14px;
+  }
+  .text {
+          font-size: 14px !important;
+      }
+</style>
   <div class="content-wrapper">
     <!-- Main content -->
     <section class="content mt-3">
@@ -10,19 +56,19 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header bg-primary text-center">
-                <h3 class="card-title pt-2" style="width:100%; text-align:center">Expense Entry</h3>
+                <h3 class="card-title text" style="width:100%; text-align:center">Expense Entry</h3>
             </div>
               <!-- /.card-header -->
               <div class="card-body">
                 <!-- /.card-header -->
                 <div class="row">
-                  <div class="col-12 m-auto border p-5">
+                  <div class="col-12 m-auto border">
                     <form action="{{ route('manager.expense.store') }}" method="POST">
                       @csrf
                       <div class="row">
-                        <div class=" col-lg-5 form-group">
-                          <label for="unit" class="">Expense Category</label>
-                          <select name="cat_id" class="form-control" id="" required>
+                        <div class=" col-lg-5 col-md-5 col-sm-6 form-group mb-0">
+                          <label for="unit" class="text">Expense Category</label>
+                          <select name="cat_id" class="form-control text" id="" required>
                             <option value="" selected disabled>Select Once</option>
                             @foreach ($exp_cat as $item)
                               <option value="{{ $item->id }}">{{ $item->name }}</option>
@@ -30,13 +76,13 @@
 
                           </select>
                         </div>
-                        <div class=" col-lg-5 form-group">
-                          <label for="unit" class="">Expense Amount</label>
-                          <input type="text" name="amount" class="form-control" placeholder="Enter Expense Amount"
+                        <div class=" col-lg-5 col-md-5 col-sm-6 form-group">
+                          <label for="unit" class="text">Expense Amount</label>
+                          <input type="text" name="amount" class="form-control text" placeholder="Enter Expense Amount"
                             required>
                         </div>
-                        <div class="col-lg-2">
-                          <button type="submit" class="btn btn-sm btn-primary float-end" style="margin-top: 35px"
+                        <div class="col-lg-2 mb-2">
+                          <button type="submit" class="btn btn-sm btn-primary float-end text" style="margin-top: 35px"
                             id="">Submit</button>
                         </div>
                       </div>
@@ -145,11 +191,9 @@
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
-
         <div id="modal_body">
 
         </div>
-
       </div>
     </div>
   </div>

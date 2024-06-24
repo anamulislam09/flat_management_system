@@ -10,11 +10,9 @@
             div.dataTables_wrapper div.dataTables_paginate {
                 text-align: right !important;
             }
-
             .card-title a {
                 font-size: 15px;
             }
-
             .text {
                 font-size: 10px !important;
             }

@@ -99,11 +99,11 @@
                               ->where('id', $item->cat_id)
                               ->first();
                           $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
-                          $sub_total = App\Models\Exp_detail::where('client_id', $user->client_id)
+                          $sub_total = App\Models\Expense::where('client_id', $user->client_id)
                               ->where('year', $item->year)
                               ->where('cat_id', $item->cat_id)
                               ->sum('amount');
-                          $total = App\Models\Exp_detail::where('client_id', $user->client_id)
+                          $total = App\Models\Expense::where('client_id', $user->client_id)
                               ->where('year', $item->year)
                               ->sum('amount');
                         @endphp
@@ -156,11 +156,11 @@
                                 ->first();
                             $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
 
-                            $sub_total = App\Models\Exp_detail::where('client_id', $user->client_id)
+                            $sub_total = App\Models\Expense::where('client_id', $user->client_id)
                                 ->where('year', $yearly_item->year)
                                 ->where('cat_id', $yearly_item->cat_id)
                                 ->sum('amount');
-                            $total = App\Models\Exp_detail::where('client_id', $user->client_id)
+                            $total = App\Models\Expense::where('client_id', $user->client_id)
                                 ->where('year', $yearly_item->year)
                                 ->sum('amount');
                           @endphp

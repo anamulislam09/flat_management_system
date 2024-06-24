@@ -3,7 +3,7 @@
 @section('admin_content')
     <style>
         @media screen and (max-width: 767px) {
-          
+
             table,
             thead,
             tbody,
@@ -15,23 +15,27 @@
             .text {
                 font-size: 14px !important;
             }
-            .button{
+
+            .button {
                 font-size: 14px;
             }
-            .voucher{
+
+            .voucher {
                 margin-top: 7px;
             }
         }
+
         .text {
-                font-size: 14px !important;
-            }
-            table,
-            thead,
-            tbody,
-            tr,
-            td {
-                font-size: 14px;
-            }
+            font-size: 14px !important;
+        }
+
+        table,
+        thead,
+        tbody,
+        tr,
+        td {
+            font-size: 14px;
+        }
     </style>
     <div class="content-wrapper">
         <!-- Main content -->
@@ -41,7 +45,7 @@
                     <div class="col-lg-7 col-md-7 col-sm-12">
                         <div class="card">
                             <div class="card-header bg-primary">
-                                <div class="row"> 
+                                <div class="row">
                                     <div class="col-lg-10 col-md-10 col-sm-8">
                                         <h3 class="card-title d-block text">Expense Summary for the Month of <strong>
                                                 @if ('1' == date('m'))
@@ -160,56 +164,7 @@
                     </div>
                 </div>
             </div>
+
+        </section>
     </div>
-    </section>
-    </div>
-    <!-- Modal -->
-    {{-- <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Edit USer </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-
-                <div id="modal_body">
-                    <form action="{{ route('expense.voucher') }}" method="POST">
-                    @csrf
-                    <input type="hidden" name="id" value="">
-                    <div class="modal-body">
-                        <div class="mb-3 mt-3">
-                            <label for="" class="form-label"> Name :</label>
-                            <input type="text" class="form-control" value="" name="name">
-                        </div>
-
-                        <div class="mb-3 mt-3">
-                            <label for="" class="form-label"> Email :</label>
-                            <input type="email" class="form-control" value="" name="email">
-                        </div>
-                        <div class="mb-3 mt-3">
-                            <label for="" class="form-label"> Phone :</label>
-                            <input type="text" class="form-control" value="" name="phone">
-                        </div>
-                        <div class="mb-3 mt-3">
-                            <label for="" class="form-label"> Address :</label>
-                            <input type="text" class="form-control" value="" name="address">
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Update</button>
-                    </div>
-                    </form>
-                </div>
-
-            </div>
-        </div>
-    </div>
-
-    <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script> --}}
 @endsection

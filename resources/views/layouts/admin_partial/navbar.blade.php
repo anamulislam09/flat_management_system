@@ -27,24 +27,21 @@
                         <span class="mr-2 d-none d-lg-inline text-white-600 small">
                             <b>
                                 @if (Auth::guard('admin')->user()->role == 0)
-                                <span class="brand-text font-weight-bold">Super Admin ( {{Auth::guard('admin')->user()->name}} )</span>
-                            @else
-                                <span class="brand-text font-weight-bold">Admin dashboard ( {{Auth::guard('admin')->user()->name}} )</span>
-                            @endif
+                                    <span class="brand-text font-weight-bold">Super Admin (
+                                        {{ Auth::guard('admin')->user()->name }} )</span>
+                                @else
+                                    <span class="brand-text font-weight-bold">Admin dashboard (
+                                        {{ Auth::guard('admin')->user()->name }} )</span>
+                                @endif
                             </b>
                         </span>
-                        <img class="img-profile rounded-circle" src="{{ asset('admin/dist/img/avatar5.png') }}" height="30" width="30">
+                        <img class="img-profile rounded-circle" src="{{ asset('admin/dist/img/avatar5.png') }}"
+                            height="30" width="30">
                     </a>
                     <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                         aria-labelledby="userDropdown">
-                        {{-- <a class="dropdown-item" href="{{ url('admin/profile/update-admin-details') }}">
-                            <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                            Profile
-                        </a> --}}
-                        {{-- <div class="dropdown-divider"></div> --}}
-                        <a class="dropdown-item"
-                            href="javascript:void(0)"
-                            data-toggle="modal" data-target="#logoutModal">
+                        <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal"
+                            data-target="#logoutModal">
                             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                             Logout
                         </a>
@@ -69,7 +66,8 @@
                 <form method="POST" action="{{ url('admin/logout') }}">
                     @csrf
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" :href="{{ url('admin/logout') }}" onclick="event.preventDefault();this.closest('form').submit();">Logout</a>
+                    <a class="btn btn-primary" :href="{{ url('admin/logout') }}"
+                        onclick="event.preventDefault();this.closest('form').submit();">Logout</a>
                 </form>
             </div>
         </div>

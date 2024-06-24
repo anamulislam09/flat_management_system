@@ -95,7 +95,7 @@
                                                                 $item->exp_id,
                                                             )->first();
 
-                                                            $Vendor = App\Models\Addressbook::where(
+                                                            $Vendor = App\Models\Vendor::where(
                                                                 'client_id',
                                                                 $item->client_id,
                                                             )->where('id', $item->vendor_id)->first();

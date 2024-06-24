@@ -226,31 +226,60 @@ class AccountController extends Controller
         }
     }
 
-     //show voucher page
-     public function ExpenseIndex()
-     {
-         $months = Carbon::now()->month;
-         $year = Carbon::now()->year;
-         $user = User::where('user_id', Auth::user()->user_id)->first();
-         $exp = Expense::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->groupBy('cat_id')->get();
-         $month = Expense::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->first();
-         return view('user.accounts.expense_voucher', compact('exp', 'month'));
-     }
+    //  //show voucher page
+    //  public function ExpenseIndex()
+    //  {
+    //      $months = Carbon::now()->month;
+    //      $year = Carbon::now()->year;
+    //      $user = User::where('user_id', Auth::user()->user_id)->first();
+    //      $exp = Expense::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->groupBy('cat_id')->get();
+    //      $month = Expense::where('client_id', $user->client_id)->where('month', $months)->where('year', $year)->first();
+    //      return view('user.accounts.expense_voucher', compact('exp', 'month'));
+    //  }
 
-     // show collection 
+    //  // show collection 
+    // public function ExpenseAll(Request $request)
+    // {
+    //     $user = User::where('user_id', Auth::user()->user_id)->first();
+    //     $isExist = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->exists();
+    //     if (!$isExist) {
+    //         return redirect()->back()->with('message', 'Data Not Found');
+    //     } else {
+    //         $data = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
+    //         $months = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->first();
+    //         //    dd($month->month);
+    //         // return view('admin.accounts.expense_voucher', compact('data', 'months'));
+    //         return redirect()->back()->with(['data' => $data, 'months' => $months]);
+    //     }
+    // }
+
+    // Show voucher page
+    public function ExpenseIndex(Request $request)
+    {
+        $months = $request->input('month', Carbon::now()->month);
+        $year = $request->input('year', Carbon::now()->year);
+        $user = User::where('user_id', Auth::user()->user_id)->first();
+
+        $monthly_exp = Expense::where('client_id', $user->client_id)
+            ->where('month', $months)
+            ->where('year', $year)
+            ->groupBy('cat_id')
+            ->get();
+        $month = Expense::where('client_id', $user->client_id)
+            ->where('month', $months)
+            ->where('year', $year)
+            ->first();
+
+        return view('user.accounts.expense_voucher', compact('monthly_exp', 'month', 'months', 'year'));
+    }
+
+    // Show filtered collection by year
     public function ExpenseAll(Request $request)
     {
-        $user = User::where('user_id', Auth::user()->user_id)->first();
-        $isExist = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->exists();
-        if (!$isExist) {
-            return redirect()->back()->with('message', 'Data Not Found');
-        } else {
-            $data = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
-            $months = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->first();
-            //    dd($month->month);
-            // return view('admin.accounts.expense_voucher', compact('data', 'months'));
-            return redirect()->back()->with(['data' => $data, 'months' => $months]);
-        }
+        $months = $request->input('month');
+        $year = $request->input('year');
+
+        return redirect()->route('manager.account.expense.index', ['month' => $months, 'year' => $year]);
     }
 
      // BalanceSheet

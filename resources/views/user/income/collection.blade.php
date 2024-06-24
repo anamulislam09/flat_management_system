@@ -1,27 +1,53 @@
 @extends('user.user_layouts.user')
-
 @section('user_content')
     <style>
         input:focus {
             outline: none
         }
 
-        .table td,
-        .table th {
-            padding: 0.4rem;
-            vertical-align: top;
-            border-top: 1px solid #dee2e6;
-        }
-
-        .table tr td {
+        table,
+        thead,
+        tbody,
+        tr,
+        td {
+            font-size: 14px;
+            padding: 5px !important;
             text-align: center;
         }
 
-        .table tr th {
-            text-align: center;
+        .text {
+            font-size: 15px;
+        }
+
+        @media screen and (max-width: 767px) {
+            .card-title a {
+                font-size: 15px;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            td {
+                font-size: 14px;
+                padding: 0px !important;
+                text-align: center;
+            }
+
+            .text {
+                font-size: 14px;
+            }
+
+            .button {
+                margin-top: -0px !important;
+            }
+
+            .date {
+                margin-bottom: 15px;
+            }
+
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
@@ -32,97 +58,19 @@
                             <div class="card-header bg-primary">
                                 <div class="row ">
                                     <div class="col-lg-10 col-sm-12 pt-2">
-                                        <h3 class="card-title" style="width:100%; text-align:center">Collection Entry</h3>
+                                        <h3 class="card-title text" style="width:100%; text-align:center">Collection Entry
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="card-header">
-                                <div class="row">
-                                    <div class="col-lg-12" style="border: 1px solid #ddd">
-                                        <form action="{{ route('manager.income.collection.store') }}" method="post">
-                                            @csrf
-                                            <div class="row my-4">
-                                                <div class="col-lg-3">
-                                                    <select name="year" class="form-control" id="">
-                                                        <option value="" selected disabled>Select Year</option>
-                                                        <option value="2023"
-                                                            @if ('2023' == date('Y')) selected @endif>Year 2023
-                                                        </option>
-                                                        <option value="2024"
-                                                            @if ('2024' == date('Y')) selected @endif>Year 2024
-                                                        </option>
-                                                        <option value="2025"
-                                                            @if ('2025' == date('Y')) selected @endif>Year 2025
-                                                        </option>
-                                                        <option value="2026"
-                                                            @if ('2026' == date('Y')) selected @endif>Year 2026
-                                                        </option>
-                                                        <option value="2027"
-                                                            @if ('2027' == date('Y')) selected @endif>Year 2027
-                                                        </option>
-                                                        <option value="2028"
-                                                            @if ('2028' == date('Y')) selected @endif>Year 2028
-                                                        </option>
-                                                        <option value="2029"
-                                                            @if ('2029' == date('Y')) selected @endif>Year 2029
-                                                        </option>
-                                                        <option value="2030"
-                                                            @if ('2030' == date('Y')) selected @endif>Year 2030
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                                <div class="col-lg-3">
-                                                    <select name="month" class="form-control" id="">
-                                                        <option value="" selected disabled>Select Month </option>
-                                                        <option value="01"
-                                                            @if ('01' == date('m')) selected @endif>January
-                                                        </option>
-                                                        <option value="02"
-                                                            @if ('02' == date('m')) selected @endif>February
-                                                        </option>
-                                                        <option value="03"
-                                                            @if ('03' == date('m')) selected @endif>March
-                                                        </option>
-                                                        <option value="04"
-                                                            @if ('04' == date('m')) selected @endif>April
-                                                        </option>
-                                                        <option value="05"
-                                                            @if ('05' == date('m')) selected @endif>May</option>
-                                                        <option value="06"
-                                                            @if ('06' == date('m')) selected @endif>June
-                                                        </option>
-                                                        <option value="07"
-                                                            @if ('07' == date('m')) selected @endif>July
-                                                        </option>
-                                                        <option value="08"
-                                                            @if ('08' == date('m')) selected @endif>August
-                                                        </option>
-                                                        <option value="09"
-                                                            @if ('09' == date('m')) selected @endif>September
-                                                        </option>
-                                                        <option value="10"
-                                                            @if ('10' == date('m')) selected @endif>October
-                                                        </option>
-                                                        <option value="11"
-                                                            @if ('11' == date('m')) selected @endif>November
-                                                        </option>
-                                                        <option value="12"
-                                                            @if ('12' == date('m')) selected @endif>December
-                                                        </option>
-                                                    </select>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div> --}}
-
                             <!-- /.card-header -->
                             <div class="card-body">
                                 @if (count($data) > 1)
                                     <div class="card">
-                                        <div class="card-header">
-                                            <strong> Total Collection for the Month of @if ('1' == date('m'))
+                                        <div class="card-header text">
+                                            Total Collection for the Month of
+                                            <strong>
+                                                @if ('1' == date('m'))
                                                     January
                                                 @elseif ('2' == date('m'))
                                                     February
@@ -146,7 +94,8 @@
                                                     November
                                                 @elseif ('12' == date('m'))
                                                     December
-                                                @endif - {{ date('Y') }}</strong>
+                                                @endif - {{ date('Y') }}
+                                            </strong>
                                         </div>
                                     </div>
                                     <div class="table-responsive">
@@ -155,7 +104,6 @@
                                                 <tr>
                                                     <th style="width: 8%">SL</th>
                                                     <th style="width: 10%">Flat Name</th>
-                                                    {{-- <th style="width: 15%">Charge</th> --}}
                                                     <th style="width: 15%">Current Amount</th>
                                                     <th style="width: 12%">Previous Due</th>
                                                     <th style="width: 10%">Payable</th>
@@ -172,8 +120,6 @@
                                                             'user_id',
                                                             Auth::user()->user_id,
                                                         )->first();
-                                                        // $month = Carbon::now()->month;
-                                                        // $year = Carbon::now()->year;
                                                         $previousDate = explode(
                                                             '-',
                                                             date('Y-m', strtotime(date('Y-m') . ' -1 month')),
@@ -218,7 +164,6 @@
                                                         <tr>
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>{{ $item->flat_name }}</td>
-                                                            {{-- <td>{{ $item->charge }}</td> --}}
                                                             <td>{{ $item->amount }}</td>
                                                             @if (!$previousMonthData)
                                                                 <td>000</td>
@@ -244,7 +189,7 @@
                                                                 @elseif($item->status == 2)
                                                                     <span class="badge badge-warning">Due</span>
                                                                     <a
-                                                                        href="{{ route('manager.income.voucher.generate', $item->id) }}"><span
+                                                                        href="{{ route('manager.income.voucher.generate', $item->id) }}" target="_blank"><span
                                                                             class="badge badge-info">Voucher</span></a>
                                                                 @else
                                                                     <input type="submit" class="btn btn-sm btn-primary"
@@ -268,7 +213,7 @@
                                             </tfoot>
                                         </table>
                                     @else
-                                        <h5 class="text-center py-3">No Data Found</h5>
+                                        <h5 class="text-center py-3 text">No Data Found</h5>
                                 @endif
                             </div>
 
@@ -278,6 +223,4 @@
             </div>
         </section>
     </div>
-
-    <script src="{{ asset('backend/plugins/jquery/jquery.min.js') }}"></script>
 @endsection

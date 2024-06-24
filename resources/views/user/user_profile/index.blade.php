@@ -1,16 +1,29 @@
 @extends('user.user_layouts.user')
 @section('user_content')
+<style>
+    h3{
+        font-size: 20px !important;
+    }
+    p{
+        font-size: 14px !important
+    }
+    .text {font-size: 14px !important }
+    .link{
+        font-size: 12px !important;
+    }
+</style>
+
     <div class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0">{{Auth::user()->name}} Dashboard</h1>
+                        <h1 class="m-0" style="font-size: 28px">{{Auth::user()->name}} Dashboard</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item"><a href="{{ route('user.Profile') }}">Home</a></li>
-                            <li class="breadcrumb-item active">Dashboard </li>
+                            <li class="breadcrumb-item" style="font-size: 14px"><a href="{{ route('user.Profile') }}">Home</a></li>
+                            <li class="breadcrumb-item active" style="font-size: 14px">Dashboard </li>
                         </ol>
                     </div>
                 </div>
@@ -116,7 +129,7 @@
                             <div class="small-box bg-warning">
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
-                                    <h3>{{ $total_exp }}<sup style="font-size: 20px">TK</sup></h3>
+                                    <h3>{{ $total_exp }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -130,7 +143,7 @@
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <p>Total Service Charge</p>
-                                    <h3>{{ $total_income }}<sup style="font-size: 20px">TK</sup></h3>
+                                    <h3>{{ $total_income }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -144,7 +157,7 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Others Income</p>
-                                    <h3>{{ $others_income }}<sup style="font-size: 20px">TK</sup></h3>
+                                    <h3>{{ $others_income }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -160,15 +173,15 @@
                                     @if (isset($manualOpeningBlance))
                                         @if ($manualOpeningBlance->flag == 1)
                                             <p>Opening Balance (Profit)</p>
-                                            <h3>{{ $manualOpeningBlance->profit }}<sup style="font-size: 20px">TK</sup>
+                                            <h3>{{ $manualOpeningBlance->profit }}<sup style="font-size: 14px">TK</sup>
                                             </h3>
                                         @else
                                             <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $manualOpeningBlance->loss }}<sup style="font-size: 20px">TK</sup></h3>
+                                            <h3>{{ $manualOpeningBlance->loss }}<sup style="font-size: 14px">TK</sup></h3>
                                         @endif
                                     @else
                                         <p>Opening Balance </p>
-                                        <h3>0<sup style="font-size: 20px">TK</sup>
+                                        <h3>0<sup style="font-size: 14px">TK</sup>
                                         </h3>
                                     @endif
                                 </div>
@@ -191,7 +204,7 @@
                                                     style="font-size: 20px">TK</sup></h3>
                                         @endif
                                     @else
-                                        <h3>{{ $total_income + $others_income }} <sup style="font-size: 20px">TK</sup></h3>
+                                        <h3>{{ $total_income + $others_income }} <sup style="font-size: 14px">TK</sup></h3>
                                     @endif
                                 </div>
                             </div>
@@ -200,7 +213,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3>{{ $balance }} <sup style="font-size: 20px">TK</sup></h3>
+                                    <h3>{{ $balance }} <sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
@@ -212,7 +225,7 @@
 
                 <div class="card " style="margin-top: -20px !important">
                     <div class="card-header row ">
-                        <h4><input value="{{ date('Y-m') }}" type="month" name="date" class="form-control"
+                        <h4><input value="{{ date('Y-m') }}" type="month" name="date" class="form-control text"
                                 id="date"></h4>
                     </div>
                 </div>
@@ -228,7 +241,7 @@
                             <div class="icon">
                                 <i class="ion ion-bag"></i>
                             </div>
-                            <a href="{{ route('manager.flat.index') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('manager.flat.index') }}" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -238,13 +251,13 @@
                         <div class="small-box bg-warning">
                             <div class="inner text-white">
                                 <p>Total Expenses</p>
-                                <h3 id="expense"><sup style="font-size: 20px">TK</sup></h3>
+                                <h3 id="expense"><sup style="font-size: 14px">TK</sup></h3>
 
                             </div>
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
                             </div>
-                            <a href="{{ route('manager.expenses.year') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('manager.expenses.year') }}" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -257,13 +270,13 @@
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <p>Total Service Charge</p>
-                                <h3 id="income"><sup style="font-size: 20px">TK</sup></h3>
+                                <h3 id="income"><sup style="font-size: 14px">TK</sup></h3>
 
                             </div>
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="{{ route('manager.income.statement') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('manager.income.statement') }}" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -275,13 +288,13 @@
                         <div class="small-box bg-secondary">
                             <div class="inner">
                                 <p>Others Income</p>
-                                <h3 id="others_income"><sup style="font-size: 20px">TK</sup></h3>
+                                <h3 id="others_income"><sup style="font-size: 14px">TK</sup></h3>
 
                             </div>
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i
+                            <a href="#" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -290,13 +303,13 @@
                         <div class="small-box bg-danger">
                             <div class="inner">
                                 <p>Balance</p>
-                                <h3 id="balance"><sup style="font-size: 20px">TK</sup></h3>
+                                <h3 id="balance"><sup style="font-size: 14px">TK</sup></h3>
 
                             </div>
                             <div class="icon">
                                 <i class="ion ion-pie-graph"></i>
                             </div>
-                            <a href="{{ route('manager.blance.index') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('manager.blance.index') }}" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -312,7 +325,7 @@
                             <div class="icon">
                                 <i class="ion ion-bag"></i>
                             </div>
-                            <a href="{{ route('manager.flat.index') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('manager.flat.index') }}" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -321,12 +334,12 @@
                         <div class="small-box bg-warning">
                             <div class="inner text-white">
                                 <p>Total Expenses</p>
-                                <h3>{{ $expense }}<sup style="font-size: 20px">TK</sup></h3>
+                                <h3>{{ $expense }}<sup style="font-size: 14px">TK</sup></h3>
                             </div>
                             <div class="icon">
                                 <i class="ion ion-person-add"></i>
                             </div>
-                            <a href="{{ route('manager.expenses.year') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('manager.expenses.year') }}" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -339,13 +352,13 @@
                         <div class="small-box bg-success">
                             <div class="inner">
                                 <p>Total Service Charge</p>
-                                <h3>{{ $income }}<sup style="font-size: 20px">TK</sup></h3>
+                                <h3>{{ $income }}<sup style="font-size: 14px">TK</sup></h3>
 
                             </div>
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="{{ route('manager.income.statement') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('manager.income.statement') }}" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -357,13 +370,13 @@
                         <div class="small-box bg-secondary">
                             <div class="inner">
                                 <p>Others Income</p>
-                                <h3>{{ $others_income }}<sup style="font-size: 20px">TK</sup></h3>
+                                <h3>{{ $others_income }}<sup style="font-size: 14px">TK</sup></h3>
 
                             </div>
                             <div class="icon">
                                 <i class="ion ion-stats-bars"></i>
                             </div>
-                            <a href="#" class="small-box-footer">More info <i
+                            <a href="#" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -373,13 +386,13 @@
                         <div class="small-box bg-danger">
                             <div class="inner">
                                 <p>Balance</p>
-                                <h3>{{ $balance }} <sup style="font-size: 20px">TK</sup></h3>
+                                <h3>{{ $balance }} <sup style="font-size: 14px">TK</sup></h3>
 
                             </div>
                             <div class="icon">
                                 <i class="ion ion-pie-graph"></i>
                             </div>
-                            <a href="{{ route('manager.blance.index') }}" class="small-box-footer">More info <i
+                            <a href="{{ route('manager.blance.index') }}" class="small-box-footer link"">More info <i
                                     class="fas fa-arrow-circle-right"></i></a>
                         </div>
                     </div>
@@ -387,7 +400,7 @@
 
                 <div class="card">
                     <div class="card-header">
-                        <h4 class="title">Total Transactions</h4>
+                        <h4 class="title" style="font-size: 20px">Total Transactions</h4>
                     </div>
                 </div>
                     <div class="row">
@@ -400,7 +413,7 @@
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
                                 </div>
-                                <a href="{{ route('manager.users.index') }}" class="small-box-footer">More info <i
+                                <a href="{{ route('manager.users.index') }}" class="small-box-footer link"">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -414,7 +427,7 @@
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
                                 </div>
-                                <a href="{{ route('manager.flat.index') }}" class="small-box-footer">More info <i
+                                <a href="{{ route('manager.flat.index') }}" class="small-box-footer link"">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -422,12 +435,12 @@
                             <div class="small-box bg-warning">
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
-                                    <h3>{{ $total_exp }}<sup style="font-size: 20px">TK</sup></h3>
+                                    <h3>{{ $total_exp }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
-                                <a href="{{ route('manager.expenses.year') }}" class="small-box-footer">More info <i
+                                <a href="{{ route('manager.expenses.year') }}" class="small-box-footer link"">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -439,12 +452,12 @@
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <p>Total Service Charge</p>
-                                    <h3>{{ $total_income }}<sup style="font-size: 20px">TK</sup></h3>
+                                    <h3>{{ $total_income }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
                                 </div>
-                                <a href="{{ route('manager.income.statement') }}" class="small-box-footer">More info <i
+                                <a href="{{ route('manager.income.statement') }}" class="small-box-footer link"">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -455,12 +468,12 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Others Income</p>
-                                    <h3>{{ $others_income }}<sup style="font-size: 20px">TK</sup></h3>
+                                    <h3>{{ $others_income }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i
+                                <a href="#" class="small-box-footer link"">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -472,22 +485,22 @@
                                     @if (isset($manualOpeningBlance))
                                         @if ($manualOpeningBlance->flag == 1)
                                             <p>Opening Balance (Profit)</p>
-                                            <h3>{{ $manualOpeningBlance->profit }}<sup style="font-size: 20px">TK</sup>
+                                            <h3>{{ $manualOpeningBlance->profit }}<sup style="font-size: 14px">TK</sup>
                                             </h3>
                                         @else
                                             <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $manualOpeningBlance->loss }}<sup style="font-size: 20px">TK</sup></h3>
+                                            <h3>{{ $manualOpeningBlance->loss }}<sup style="font-size: 14px">TK</sup></h3>
                                         @endif
                                     @else
                                         <p>Opening Balance </p>
-                                        <h3>0<sup style="font-size: 20px">TK</sup>
+                                        <h3>0<sup style="font-size: 14px">TK</sup>
                                         </h3>
                                     @endif
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i
+                                <a href="#" class="small-box-footer link"">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -505,13 +518,13 @@
                                                     style="font-size: 20px">TK</sup></h3>
                                         @endif
                                     @else
-                                        <h3>{{ $total_income + $others_income }} <sup style="font-size: 20px">TK</sup></h3>
+                                        <h3>{{ $total_income + $others_income }} <sup style="font-size: 14px">TK</sup></h3>
                                     @endif
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
                                 </div>
-                                <a href="#" class="small-box-footer">More info <i
+                                <a href="#" class="small-box-footer link"">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -520,12 +533,12 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3>{{ $balance }} <sup style="font-size: 20px">TK</sup></h3>
+                                    <h3>{{ $balance }} <sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
                                 </div>
-                                <a href="{{ route('manager.blance.index') }}" class="small-box-footer">More info <i
+                                <a href="{{ route('manager.blance.index') }}" class="small-box-footer link"">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>

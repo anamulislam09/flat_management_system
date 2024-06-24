@@ -1,5 +1,4 @@
 @extends('layouts.admin')
-
 @section('admin_content')
     <style>
         input:focus {
@@ -26,14 +25,14 @@
             }
 
             table,
-        thead,
-        tbody,
-        tr,
-        td {
-            font-size: 14px;
-            padding: 5px !important;
-            text-align: center;
-        }
+            thead,
+            tbody,
+            tr,
+            td {
+                font-size: 14px;
+                padding: 0px !important;
+                text-align: center;
+            }
 
             .text {
                 font-size: 14px;
@@ -49,7 +48,6 @@
 
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
@@ -68,23 +66,28 @@
                                             @csrf
                                             <div class="row my-4">
                                                 <div class="col-lg-3 date">
-                                                    <select name="year" class="form-control text" id="year" required>
+                                                    <select name="year" class="form-control text" id="year"
+                                                        required>
                                                         @foreach (range(date('Y'), 2010) as $year)
                                                             <option value="{{ $year }}">{{ $year }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-3">
-                                                    <select name="month" class="form-control text date" id="month" required>
+                                                    <select name="month" class="form-control text date" id="month"
+                                                        required>
                                                         @for ($i = 1; $i <= 12; $i++)
-                                                            <option value="{{ $i }}" @if($i == $months) selected @endif>
-                                                                {{ date('F', strtotime(date('Y') . '-' . $i . '-01')) }}</option>
+                                                            <option value="{{ $i }}"
+                                                                @if ($i == $months) selected @endif>
+                                                                {{ date('F', strtotime(date('Y') . '-' . $i . '-01')) }}
+                                                            </option>
                                                         @endfor
                                                     </select>
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <label for="" class="col-form-label text"></label>
-                                                    <input type="submit" class="btn btn-primary btn-sm text" value="Filter">
+                                                    <input type="submit" class="btn btn-primary btn-sm text"
+                                                        value="Filter">
                                                 </div>
                                             </div>
                                         </form>
@@ -103,20 +106,21 @@
                                         <div class="card-header">
                                             <div class="row">
                                                 <div class="col-10 text">
-                                                    <strong> Total Collection for the Month dfgdsfgd of 
+                                                    <strong> Total Collection for the Month dfgdsfgd of
                                                         <strong>
                                                             {{ date('F', mktime(0, 0, 0, $months->month, 10)) }}
                                                         </strong>
                                                     </strong>
                                                 </div>
                                                 <div class="col-2">
-                                                    <form action="{{ route('income.voucher.generateall') }}" method="post"  >
+                                                    <form action="{{ route('income.voucher.generateall') }}" method="post">
                                                         @csrf
                                                         <input type="hidden" name="month" value="{{ $months->month }}">
                                                         <input type="hidden" name="year" value="{{ $months->year }}">
 
                                                         <label for="" class="col-form-label"></label>
-                                                        <input type="submit" formtarget="_blank" class="btn btn-info text-end btn-sm text button"
+                                                        <input type="submit" formtarget="_blank"
+                                                            class="btn btn-info text-end btn-sm text button"
                                                             value="Generate all">
                                                     </form>
                                                 </div>
@@ -131,7 +135,7 @@
                                                 <th style="width: 20%">Flat Name</th>
                                                 <th style="width: 20%" class="text-center">Payable</th>
                                                 <th style="width: 20%" class="text-center">Paid Amount</th>
-                                                <th style="width: 20%" class="text-center">Action</th>
+                                                <th style="width: 32%" class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -185,8 +189,8 @@
                                                     @endif
                                                     <td class="text-right"> {{ $item->paid }}</td>
                                                     <td class="text-center"><a
-                                                            href="{{ route('income.voucher.generate', $item->id) }}" target="_blank"
-                                                            class="btn btn-sm btn-info">Voucher</a></td>
+                                                            href="{{ route('income.voucher.generate', $item->id) }}"
+                                                            target="_blank" class="badge badge-info">Voucher</a></td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
@@ -240,8 +244,9 @@
                                                                 value="{{ $month->year }}">
 
                                                             <label for="" class="col-form-label"></label>
-                                                            <input type="submit" class="btn btn-info text-end btn-sm text button" formtarget="_blank"
-                                                                value="Generate all">
+                                                            <input type="submit"
+                                                                class="btn btn-info text-end btn-sm text button"
+                                                                formtarget="_blank" value="Generate all">
                                                         </form>
                                                     </div>
                                                 </div>
@@ -255,7 +260,7 @@
                                                         <th style="width: 20%">Flat Name</th>
                                                         <th style="width: 20%" class="text-center">Payable</th>
                                                         <th style="width: 20%" class="text-center">Paid Amount</th>
-                                                        <th style="width: 20%" class="text-center">Action</th>
+                                                        <th style="width: 32%" class="text-center">Action</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -310,7 +315,8 @@
                                                             <td class="text-right"> {{ $item->paid }}</td>
                                                             <td class="text-center"><a
                                                                     href="{{ route('income.voucher.generate', $item->id) }}"
-                                                                    class="btn btn-sm btn-info" target="_blank">Voucher</a></td>
+                                                                    class="badge badge-info" target="_blank">Voucher</a>
+                                                            </td>
                                                         </tr>
                                                     @endforeach
                                                 </tbody>

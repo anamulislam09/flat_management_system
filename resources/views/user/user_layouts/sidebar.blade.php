@@ -1,32 +1,43 @@
+<style>
+    @media screen and (max-width: 767px) {
+
+        ul,
+        li,
+        a {
+            font-size: 13px !important;
+        }
+    }
+
+    ul,
+    li,
+    a {
+        font-size: 15px;
+    }
+</style>
+
 <aside class="main-sidebar sidebar-dark-primary elevation-4 p-0">
     <!-- Brand Logo -->
-    <a href="{{ route('user.Profile') }}" class="brand-link">
-        <img src="{{ asset('admin//dist/img/AdminLTELogo.png') }}" alt="AdminLTE Logo"
-            class="brand-image img-circle elevation-3" style="opacity: .8">
+    <a href="{{ route('user.Profile') }}" class="brand-link bg-success text-center">
         @if (Auth::user()->role_id == 0)
-            <span class="brand-text font-weight-light"> User Dashboard</span>
+            <span class="brand-text font-weight-bold"> User Dashboard</span>
         @else
-            <span class="brand-text font-weight-light">Manager dashboard</span>
+            <span class="brand-text font-weight-bold">Manager dashboard</span>
         @endif
     </a>
 
     <!-- Sidebar -->
     <div class="sidebar mt-3">
-        <!-- Sidebar user panel (optional) -->
-        <div class="user-panel pb-3 mb-3 d-flex">
-            <div class="image">
-                <img src="{{ asset('admin//dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2"
-                    alt="User Image">
-            </div>
-            <div class="info">
-                <a href="{{ route('user.Profile') }}" class="d-block">{{ Auth::user()->name }}</a>
-            </div>
-        </div>
-        <!-- Sidebar Menu -->
         <!-- Category start here -->
         <nav class=" mb-5">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                 data-accordion="false">
+                <li class="nav-item ">
+                    <a href="{{ route('user.Profile') }}"
+                        class="nav-link {{ Request::routeIs('user.Profile') ? 'active' : '' }}">
+                        <i class="nav-icon fas fa-circle"></i>
+                        <p> Dashboard </p>
+                    </a>
+                </li>
                 @if (Auth::user()->role_id == 0)
                     <li
                         class="nav-item {{ Request::routeIs('singleUser.paid') || Request::routeIs('singleUser.due') ? 'menu-open' : '' }}">
@@ -305,42 +316,43 @@
                     </li>
                     {{-- All Setup ends here --}}
 
-                          {{-- All Setup history  start here --}}
-                          <li class="nav-item ">
-                            <a href="{{route('manager.expense.setup.history')}}" class="nav-link {{ Request::routeIs('manager.expense.setup.history') ? 'active' : '' }}">
-                                <i class="nav-icon fas fa-circle"></i>
-                                <p>Setup History
-                                </p>
-                            </a>
-                        </li>
-                        {{-- All Setup history ends here --}}
+                    {{-- All Setup history  start here --}}
+                    <li class="nav-item ">
+                        <a href="{{ route('manager.expense.setup.history') }}"
+                            class="nav-link {{ Request::routeIs('manager.expense.setup.history') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>Setup History
+                            </p>
+                        </a>
+                    </li>
+                    {{-- All Setup history ends here --}}
 
-                         {{-- All Vendors mewnu start here --}}
-                     <li
-                     class="nav-item {{ Request::routeIs('manager.vendor.all') || Request::routeIs('manager.vendor.create') || Request::routeIs('manager.vendor.edit') ? 'menu-open' : '' }}">
-                     <a href="#" class="nav-link">
-                         <i class="nav-icon fas fa-circle"></i>
-                         <p>Vendors<i class="right fas fa-angle-left"></i>
-                         </p>
-                     </a>
-                     <ul class="nav nav-treeview ml-3">
-                         <li class="nav-item">
-                             <a href="{{ route('manager.vendor.create') }}"
-                                 class="nav-link {{ Request::routeIs('manager.vendor.create') ? 'active' : '' }}">
-                                 <i class="far fa-dot-circle nav-icon"></i>
-                                 <p>Add New Vendor</p>
-                             </a>
-                         </li>
-                         <li class="nav-item">
-                             <a href="{{ route('manager.vendor.all') }}"
-                                 class="nav-link {{ Request::routeIs('manager.vendor.all') ? 'active' : '' }}">
-                                 <i class="far fa-dot-circle nav-icon"></i>
-                                 <p>All Vendors</p>
-                             </a>
-                         </li>
-                     </ul>
-                 </li>
-                 {{-- All Vendors menu ends here --}}
+                    {{-- All Vendors mewnu start here --}}
+                    <li
+                        class="nav-item {{ Request::routeIs('manager.vendor.all') || Request::routeIs('manager.vendor.create') || Request::routeIs('manager.vendor.edit') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>Vendors<i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('manager.vendor.create') }}"
+                                    class="nav-link {{ Request::routeIs('manager.vendor.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Add New Vendor</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('manager.vendor.all') }}"
+                                    class="nav-link {{ Request::routeIs('manager.vendor.all') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Vendors</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{-- All Vendors menu ends here --}}
 
                     {{-- Roles & Parmission start here --}}
                     {{-- <li class="nav-item">
