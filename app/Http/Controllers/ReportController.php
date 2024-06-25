@@ -38,13 +38,6 @@ class ReportController extends Controller
     {
         $months = $request->input('month');
         $year = $request->input('year');
-        $clientId = Auth::guard('admin')->user()->id;
-
-        $isExist = Expense::where('client_id', $clientId)
-            ->where('month', $months)
-            ->where('year', $year)
-            ->exists();
-
         return redirect()->route('expenses.month', ['month' => $months, 'year' => $year]);
     }
 

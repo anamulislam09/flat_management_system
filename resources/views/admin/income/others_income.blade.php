@@ -35,7 +35,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header bg-primary text-center text">
-                                <h3 class="card-title pt-2" style="width:100%; text-align:center">Others Income Entry </h3>
+                                <h3 class="card-title text" style="width:100%; text-align:center">Others Income Entry </h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">

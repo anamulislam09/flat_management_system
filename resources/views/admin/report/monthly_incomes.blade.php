@@ -21,7 +21,7 @@
                 <div class="col-lg-8 col-md-9 col-sm-12">
                     <div class="card">
                         <div class="card-header bg-primary text-center">
-                            <h3 class="card-title pt-2">Monthly Income</h3>
+                            <h3 class="card-title text" style="width:100%; text-align:center">Monthly Income</h3>
                         </div>
                         <div class="card-header">
                             <form action="{{ route('handle.monthly.income') }}" method="post" class="row my-4">

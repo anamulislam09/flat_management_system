@@ -1,6 +1,5 @@
-@extends('layouts.admin')
-
-@section('admin_content')
+@extends('user.user_layouts.user')
+@section('user_content')
     <style>
         @media screen and (max-width: 767px) {
 

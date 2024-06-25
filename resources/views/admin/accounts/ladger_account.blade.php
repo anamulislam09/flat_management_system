@@ -54,7 +54,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header bg-primary text-center text">
-                                <h3 class="card-title" style="width:100%; text-align:center">Ledger Account </h3>
+                                <h3 class="card-title text" style="width:100%; text-align:center">Ledger Account </h3>
                             </div>
                             <div class="card-header">
                                 <div class="row">

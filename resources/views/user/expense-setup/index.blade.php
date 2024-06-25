@@ -1,12 +1,54 @@
 @extends('user.user_layouts.user')
 
 @section('user_content')
-    <style>
-        ul li {
-            list-style: none;
+<style>
+    @media screen and (max-width: 767px) {
+  
+        div.dataTables_wrapper div.dataTables_length,
+        div.dataTables_wrapper div.dataTables_filter,
+        div.dataTables_wrapper div.dataTables_info,
+        div.dataTables_wrapper div.dataTables_paginate {
+            text-align: right !important;
         }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
+  
+        .card-title a {
+            font-size: 15px;
+        }
+  
+        table,
+        thead,
+        tbody,
+        tr,
+        td,
+        th {
+            font-size: 13px !important;
+            padding: 5px !important;
+        }
+  
+        .card-header {
+            padding: .25rem 1.25rem;
+        }
+  
+        .text {
+            font-size: 14px !important;
+        }
+  
+        .button {
+            margin-top: -0px !important;
+        }
+    }
+  
+    .table td,
+    .table th {
+        padding: .30rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+        font-size: 14px;
+    }
+    .text {
+            font-size: 14px !important;
+        }
+  </style>
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
@@ -15,7 +57,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header bg-primary text-center">
-                                <h3 class="card-title pt-2" style="width:100%; text-align:center">Expense Schedule Setup</h3>
+                                <h3 class="card-title text" style="width:100%; text-align:center">Expense Schedule Setup</h3>
                             </div>
                             <!-- /.card-header -->
                             <div class="card-body">
@@ -27,8 +69,8 @@
                                             <div class="row">
                                                 <div class="col-lg-3">
                                                     <div class=" form-group">
-                                                        <label for="floor" class="">Select Expense</label>
-                                                        <select name="exp_id" id="exp_id" class="form-control">
+                                                        <label for="floor" class="text">Select Expense</label>
+                                                        <select name="exp_id" id="exp_id" class="form-control text">
                                                             <option value="" selected disabled>Select Once</option>
                                                             @foreach ($expenses as $expense)
                                                                 <option value="{{ $expense->id }}">{{ $expense->name }}
@@ -39,8 +81,8 @@
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class=" form-group">
-                                                        <label for="floor" class="">Select Vendor</label>
-                                                        <select name="vendor_id" id="vendor_id" class="form-control">
+                                                        <label for="floor" class="text">Select Vendor</label>
+                                                        <select name="vendor_id" id="vendor_id" class="form-control text">
                                                             <option value="" selected disabled>Select Once</option>
                                                             @foreach ($vendor as $item)
                                                                 <option value="{{ $item->id }}">{{ $item->name }}
@@ -51,15 +93,15 @@
                                                 </div>
                                                 <div class="col-lg-3">
                                                     <div class="form-group">
-                                                        <label for="unit" class="">Interval Days :</label>
-                                                        <input type="text" class="form-control" value=""
+                                                        <label for="unit" class="text">Interval Days :</label>
+                                                        <input type="text" class="form-control text" value=""
                                                             name="days" id="days" placeholder="Enter Interval Days"
                                                             required>
                                                     </div>
                                                 </div>
                                                 <div class="col-lg-2">
                                                     <div class="form-group">
-                                                        <button type="submit" id="submitBtn" class="btn btn-sm btn-primary"
+                                                        <button type="submit" id="submitBtn" class="btn btn-sm btn-primary text"
                                                             style="margin-top: 35px">Submit</button>
                                                     </div>
                                                 </div>
@@ -71,7 +113,7 @@
                             <div class="card-body">
                                 <div class="col-lg-12">
                                     <div class="card">
-                                        <strong class="d-flex justify-content-center mb-2"><span
+                                        <strong class="d-flex justify-content-center mb-2 text"><span
                                                 id="user"></span>&nbsp; Expense Setup</strong>
                                         <hr>
                                         <div class="card-body table-responsive">

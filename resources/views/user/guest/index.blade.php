@@ -1,6 +1,5 @@
-@extends('layouts.admin')
-
-@section('admin_content')
+@extends('user.user_layouts.user')
+@section('user_content')
     <style>
         @media screen and (max-width: 767px) {
 
@@ -25,7 +24,7 @@
             tr,
             td,
             th {
-                font-size: 14px !important;
+                font-size: 13px !important;
                 padding: 10px !important;
             }
 
@@ -80,7 +79,8 @@
                         <div class="card">
                             <div class="card-header bg-primary text-center text p-1">
                                 <h3 class="card-title">
-                                    <a href="#"class="btn btn-light shadow rounded m-0"><span>Guest Entry History</span></a>
+                                    <a href="{{ route('guestBook.create') }}"class="btn btn-light shadow rounded m-0"><i
+                                            class="fas fa-plus"></i><span>Add New</span></a>
                                 </h3>
                             </div>
                             {{-- </div> --}}
@@ -94,25 +94,24 @@
                                             <th>Phone</th>
                                             <th>Address</th>
                                             <th>Image</th>
-                                            <th>Purpose</th>
-                                            <th>Entry_Date</th>
-                                            <th>Exit_Date</th>
+                                            {{-- <th>Created By</th> --}}
+                                            <th>Action</th>
                                     </thead>
                                     <tbody>
-                                        @foreach ($history as $key => $item)
-                                            @php
-                                                $guest = App\Models\Guest::where('id', $item->guest_id)->first();
-                                            @endphp
+                                        @foreach ($guests as $key => $item)
                                             <tr>
-                                                <td>{{ $key + 1 }}</td>
-                                                <td>{{ $guest->name }}</td>
-                                                <td>{{ $guest->phone }}</td>
-                                                <td>{{ $guest->address }}</td>
-                                                <td> <img src="{{ asset('images/' . $guest->image) }}"
-                                                        style="width: 50px; margin:auto;" alt="{{ $guest->image }}"></td>
-                                                <td>{{ $item->purpose }}</td>
-                                                <td>{{ $item->entry_date }}</td>
-                                                <td>{{ $item->exit_date ? $item->exit_date : '---' }}</td>
+                                                <td>{{ $key+1 }}</td>
+                                                <td>{{ $item->name }}</td>
+                                                <td>{{ $item->phone }}</td>
+                                                <td>{{ $item->address }}</td>
+                                                <td>
+                                                    <img src="{{ asset('images/' . $item->image) }}" style="width: 50px; margin:auto;" alt="{{ $item->image }}">
+                                                </td>
+                                                <td>
+                                                    <a href="" class="btn btn-sm btn-info edit"
+                                                        data-id="{{ $item->id }}" data-toggle="modal"
+                                                        data-target="#editUser"><i class="fas fa-edit"></i></a>
+                                                </td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -124,4 +123,36 @@
             </div>
         </section>
     </div>
+
+    {{-- category edit model --}}
+    <!-- Modal -->
+    <div class="modal fade" id="editUser" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" id="model-main">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Guest Info</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div id="modal_body">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.js"></script>
+    <script>
+        $('body').on('click', '.edit', function() {
+            let guest_id = $(this).data('id');
+            $.get("/guest-book/edit/" + guest_id, function(data) {
+                $('#model-main').html(data);
+
+            })
+        })
+    </script>
 @endsection

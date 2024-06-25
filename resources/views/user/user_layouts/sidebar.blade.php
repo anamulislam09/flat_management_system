@@ -291,7 +291,7 @@
 
                     {{-- All Setup  start here --}}
                     <li
-                        class="nav-item {{ Request::routeIs('manager.flat.singlecreate') || Request::routeIs('manager.expense.setup') ? 'menu-open' : '' }}">
+                        class="nav-item {{ Request::routeIs('manager.flat.singlecreate') || Request::routeIs('manager.expense.setup*') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>Setup<i class="right fas fa-angle-left"></i>
@@ -307,7 +307,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('manager.expense.setup') }}"
-                                    class="nav-link {{ Request::routeIs('manager.expense.setup') ? 'active' : '' }}">
+                                    class="nav-link {{ Request::routeIs('manager.expense.setup*') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>Schedule Setup</p>
                                 </a>
@@ -354,25 +354,39 @@
                     </li>
                     {{-- All Vendors menu ends here --}}
 
-                    {{-- Roles & Parmission start here --}}
-                    {{-- <li class="nav-item">
-                        <a href="#" class="nav-link">
+                    {{-- All Vendors mewnu start here --}}
+                    <li
+                        class="nav-item {{ Request::routeIs('manager.guestBook.index') || Request::routeIs('manager.guestBook.create') || Request::routeIs('manager.guestBook.edit') || Request::routeIs('manager.guestBook.history') ? 'menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ Request::routeIs('manager.guestBook.index') || Request::routeIs('manager.guestBook.create') || Request::routeIs('manager.guestBook.edit') || Request::routeIs('manager.guestBook.history') ? 'Active' : '' }}">
                             <i class="nav-icon fas fa-circle"></i>
-                            <p>
-                                Roles & Permission
-                                <i class="right fas fa-angle-left"></i>
+                            <p>Guest Manage<i class="right fas fa-angle-left"></i>
                             </p>
                         </a>
                         <ul class="nav nav-treeview ml-3">
                             <li class="nav-item">
-                                <a href="#" class="nav-link">
+                                <a href="{{ route('manager.guestBook.create') }}"
+                                    class="nav-link {{ Request::routeIs('manager.guestBook.create') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
-                                    <p>All Permission</p>
+                                    <p>Add New</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('manager.guestBook.index') }}"
+                                    class="nav-link {{ Request::routeIs('manager.guestBook.index') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Guests</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('manager.guestBook.history') }}"
+                                    class="nav-link {{ Request::routeIs('manager.guestBook.history') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Guest History</p>
                                 </a>
                             </li>
                         </ul>
-                    </li> --}}
-                    {{-- Roles & Parmission ends here --}}
+                    </li>
                 @endif
             </ul>
         </nav>

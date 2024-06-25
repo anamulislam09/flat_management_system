@@ -72,14 +72,12 @@
                                     <thead>
                                         <tr>
                                             <th>User Id</th>
-                                            {{-- <th width="10%">client_id</th> --}}
                                             <th>User Name</th>
                                             <th>Flat Name</th>
                                             <th>Phone/Passport</th>
                                             <th>Email</th>
                                             <th>NID/NRC</th>
                                             <th>Status</th>
-                                            {{-- <th>Role_id</th> --}}
                                             <th> Action</th>
                                     </thead>
                                     <tbody>
@@ -112,8 +110,6 @@
                                                     <a href="" class="btn btn-sm btn-info edit"
                                                         data-id="{{ $item->id }}" data-toggle="modal"
                                                         data-target="#editUser"><i class="fas fa-edit"></i></a>
-                                                    {{-- <a href="{{ route('user.delete', $item->id) }}"
-                                                    class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></a> --}}
                                                 </td>
                                             </tr>
                                         @endforeach

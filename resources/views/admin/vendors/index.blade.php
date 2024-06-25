@@ -1,12 +1,59 @@
 @extends('layouts.admin')
 
 @section('admin_content')
-    <style>
-        ul li {
-            list-style: none;
+<style>
+    @media screen and (max-width: 767px) {
+
+        div.dataTables_wrapper div.dataTables_length,
+        div.dataTables_wrapper div.dataTables_filter,
+        div.dataTables_wrapper div.dataTables_info,
+        div.dataTables_wrapper div.dataTables_paginate {
+            text-align: right !important;
         }
-    </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.css" />
+        .card-title a {
+            font-size: 15px;
+        }
+        .text {
+            font-size: 10px !important;
+        }
+
+        table,
+        thead,
+        tbody,
+        tr,
+        td,
+        th {
+            font-size: 13px !important;
+            padding: 10px !important;
+        }
+
+        .card-header {
+            padding: .25rem 1.25rem;
+        }
+
+    }
+
+    a.disabled {
+        pointer-events: none;
+        cursor: default;
+    }
+
+    .modal-dialog {
+        max-width: 650px;
+    }
+
+    .table td,
+    .table th {
+        padding: .20rem;
+        vertical-align: top;
+        border-top: 1px solid #dee2e6;
+        font-size: 14px;
+    }
+
+    .text {
+        font-size: 14px
+    }
+</style>
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
@@ -15,7 +62,7 @@
                     <div class="col-12">
                         <div class="card">
                             <div class="card-header bg-primary text-center">
-                                <h3 class="card-title pt-2" style="width:100%; text-align:center">All Vendor</h3>
+                                <h3 class="card-title text" style="width:100%; text-align:center">All Vendor</h3>
                             </div>
                             <div class="card-body">
                                 <div class="col-lg-12">
@@ -88,7 +135,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title editmodel">Edit Vendor </h5>
+                    <h5 class="modal-title editmodel text">Edit Vendor </h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>

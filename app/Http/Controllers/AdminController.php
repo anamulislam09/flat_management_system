@@ -19,14 +19,12 @@ use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Auth;
-use Carbon\Carbon;
-use Haruncpi\LaravelIdGenerator\IdGenerator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
-use sirajcse\UniqueIdGenerator\UniqueIdGenerator;
-use Yajra\DataTables\Facades\DataTables;
+
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -218,20 +216,66 @@ class AdminController extends Controller
         return view('admin.pages.forgot_password');
     }
     // receive the email 
+    // public function ForgotPassword(Request $request)
+    // {
+    //     $client = Client::where('email', '=', $request->email)->first();
+    //     if (!empty($client)) {
+    //         $client->remember_token = Str::random(40);
+    //         $client->save();
+    //         Mail::to($client->email)->send(new ForgotPasswordMail($client));
+    //         $notification = array('message' => 'Please check your email and forgot your password.', 'alert_type' => 'warning');
+    //         return redirect()->back()->with($notification);
+    //     } else {
+    //         $notification = array('message' => 'Email not found in this system.', 'alert_type' => 'warning');
+    //         return redirect()->back()->with($notification);
+    //     }
+    // }
+
+    
+
     public function ForgotPassword(Request $request)
-    {
-        $client = Client::where('email', '=', $request->email)->first();
-        if (!empty($client)) {
-            $client->remember_token = Str::random(40);
-            $client->save();
-            Mail::to($client->email)->send(new ForgotPasswordMail($client));
-            $notification = array('message' => 'Please check your email and forgot your password.', 'alert_type' => 'warning');
-            return redirect()->back()->with($notification);
-        } else {
-            $notification = array('message' => 'Email not found in this system.', 'alert_type' => 'warning');
-            return redirect()->back()->with($notification);
-        }
+{
+    // Validate the request
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email',
+    ]);
+
+    if ($validator->fails()) {
+        return redirect()->back()->withErrors($validator)->withInput();
     }
+
+    // Find the client by email
+    $client = Client::where('email', $request->email)->first();
+
+    if ($client) {
+        // Generate a new remember token
+        $client->remember_token = Str::random(40);
+        $client->save();
+
+        try {
+            // Send the reset password email
+            Mail::to($client->email)->send(new ForgotPasswordMail($client));
+            $notification = array(
+                'message' => 'Please check your email and reset your password.', 
+                'alert_type' => 'success'
+            );
+        } catch (\Exception $e) {
+            // Handle any errors during the email sending process
+            $notification = array(
+                'message' => 'Failed to send reset password email. Please try again later.', 
+                'alert_type' => 'danger'
+            );
+        }
+
+        return redirect()->back()->with($notification);
+    } else {
+        $notification = array(
+            'message' => 'Email not found in this system.', 
+            'alert_type' => 'warning'
+        );
+        return redirect()->back()->with($notification);
+    }
+}
 
     public function reset($token)
     {

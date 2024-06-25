@@ -105,59 +105,21 @@
 <!-- Summernote -->
 <script src="{{asset('admin/plugins/summernote/summernote-bs4.min.js')}}"></script>
 <script>
+  // Summernote
   $(function () {
-    // Summernote
     $('#summernote').summernote()
   })
 </script>
 
-
-<!-- AdminLTE App -->
-{{-- <script src="{{asset('admin/dist/js/adminlte.min.js')}}"></script> --}}
-<!-- AdminLTE for demo purposes -->
-{{-- <script src="{{asset('admin/dist/js/demo.js')}}"></script> --}}
 <!-- Page specific script -->
 <script>
-  $(function () {
-    $("#example1").DataTable({
-      "responsive": true, "lengthChange": false, "autoWidth": false,
-      "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-    }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
-    $('#example2').DataTable({
-      "paging": true,
-      "lengthChange": false,
-      "searching": false,
-      "ordering": true,
-      "info": true,
-      "autoWidth": false,
-      "responsive": true,
-    });
-  });
+$(function () {
+  $("#example1").DataTable({
+    "responsive": true, "lengthChange": false, "autoWidth": false,
+  }).appendTo('#example1_wrapper .col-md-6:eq(0)');
+});
 
 </script>
-
-{{-- sweetalert for delete --}}
-{{-- <script>
-  $(document).on("click", "#delete", function(e){
-    e.preventDefault();
-    var link = $(this).attr('href');
-    swal({
-      title: "Are you want to delete?",
-      text: "Once Delete,this will be permanently delete!",
-      icon:"warning",
-      button:true,
-      dangerMode:true,
-    })
-    .then((willDelete) => {
-      if(willDelete){
-        window.location.href = link
-      }else{
-        swal("Safe Data");
-      }
-    });
-  });
-</script> --}}
-
 <script>
   function confirmAlert(element, message = "You won't be able to revert this!", buttonText = 'Yes, delete it!', title = 'Are you sure?') {
       $(document).on('click', element, function(event) {

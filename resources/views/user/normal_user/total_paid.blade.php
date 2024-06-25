@@ -1,26 +1,57 @@
 @extends('user.user_layouts.user')
-
 @section('user_content')
-  <style>
-    input:focus {
-      outline: none
-    }
+<style>
+  @media screen and (max-width: 767px) {
 
-    .table td,
-    .table th {
-      padding: 0.4rem;
+      div.dataTables_wrapper div.dataTables_length,
+      div.dataTables_wrapper div.dataTables_filter,
+      div.dataTables_wrapper div.dataTables_info,
+      div.dataTables_wrapper div.dataTables_paginate {
+          text-align: right !important;
+      }
+      .card-title a {
+          font-size: 15px;
+      }
+      .text {
+          font-size: 10px !important;
+      }
+
+      table,
+      thead,
+      tbody,
+      tr,
+      td,
+      th {
+          font-size: 13px !important;
+          padding: 10px !important;
+      }
+
+      .card-header {
+          padding: .25rem 1.25rem;
+      }
+  }
+
+  a.disabled {
+      pointer-events: none;
+      cursor: default;
+  }
+
+  .modal-dialog {
+      max-width: 650px;
+  }
+
+  .table td,
+  .table th {
+      padding: .20rem;
       vertical-align: top;
       border-top: 1px solid #dee2e6;
-    }
+      font-size: 14px;
+  }
 
-    .table tr td {
-      text-align: center;
-    }
-
-    .table tr th {
-      text-align: center;
-    }
-  </style>
+  .text {
+      font-size: 14px
+  }
+</style>
   <div class="content-wrapper">
     <!-- Main content -->
     <section class="content mt-3">
@@ -29,19 +60,16 @@
           <div class="col-12">
             <div class="card">
               <div class="card-header bg-primary">
-
                 @if (Route::current()->getName() == 'singleUser.paid')
                   <div class="col-lg-12">
-                    <h3 class="card-title" style="width: 100%; text-align:center">Total Payable From <strong>{{ Auth::user()->name }}</strong>
+                    <h3 class="card-title text" style="width: 100%; text-align:center">Total Payable From <strong>{{ Auth::user()->name }}</strong>
                     </h3>
                   </div>
                 @else
                   <div class="col-lg-12">
-                    <h3 class="card-title" style="width: 100%; text-align:center">Total Due From <strong>{{ Auth::user()->name }}</strong></h3>
+                    <h3 class="card-title text" style="width: 100%; text-align:center">Total Due From <strong>{{ Auth::user()->name }}</strong></h3>
                   </div>
                 @endif
-
-
               </div>
               <!-- /.card-header -->
               <div class="card-body">
@@ -51,7 +79,6 @@
                       <th>SL </th>
                       <th>Year</th>
                       <th>Month</th>
-                      {{-- <th >Flat_Name</th> --}}
                       <th>Charge</th>
                       <th>Amount</th>
                       @if (Route::current()->getName() == 'singleUser.paid')
@@ -59,7 +86,6 @@
                       @else
                         <th>Due</th>
                       @endif
-                      {{-- <th>Payble</th> --}}
                     </tr>
                   </thead>
                   <tbody>
@@ -72,7 +98,7 @@
                             ->where('user_id', $item->auth_id)
                             ->first();
 
-                        $customer = DB::table('customers')
+                        $client = DB::table('clients')
                             ->where('id', $item->client_id)
                             ->exists();
 
@@ -118,7 +144,6 @@
                             December
                           @endif
                         </td>
-                        {{-- <td>{{ $item->flat_name }}</td> --}}
                         <td>{{ $item->charge }}</td>
                         <td class="text-right">{{ $item->amount }}</td>
                         @if (Route::current()->getName() == 'singleUser.paid')
@@ -135,12 +160,6 @@
                     <tr>
                       <td colspan="4" class="text-right"> <strong>Total :</strong></td>
                       <td class="text-right"><strong>{{ $total_amount }}</strong></td>
-                      {{-- @if (isset($collection))
-                        <td class="text-right"><strong>{{ $collection }}</strong></td>
-                      @else
-                        <td class="text-right"><strong>00</strong></td>
-                      @endif --}}
-
                       @if (Route::current()->getName() == 'singleUser.paid')
                         @if (isset($collection))
                           <td class="text-right"><strong>{{ $collection }}</strong></td>
@@ -162,6 +181,4 @@
       </div>
     </section>
   </div>
-
-  {{-- <script src="{{ asset('backend/plugins/jquery/jquery.min.js') }}"></script> --}}
 @endsection

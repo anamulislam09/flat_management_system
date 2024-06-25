@@ -54,6 +54,7 @@
                             $years = session('year', $years);
                             $opening_balance = session('opening_balance', $y_opening_balance);
                             $others_income = session('others_income', $y_other_income);
+                            $others_total = 0; // Initialize others_total
                         @endphp
 
                         @if ($yearly_income == 0)
