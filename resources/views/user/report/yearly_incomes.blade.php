@@ -68,7 +68,7 @@
                                     <div class="col-lg-6 col-md-6 col-sm-12">
                                         @if ($opening_balance)
                                             <h3 class="card-title text"><strong>
-                                                Opening {{ $opening_balance->flag == 1 ? 'Balance' : 'Loss' }} {{ $opening_balance->flag == 1 ? $opening_balance->profit : $opening_balance->loss }}
+                                                Opening {{ $opening_balance->flag == 1 ? 'Balance' : 'Loss' }} {{ $opening_balance->flag == 1 ? $opening_balance->amount : $opening_balance->amount }}
                                             </strong></h3>
                                         @endif
                                     </div>
@@ -111,7 +111,7 @@
                                         @php
                                             $total_income_without_op = $yearly_income + $others_total;
                                             $total_income_with_op = $opening_balance
-                                                ? ($opening_balance->flag == 1 ? $total_income_without_op + $opening_balance->profit : $total_income_without_op - $opening_balance->loss)
+                                                ? ($opening_balance->flag == 1 ? $total_income_without_op + $opening_balance->amount : $total_income_without_op - $opening_balance->amount)
                                                 : $total_income_without_op;
                                         @endphp
                                         <tr>

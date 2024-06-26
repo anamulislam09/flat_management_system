@@ -32,52 +32,18 @@ class BlanceController extends Controller
         } else {
             $month = Carbon::now()->month;
             $year = Carbon::now()->year;
-            $profit = abs($request->profit);
-            $loss = abs($request->loss);
-
-        //    if($request->has('profit') && $request->has('loss')){
-        //     return redirect()->back()->with('message', 'Something went wrong.');
-        //    }else{
-        //     dd("done");
+            $amount = abs($request->amount);
             $data['client_id'] = Auth::guard('admin')->user()->id;
             $data['auth_id'] = Auth::guard('admin')->user()->id;
             $data['year'] = $year;
             $data['month'] = $month;
-            $data['profit'] = $profit;
-            $data['loss'] = $loss;
+            $data['amount'] = $amount;
             $data['entry_datetime'] = date('Y-m-d');
+            $data['flag'] = $request->flag;
 
-            if ($request->profit > 0) {
-                $data['flag'] = 1;
-            } else {
-                $data['flag'] = 0;
-            }
- 
-             OpeningBalance::create($data);
+            OpeningBalance::create($data);
             return redirect()->back()->with('message', 'Opening Balance Added Successfully');
-        //    }
+            //    }
         }
     }
-
-    // Monthly blance 
-    public function Monthly()
-    {
-        $data = MonthlyBlance::where('client_id', Auth::guard('admin')->user()->id)->get();
-        return view('admin.blances.month', compact('data'));
-    }
-
-    // yearly blance 
-    public function Yearly()
-    {
-        $data = YearlyBlance::where('client_id', Auth::guard('admin')->user()->id)->get();
-        return view('admin.blances.year', compact('data'));
-    }
-
-    // Blance Sheet 
-    public function BalanceSheet()
-    {
-        $data = MonthlyBlance::where('client_id', Auth::guard('admin')->user()->id)->get();
-        return view('admin.report.balanceSheet', compact('data'));
-    }
-
 }

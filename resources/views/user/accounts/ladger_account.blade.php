@@ -12,7 +12,7 @@
     tr,
     td {
         font-size: 14px;
-        padding: 5px !important;
+        /* padding: 5px !important; */
         /* padding: .30rem; */
     }
     .text {
@@ -30,7 +30,7 @@
         tr,
         td {
             font-size: 14px;
-            padding: 5px !important;
+            /* padding: 5px !important; */
         }
 
         .text {
@@ -76,17 +76,16 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- /.card-header -->
                             <div class="card-body">
                                 <div class="table-responsive">
-                                    <table id="example1" class="table table-bordered table-striped">
+                                    <table id="" class="table table-bordered ">
                                         <thead>
                                             <tr>
                                                 <th>SL</th>
-                                                <th>Expense</th>
+                                                <th>Particulars</th>
                                                 <th>SubTotal</th>
-                                                <th>Total Cost</th>
-                                                <th>Income</th>
+                                                <th>Debit</th>
+                                                <th>Credit</th>
                                                 <th>Balance</th>
                                         </thead>
                                         @php
@@ -98,7 +97,6 @@
                                                 date('Y-m', strtotime(date('Y-m') . ' -1 month')),
                                             );
                                             $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
-
                                             $openingBlance = DB::table('balances')
                                                 ->where('month', $month - 1)
                                                 ->where('year', $previousDate[0])
@@ -136,8 +134,11 @@
                                         @endphp
                                         <tbody>
                                             <tr>
-                                                <td colspan="5" class=""> <strong>Opening
-                                                        Balance</strong></td>
+                                                <td>1</td>
+                                                <td colspan="1" class=""> <strong>Opening Balance </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
                                                 @if ($month == 1)
                                                     @if (!$lastYopeningBlance)
                                                         <td><strong>00</strong></td>
@@ -150,13 +151,13 @@
                                                     @endif
                                                 @else
                                                     @if (!$openingBlance && !$manualOpeningBlance)
-                                                        <td><strong>0</strong></td>
+                                                        <td><strong>00</strong></td>
                                                     @elseif (!$openingBlance && $manualOpeningBlance)
                                                         {{-- <td><strong>000</strong></td> --}}
                                                         @if ($manualOpeningBlance->flag == 1)
-                                                            <td><strong>{{ $manualOpeningBlance->profit }}</strong></td>
+                                                            <td><strong>{{ $manualOpeningBlance->amount }}</strong></td>
                                                         @else
-                                                            <td><strong>({{ $manualOpeningBlance->loss }})</strong></td>
+                                                            <td><strong>({{ $manualOpeningBlance->amount }})</strong></td>
                                                         @endif
                                                     @else
                                                         @if ($openingBlance->flag == 1)
@@ -167,15 +168,33 @@
                                                     @endif
                                                 @endif
                                             </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td colspan="1">Total Collection of This
+                                                    Month</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{{ $income }}</td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>3</td>
+                                                <td colspan="1">Other Income of This
+                                                    Month</td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>{{ $others_income }}</td>
+                                                <td>{{ $income + $others_income }}</td>
+                                            </tr>
                                             @if (count($expense) > 0)
                                                 @foreach ($expense as $key => $item)
                                                     @php
-                                                    $user = App\Models\User::where('user_id', Auth::user()->user_id)->first();
                                                         $data = DB::table('categories')
                                                             ->where('id', $item->cat_id)
                                                             ->first();
                                                         $total_exp = App\Models\Expense::where(
-                                                            'client_id',$user->client_id,
+                                                            'client_id',
+                                                            $user->client_id,
                                                         )
                                                             ->where('month', $item->month)
                                                             ->where('year', $item->year)
@@ -190,7 +209,7 @@
                                                             ->sum('amount');
                                                     @endphp
                                                     <tr>
-                                                        <td style="border-right:1px solid #ddd">{{ $key + 1 }}</td>
+                                                        <td style="border-right:1px solid #ddd">{{ $key + 4 }}</td>
                                                         <td>{{ $data->name }}</td>
                                                         <td>{{ $total_exp }}</td>
                                                         <td rowspan=""></td>
@@ -204,32 +223,31 @@
                                                 </tr>
                                             @endif
                                             <tr>
-                                                <td colspan="3"><strong>Total Cost of This Month
+                                                <td></td>
+                                                <td colspan="2">Total Expenses of this month
+                                                </td>
+                                                @if (count($expense) > 0)
+                                                    <td>{{ $total }}</td>
+                                                @else
+                                                    <td>00</td>
+                                                @endif
+                                                <td></td>
+                                                @if (count($expense) > 0)
+                                                    <td>({{ $total }})</td>
+                                                @else
+                                                    <td>00</td>
+                                                @endif
+                                            </tr>
+                                            <tr>
+                                                <td colspan="3"><strong>Total
                                                     </strong></td>
                                                 @if (count($expense) > 0)
                                                     <td><strong>{{ $total }}</strong></td>
                                                 @else
-                                                    <td><strong>0</strong></td>
+                                                    <td><strong>00</strong></td>
                                                 @endif
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4"><strong>Total Income of This
-                                                        Month</strong></td>
-                                                <td><strong>{{ $income }}</strong></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="4"><strong>Other Income of This
-                                                        Month</strong></td>
-                                                <td><strong>{{ $others_income }}</strong></td>
-                                                <td></td>
-                                            </tr>
-                                            <tr>
-                                                <td colspan="5"><strong>Balance of This Month
-                                                    </strong></td>
-                                                <td>
+                                                <td><strong>{{ $income + $others_income }}</strong></td>
+                                                <td class="botderd">
                                                     @if (count($expense) > 0)
                                                         @if (!$openingBlance && !$manualOpeningBlance && !$others_income)
                                                             <strong
@@ -240,10 +258,10 @@
                                                         @elseif (!$openingBlance && $manualOpeningBlance)
                                                             @if ($manualOpeningBlance->flag == 1)
                                                                 <strong
-                                                                    style="border-right:1px solid #ddd">{{ $manualOpeningBlance->profit + $income + $others_income - $total }}</strong>
+                                                                    style="border-right:1px solid #ddd">{{ $manualOpeningBlance->amount + $income + $others_income - $total }}</strong>
                                                             @else
                                                                 <strong
-                                                                    style="border-right:1px solid #ddd">{{ $income + $others_income - $manualOpeningBlance->loss - $total }}</strong>
+                                                                    style="border-right:1px solid #ddd">{{ $income + $others_income - $manualOpeningBlance->amount - $total }}</strong>
                                                             @endif
                                                         @elseif($openingBlance)
                                                             @if ($openingBlance->flag == 1)
@@ -261,10 +279,10 @@
                                                         @elseif (!$openingBlance && $manualOpeningBlance)
                                                             @if ($manualOpeningBlance->flag == 1)
                                                                 <strong
-                                                                    style="border-right:1px solid #ddd">{{ $manualOpeningBlance->profit + $income + $others_income }}</strong>
+                                                                    style="border-right:1px solid #ddd">{{ $manualOpeningBlance->amount + $income + $others_income }}</strong>
                                                             @else
                                                                 <strong
-                                                                    style="border-right:1px solid #ddd">{{ $income + $others_income - $manualOpeningBlance->loss }}</strong>
+                                                                    style="border-right:1px solid #ddd">{{ $income + $others_income - $manualOpeningBlance->amount }}</strong>
                                                             @endif
                                                         @elseif($openingBlance)
                                                             @if ($openingBlance->flag == 1)
@@ -278,10 +296,12 @@
                                                     @endif
                                                 </td>
                                             </tr>
+                                            {{-- <hr> --}}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>

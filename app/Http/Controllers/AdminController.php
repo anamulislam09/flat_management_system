@@ -116,35 +116,35 @@ class AdminController extends Controller
     // register method ends here
 
     // client verified rouite start here
-        // Verify method ends here
-        public function Verify()
-        {
-            $client = Client::latest()->first();
-            return view('admin.pages.admin_register_verify', compact('client'));
+    // Verify method ends here
+    public function Verify()
+    {
+        $client = Client::latest()->first();
+        return view('admin.pages.admin_register_verify', compact('client'));
+    }
+    // Verify method ends here
+
+    // Verify store method ends here
+    public function VerifyStore(Request $request)
+    {
+        $client = Client::where('id', $request->client_id)->first();
+        if ($client->otp == $request->otp) {
+            $client['isVerified'] = 1;
+            $client->save();
+            return redirect()->route('admin.verfied');
+        } else {
+            return redirect()->back()->with('message', 'OTP is Invalied! please, Submit Valied OTP.');
         }
-        // Verify method ends here
-    
-        // Verify store method ends here
-        public function VerifyStore(Request $request)
-        {
-            $client = Client::where('id', $request->client_id)->first();
-            if ($client->otp == $request->otp) {
-                $client['isVerified'] = 1;
-                $client->save();
-                return redirect()->route('admin.verfied');
-            } else {
-                return redirect()->back()->with('message', 'OTP is Invalied! please, Submit Valied OTP.');
-            }
-        }
-        // Verify store method ends here
-    
-        // Verified method ends here
-        public function Verified(Request $request)
-        {
-            $client = Client::latest()->first();
-            return view('admin.pages.admin_register_verified', compact('client'));
-        }
-        // Verified method ends here
+    }
+    // Verify store method ends here
+
+    // Verified method ends here
+    public function Verified(Request $request)
+    {
+        $client = Client::latest()->first();
+        return view('admin.pages.admin_register_verified', compact('client'));
+    }
+    // Verified method ends here
     // client verified rouite start here
 
 
@@ -174,40 +174,122 @@ class AdminController extends Controller
     // ClientEdit edit 
     public function ClientEdit($id)
     {
-        
+
         if (Auth::guard('admin')->user()->role == 0) {
             $data = Client::findOrFail($id);
             $flat = Flat::where('client_id', $data->id)->first();
-            return view('superadmin.clients.edit', compact('data', 'flat'));
+            $packages = Package::get();
+            return view('superadmin.clients.edit', compact('data', 'flat', 'packages'));
         } else {
             $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
             return redirect()->back()->with($notification);
         }
     }
-
-    // Client update 
+    // Customer update 
     public function ClientUpdate(Request $request)
     {
         $isverify = DB::table('clients')->where('id', $request->id)->first();
         $package_amount = Package::where('id', $request->package)->first();
         if (Auth::guard('admin')->user()->role == 0) {
             if ($isverify->isVerified == 1) {
-            $data = array();
-            $data['status'] = $request->status;
-            DB::table('Clients')->where('id', $request->id)->update($data);
+                $data = array();
+                // $data['status'] = $request->status;
+                $data['package_id'] = $request->package;
+                $data['package_start_date'] = date('Y-m-d');
+                $data['client_balance'] = $package_amount->amount;
+                DB::table('clients')->where('id', $request->id)->update($data);
 
-            $notification = array('message' => 'Customer Update Successfully.', 'alert_type' => 'warning');
-            return redirect()->route('client.all')->with($notification);
-        } else {
-            $notification = array('message' => 'OPS! This Client Was Not Verified.', 'alert_type' => 'danger');
-            return redirect()->back()->with($notification);
-        }
+                $notification = array('message' => 'Client Update Successfully.', 'alert_type' => 'warning');
+                return redirect()->route('client.all')->with($notification);
+            } else {
+                $notification = array('message' => 'OPS! This Client Was Not Verified.', 'alert_type' => 'danger');
+                return redirect()->back()->with($notification);
+            }
         } else {
             $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
             return redirect()->back()->with($notification);
         }
     }
 
+
+    // active status method 
+    public function ClientActive($id)
+    {
+        if (Auth::guard('admin')->user()->role == 0) {
+            $data = Client::findOrFail($id);
+            $status = $data->update(['status' => 1]);
+            if ($status) {
+                $client = Client::where('id', $id)->first();
+
+                $post_url = "http://api.smsinbd.com/sms-api/sendsms";
+                $post_values['api_token'] = "V8qsvGXfqBFhS4FozsQq7MyaeqTzXY2es6ufjQ3M";
+                $post_values['senderid'] = "8801969908462";
+                $post_values['message'] = "Welcome Mr/Ms " . $client->name . "." . " We have approved you as our client, So you can now record regular transaction. Thanks for stay with us.";
+                $post_values['contact_number'] = $client->phone;
+
+                $post_string = "";
+                foreach ($post_values as $key => $value) {
+                    $post_string .= "$key=" . urlencode($value) . "&";
+                }
+                $post_string = rtrim($post_string, "& ");
+                $request = curl_init($post_url);
+                curl_setopt($request, CURLOPT_HEADER, 0);
+                curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($request, CURLOPT_POSTFIELDS, $post_string);
+                curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
+                $post_response = curl_exec($request);
+                curl_close($request);
+                json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $post_response), true);
+                return response()->json('Client Activated Successfully');
+            } else {
+                return redirect()->back()->with('message', 'Something Went Wrong.');
+            }
+        } else {
+            $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
+            return redirect()->back()->with($notification);
+        }
+    }
+
+    // not Active Status method 
+    public function ClientNotActive($id)
+    {
+        if (Auth::guard('admin')->user()->role == 0) {
+            $data = Client::findOrFail($id);
+            $status = $data->update(['status' => 0]);
+
+            if ($status) {
+                $client = Client::where('id', $id)->first();
+
+                $post_url = "http://api.smsinbd.com/sms-api/sendsms";
+                $post_values['api_token'] = "V8qsvGXfqBFhS4FozsQq7MyaeqTzXY2es6ufjQ3M";
+                $post_values['senderid'] = "8801969908462";
+                $post_values['message'] = "Hi Mr/Ms " . $client->name . "." . " We have temporarily disabled you as our client,So you can no longer record transactions through the \"Flat_Management_system\" software.Please contact our head office for any need, Sorry for the temporary inconvenience.";
+                $post_values['contact_number'] = $client->phone;
+
+                $post_string = "";
+                foreach ($post_values as $key => $value) {
+                    $post_string .= "$key=" . urlencode($value) . "&";
+                }
+                $post_string = rtrim($post_string, "& ");
+                $request = curl_init($post_url);
+                curl_setopt($request, CURLOPT_HEADER, 0);
+                curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
+                curl_setopt($request, CURLOPT_POSTFIELDS, $post_string);
+                curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
+                $post_response = curl_exec($request);
+                curl_close($request);
+                json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $post_response), true);
+
+                return response()->json('Client Not Activated Successfully');
+            } else {
+                return redirect()->back()->with('message', 'Something Went Wrong.');
+            }
+        } else {
+            $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
+            return redirect()->back()->with($notification);
+        }
+    }
+    // status method ends here
     /*-------------------Clients related method start here--------------*/
 
     /*-------------------Clients password method start here--------------*/
@@ -231,51 +313,51 @@ class AdminController extends Controller
     //     }
     // }
 
-    
+
 
     public function ForgotPassword(Request $request)
-{
-    // Validate the request
-    $validator = Validator::make($request->all(), [
-        'email' => 'required|email',
-    ]);
+    {
+        // Validate the request
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email',
+        ]);
 
-    if ($validator->fails()) {
-        return redirect()->back()->withErrors($validator)->withInput();
-    }
-
-    // Find the client by email
-    $client = Client::where('email', $request->email)->first();
-
-    if ($client) {
-        // Generate a new remember token
-        $client->remember_token = Str::random(40);
-        $client->save();
-
-        try {
-            // Send the reset password email
-            Mail::to($client->email)->send(new ForgotPasswordMail($client));
-            $notification = array(
-                'message' => 'Please check your email and reset your password.', 
-                'alert_type' => 'success'
-            );
-        } catch (\Exception $e) {
-            // Handle any errors during the email sending process
-            $notification = array(
-                'message' => 'Failed to send reset password email. Please try again later.', 
-                'alert_type' => 'danger'
-            );
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        return redirect()->back()->with($notification);
-    } else {
-        $notification = array(
-            'message' => 'Email not found in this system.', 
-            'alert_type' => 'warning'
-        );
-        return redirect()->back()->with($notification);
+        // Find the client by email
+        $client = Client::where('email', $request->email)->first();
+
+        if ($client) {
+            // Generate a new remember token
+            $client->remember_token = Str::random(40);
+            $client->save();
+
+            try {
+                // Send the reset password email
+                Mail::to($client->email)->send(new ForgotPasswordMail($client));
+                $notification = array(
+                    'message' => 'Please check your email and reset your password.',
+                    'alert_type' => 'success'
+                );
+            } catch (\Exception $e) {
+                // Handle any errors during the email sending process
+                $notification = array(
+                    'message' => 'Failed to send reset password email. Please try again later.',
+                    'alert_type' => 'danger'
+                );
+            }
+
+            return redirect()->back()->with($notification);
+        } else {
+            $notification = array(
+                'message' => 'Email not found in this system.',
+                'alert_type' => 'warning'
+            );
+            return redirect()->back()->with($notification);
+        }
     }
-}
 
     public function reset($token)
     {

@@ -41,19 +41,16 @@
                                                     <input type="text" readonly class="form-control"
                                                         value="{{ $data->name }}" name="name">
                                                 </div>
-
                                                 <div class="mb-3 mt-3">
                                                     <label for="user_phone" class="form-label">Phone:</label>
                                                     <input type="text" readonly class="form-control"
                                                         value="{{ $data->phone }}" name="phone">
                                                 </div>
-
                                                 <div class="mb-3 mt-3">
                                                     <label for="user_email" readonly class="form-label">Email:</label>
                                                     <input type="email" class="form-control" value="{{ $data->email }}"
                                                         name="email">
                                                 </div>
-
                                                 <div class="mb-3 mt-3">
                                                     <label for="exampleInputEmail1"> Flat Sequence </label>
                                                     @if (isset($flat->sequence) && !empty($flat->sequence))
@@ -68,19 +65,27 @@
                                                             value="-----" readonly>
                                                     @endif
                                                 </div>
-
                                                 <div class="mb-3 mt-3">
                                                     <label for="exampleInputEmail1"> Status </label>
-                                                    <select name="status" id="" class="form-control">
-                                                        <option value="1"
-                                                            @if ($data->status == 1) selected @endif>
+                                                    <select name="" id="" class="form-control" @readonly(true)>
+                                                        <option @if ($data->status == 1) selected @endif>
                                                             Active</option>
                                                         <option value="0"
                                                             @if ($data->status == 0) selected @endif>
                                                             Deactive</option>
                                                     </select>
                                                 </div>
-
+                                                <div class="mb-3 mt-3 form">
+                                                    <label for="exampleInputEmail1">Assign Package </label>
+                                                    <select name="package" id="" class="form-control">
+                                                        <option value="" selected disabled>Select Once</option>
+                                                        @foreach ($packages as $package)
+                                                            <option value="{{ $package->id }}"
+                                                                @if ($data->package_id == $package->id) selected @endif>
+                                                                {{ $package->package_name }}</option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
                                             </div>
                                             <div class="modal-footer">
                                                 <button type="submit" class="btn btn-primary">Update</button>

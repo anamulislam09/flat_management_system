@@ -291,7 +291,7 @@
 
                     {{-- All Setup  start here --}}
                     <li
-                        class="nav-item {{ Request::routeIs('manager.flat.singlecreate') || Request::routeIs('manager.expense.setup*') ? 'menu-open' : '' }}">
+                        class="nav-item {{ Request::routeIs('manager.flat.singlecreate') || Request::routeIs('manager.expense.setup') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link">
                             <i class="nav-icon fas fa-circle"></i>
                             <p>Setup<i class="right fas fa-angle-left"></i>
@@ -307,7 +307,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('manager.expense.setup') }}"
-                                    class="nav-link {{ Request::routeIs('manager.expense.setup*') ? 'active' : '' }}">
+                                    class="nav-link {{ Request::routeIs('manager.expense.setup') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>Schedule Setup</p>
                                 </a>

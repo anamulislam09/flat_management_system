@@ -13,8 +13,7 @@ class OpeningBalance extends Model
         'auth_id',
         'year',
         'month',
-        'profit',
-        'loss',
+        'amount',
         'entry_datetime',
         'flag',
     ];

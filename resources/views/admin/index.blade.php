@@ -400,11 +400,11 @@
                                     @if (isset($manualOpeningBlance))
                                         @if ($manualOpeningBlance->flag == 1)
                                             <p>Opening Balance (Profit)</p>
-                                            <h3>{{ $manualOpeningBlance->profit }}<sup style="font-size: 14px">TK</sup>
+                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup>
                                             </h3>
                                         @else
                                             <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $manualOpeningBlance->loss }}<sup style="font-size: 14px">TK</sup></h3>
+                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup></h3>
                                         @endif
                                     @else
                                         <p>Opening Balance </p>
@@ -430,10 +430,10 @@
 
                                     @if (isset($manualOpeningBlance))
                                         @if ($manualOpeningBlance->flag == 1)
-                                            <h3>{{ $total_income + $others_income + $manualOpeningBlance->profit }} <sup
+                                            <h3>{{ $total_income + $others_income + $manualOpeningBlance->amount }} <sup
                                                     style="font-size: 20px">TK</sup></h3>
                                         @else
-                                            <h3>{{ $total_income + $others_income - $manualOpeningBlance->loss }} <sup
+                                            <h3>{{ $total_income + $others_income - $manualOpeningBlance->amount }} <sup
                                                     style="font-size: 20px">TK</sup></h3>
                                         @endif
                                     @else

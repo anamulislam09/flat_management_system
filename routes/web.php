@@ -26,8 +26,6 @@ use App\Http\Controllers\User\VendoreController as UserVendoreController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\VendoreController;
 use App\Http\Controllers\VoucherController;
-use App\Models\Category;
-use App\Models\OthersIncome;
 use Illuminate\Support\Facades\Route;
 
 /*---------------- Admin route start here ------------------*/
@@ -59,6 +57,10 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/clients', [AdminController::class, 'Client'])->name('client.all');
     Route::get('/client/edit/{id}', [AdminController::class, 'ClientEdit'])->name('client.edit');
     Route::post('/client/update', [AdminController::class, 'ClientUpdate'])->name('client.update');
+
+    // customer status activation route 
+    Route::get('/client/active/{id}', [AdminController::class, 'ClientActive'])->name('client.active');
+    Route::get('/client/not-active/{id}', [AdminController::class, 'ClientNotActive'])->name('client.notactive');
     // client data deleted 
     Route::get('/clients/all', [AdminController::class, 'ClientAll'])->name('client.index');
     Route::post('/client/delete', [AdminController::class, 'ClientDataDelete'])->name('client.data.delete');
@@ -81,8 +83,6 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/package/edit/{id}', [PackageController::class, 'Edit'])->name('package.edit');
     Route::post('/package/update', [PackageController::class, 'Update'])->name('package.update');
     Route::get('/package/delete/{id}', [PackageController::class, 'Delete'])->name('package.delete');
-
-
 });
 
 /*---------------- Admin route ends here ------------------*/
@@ -199,7 +199,7 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     // Route::post('/monthly-income', 'ReportControllerMonthlyIncome')->name('incomesall.month');
 
     Route::get('/monthly-income', [ReportController::class, 'showMonthlyIncome'])->name('incomes.month');
-Route::post('/monthly-income', [ReportController::class, 'handleMonthlyIncome'])->name('handle.monthly.income');
+    Route::post('/monthly-income', [ReportController::class, 'handleMonthlyIncome'])->name('handle.monthly.income');
 
 
     // Route::post('/incomes-all/month', [ReportController::class, 'MonthlyAllIncome'])->name('incomesall.month');
@@ -222,14 +222,13 @@ Route::post('/monthly-income', [ReportController::class, 'handleMonthlyIncome'])
     Route::get('/balance-sheet', [BlanceController::class, 'BalanceSheet'])->name('blance.index');
     // Route::get('/all-expenses', [BlanceController::class, 'Expenses'])->name('expense-all.index');
 
-     // Guest Manage 
-     Route::get('/guest-book/all', [GuestController::class, 'Index'])->name('guestBook.index');
-     Route::get('/guest-book/create', [GuestController::class, 'Create'])->name('guestBook.create');
-     Route::post('/guest-book/store', [GuestController::class, 'Store'])->name('guestBook.store');
-     Route::get('/guest-book/edit/{id}', [GuestController::class, 'Edit'])->name('guestBook.edit');
-     Route::post('/guest-book/update', [GuestController::class, 'Update'])->name('guestBook.update');
-     Route::get('/guest-book/history', [GuestController::class, 'ShowHistory'])->name('guestBook.history');
-    
+    // Guest Manage 
+    Route::get('/guest-book/all', [GuestController::class, 'Index'])->name('guestBook.index');
+    Route::get('/guest-book/create', [GuestController::class, 'Create'])->name('guestBook.create');
+    Route::post('/guest-book/store', [GuestController::class, 'Store'])->name('guestBook.store');
+    Route::get('/guest-book/edit/{id}', [GuestController::class, 'Edit'])->name('guestBook.edit');
+    Route::post('/guest-book/update', [GuestController::class, 'Update'])->name('guestBook.update');
+    Route::get('/guest-book/history', [GuestController::class, 'ShowHistory'])->name('guestBook.history');
 });
 
 /*---------------- Customer route ends here ------------------*/
@@ -314,7 +313,7 @@ Route::middleware('auth')->group(function () {
     /*--------------- Report route start here ------------------*/
     Route::get('/expenses/month', [UserReportController::class, 'MonthlyExpense'])->name('manager.expenses.month');
     Route::post('/expenses-all/month', [UserReportController::class, 'MonthlyAllExpense'])->name('manager.expensesall.month');
-    
+
     Route::get('/expenses/yearly', [UserReportController::class, 'YearlyExpense'])->name('manager.expenses.year');
     Route::post('/expenses-all/year', [UserReportController::class, 'YearlyAllExpense'])->name('manager.expensesall.year');
 
@@ -345,13 +344,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/manager/vendor/edit/{id}', [UserVendoreController::class, 'VendorEdit'])->name('manager.vendor.edit');
     Route::post('/manager/vendor/update', [UserVendoreController::class, 'VendorUpdate'])->name('manager.vendor.update');
 
-     // Guest Manage 
-     Route::get('/guest-book/all', [UserGuestController::class, 'Index'])->name('manager.guestBook.index');
-     Route::get('/guest-book/create', [UserGuestController::class, 'Create'])->name('manager.guestBook.create');
-     Route::post('/guest-book/store', [UserGuestController::class, 'Store'])->name('manager.guestBook.store');
-     Route::get('/guest-book/edit/{id}', [UserGuestController::class, 'Edit'])->name('manager.guestBook.edit');
-     Route::post('/guest-book/update', [UserGuestController::class, 'Update'])->name('manager.guestBook.update');
-     Route::get('/guest-book/history', [UserGuestController::class, 'ShowHistory'])->name('manager.guestBook.history');
+    // Guest Manage 
+    Route::get('/guest-book/all', [UserGuestController::class, 'Index'])->name('manager.guestBook.index');
+    Route::get('/guest-book/create', [UserGuestController::class, 'Create'])->name('manager.guestBook.create');
+    Route::post('/guest-book/store', [UserGuestController::class, 'Store'])->name('manager.guestBook.store');
+    Route::get('/guest-book/edit/{id}', [UserGuestController::class, 'Edit'])->name('manager.guestBook.edit');
+    Route::post('/guest-book/update', [UserGuestController::class, 'Update'])->name('manager.guestBook.update');
+    Route::get('/guest-book/history', [UserGuestController::class, 'ShowHistory'])->name('manager.guestBook.history');
 
     /*---------------- Manager route ends here ------------------*/
 

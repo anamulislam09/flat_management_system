@@ -18,8 +18,7 @@ return new class extends Migration
             $table->integer('client_id');
             $table->string('auth_id');
             $table->string('entry_datetime');
-            $table->double('profit', 20, 2)->default(0);
-            $table->double('loss', 20, 2)->default(0);
+            $table->double('amount', 20, 2)->default(0);
             $table->integer('flag');
             $table->timestamps();
         });

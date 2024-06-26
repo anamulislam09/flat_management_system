@@ -192,10 +192,10 @@
                                                     @if (isset($opening_balance) && !empty($data))
                                                         @if ($opening_balance->flag == 1)
                                                             <h3 class="card-title"><strong>Opening Balance
-                                                                    {{ $opening_balance->profit }}</strong></h3>
+                                                                    {{ $opening_balance->amount }}</strong></h3>
                                                         @else
                                                             <h3 class="card-title"><strong>Opening Loss
-                                                                    {{ $opening_balance->loss }}</strong></h3>
+                                                                    {{ $opening_balance->amount }}</strong></h3>
                                                         @endif
                                                     @else
                                                     @endif
@@ -211,12 +211,10 @@
                                                         <tr>
                                                             <th> SL</th>
                                                             <th>Flat Name</th>
-                                                            {{-- <th>Charge</th> --}}
                                                             <th class="text-right">Amount</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        {{-- @if (isset($data) && !empty($data)) --}}
                                                         @foreach ($data as $key => $item)
                                                             @php
                                                                 $total = App\Models\Income::where('month', $item->month)
@@ -230,7 +228,6 @@
                                                             <tr>
                                                                 <td class="text-center">{{ $key + 1 }}</td>
                                                                 <td>{{ $item->flat_name }}</td>
-                                                                {{-- <td>{{ $item->charge }}</td> --}}
                                                                 <td class="text-right">{{ $item->amount }}</td>
                                                             </tr>
                                                         @endforeach
