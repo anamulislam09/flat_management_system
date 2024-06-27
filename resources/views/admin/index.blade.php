@@ -65,6 +65,7 @@
             $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', date('Y-m'))
                 ->sum('amount');
+                $total_colloection = App\Models\Payment::sum('paid');
         @endphp
         <!-- Main content -->
         <section class="content">
@@ -118,6 +119,36 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-secondary">
+                                <div class="inner">
+                                    <p>Total Collection</p>
+                                    <h3>{{ $total_colloection }}</h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                <a href="{{ route('collections.all') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        {{-- <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <p>Total Due</p>
+                                    <h3>{{ $total_due }}</h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                <a href="{{ route('category.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div> --}}
                         <!-- /.col -->
                     </div>
                 @else

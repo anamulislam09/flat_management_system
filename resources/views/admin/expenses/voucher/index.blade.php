@@ -48,7 +48,7 @@
 
         .status h3 {
             padding: 8px 0px;
-            background: #5ac1e0;
+            background: #ddd;
             text-align: center;
             width: 100%;
         }

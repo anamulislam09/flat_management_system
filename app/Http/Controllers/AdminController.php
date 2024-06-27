@@ -10,6 +10,8 @@ use App\Models\Expense;
 use App\Models\ExpenseVoucher;
 use App\Models\ExpSetup;
 use App\Models\Flat;
+use App\Models\Guest;
+use App\Models\GuestHistory;
 use App\Models\Income;
 use App\Models\OpeningBalance;
 use App\Models\OthersIncome;
@@ -23,6 +25,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+
 
 use Illuminate\Support\Facades\Validator;
 
@@ -192,15 +195,20 @@ class AdminController extends Controller
         $package_amount = Package::where('id', $request->package)->first();
         if (Auth::guard('admin')->user()->role == 0) {
             if ($isverify->isVerified == 1) {
-                $data = array();
-                // $data['status'] = $request->status;
-                $data['package_id'] = $request->package;
-                $data['package_start_date'] = date('Y-m-d');
-                $data['client_balance'] = $package_amount->amount;
-                DB::table('clients')->where('id', $request->id)->update($data);
+                if ($isverify->status == 1) {
+                    $data = array();
+                    // $data['status'] = $request->status;
+                    $data['package_id'] = $request->package;
+                    $data['package_start_date'] = date('Y-m-d');
+                    $data['client_balance'] = $package_amount->amount;
+                    DB::table('clients')->where('id', $request->id)->update($data);
 
-                $notification = array('message' => 'Client Update Successfully.', 'alert_type' => 'warning');
-                return redirect()->route('client.all')->with($notification);
+                    $notification = array('message' => 'Client Update Successfully.', 'alert_type' => 'warning');
+                    return redirect()->route('client.all')->with($notification);
+                } else {
+                    $notification = array('message' => 'OPS! This Client Not Active.', 'alert_type' => 'danger');
+                    return redirect()->back()->with($notification);
+                }
             } else {
                 $notification = array('message' => 'OPS! This Client Was Not Verified.', 'alert_type' => 'danger');
                 return redirect()->back()->with($notification);
@@ -216,33 +224,38 @@ class AdminController extends Controller
     public function ClientActive($id)
     {
         if (Auth::guard('admin')->user()->role == 0) {
-            $data = Client::findOrFail($id);
-            $status = $data->update(['status' => 1]);
-            if ($status) {
-                $client = Client::where('id', $id)->first();
+            $isverify = DB::table('clients')->where('id', $id)->first();
+            if ($isverify->isVerified == 1) {
+                $data = Client::findOrFail($id);
+                $status = $data->update(['status' => 1]);
+                if ($status) {
+                    $client = Client::where('id', $id)->first();
 
-                $post_url = "http://api.smsinbd.com/sms-api/sendsms";
-                $post_values['api_token'] = "V8qsvGXfqBFhS4FozsQq7MyaeqTzXY2es6ufjQ3M";
-                $post_values['senderid'] = "8801969908462";
-                $post_values['message'] = "Welcome Mr/Ms " . $client->name . "." . " We have approved you as our client, So you can now record regular transaction. Thanks for stay with us.";
-                $post_values['contact_number'] = $client->phone;
+                    $post_url = "http://api.smsinbd.com/sms-api/sendsms";
+                    $post_values['api_token'] = "V8qsvGXfqBFhS4FozsQq7MyaeqTzXY2es6ufjQ3M";
+                    $post_values['senderid'] = "8801969908462";
+                    $post_values['message'] = "Welcome Mr/Ms " . $client->name . "." . " We have approved you as our client, So you can now record regular transaction. Thanks for stay with us.";
+                    $post_values['contact_number'] = $client->phone;
 
-                $post_string = "";
-                foreach ($post_values as $key => $value) {
-                    $post_string .= "$key=" . urlencode($value) . "&";
+                    $post_string = "";
+                    foreach ($post_values as $key => $value) {
+                        $post_string .= "$key=" . urlencode($value) . "&";
+                    }
+                    $post_string = rtrim($post_string, "& ");
+                    $request = curl_init($post_url);
+                    curl_setopt($request, CURLOPT_HEADER, 0);
+                    curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
+                    curl_setopt($request, CURLOPT_POSTFIELDS, $post_string);
+                    curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
+                    $post_response = curl_exec($request);
+                    curl_close($request);
+                    json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $post_response), true);
+                    return response()->json('Client Activated Successfully');
+                } else {
+                    return redirect()->back()->with('message', 'Something Went Wrong.');
                 }
-                $post_string = rtrim($post_string, "& ");
-                $request = curl_init($post_url);
-                curl_setopt($request, CURLOPT_HEADER, 0);
-                curl_setopt($request, CURLOPT_RETURNTRANSFER, 1);
-                curl_setopt($request, CURLOPT_POSTFIELDS, $post_string);
-                curl_setopt($request, CURLOPT_SSL_VERIFYPEER, FALSE);
-                $post_response = curl_exec($request);
-                curl_close($request);
-                json_decode(preg_replace('/[\x00-\x1F\x80-\xFF]/', '', $post_response), true);
-                return response()->json('Client Activated Successfully');
             } else {
-                return redirect()->back()->with('message', 'Something Went Wrong.');
+                return response()->json('OPS! This Client Was Not Verified.');
             }
         } else {
             $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');
@@ -312,7 +325,6 @@ class AdminController extends Controller
     //         return redirect()->back()->with($notification);
     //     }
     // }
-
 
 
     public function ForgotPassword(Request $request)
@@ -417,12 +429,11 @@ class AdminController extends Controller
             OthersIncome::where('client_id', $request->id)->delete();
             User::where('client_id', $request->id)->delete();
             Flat::where('client_id', $request->id)->delete();
-            // Flat::where('client_id', $request->id)->delete();
             Vendor::where('client_id', $request->id)->delete();
             ExpSetup::where('client_id', $request->id)->delete();
             SetupHistory::where('client_id', $request->id)->delete();
-
-
+            Guest::where('client_id', $request->id)->delete();
+            GuestHistory::where('client_id', $request->id)->delete();
             return redirect()->back()->with('message', 'All data deleted successfully.');
         } else {
             $notification = array('message' => 'You have no permission.', 'alert_type' => 'warning');

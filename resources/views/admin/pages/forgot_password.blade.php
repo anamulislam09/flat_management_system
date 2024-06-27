@@ -49,7 +49,6 @@
             opacity: .8;
         }
     </style>
-
     <!-- Google Font: Source Sans Pro -->
     <link rel="stylesheet"
         href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -71,14 +70,12 @@
                 <a href="{{ route('login_form') }}" class="h1">Forgot Password</a>
             </div>
             <div class="card-body">
-                {{-- <p class="login-box-msg">Admin Login Panel</p> --}}
                 @if (Session::has('message'))
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         <strong>{{ Session::get('message') }}!</strong>
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 @endif
-
                 <form method="POST" action="{{ route('admin.forgot-password.create') }}">
                     @csrf
                     <div class="input-group mb-3">
@@ -91,45 +88,14 @@
                             </div>
                         </div>
                     </div>
-                    {{-- <div class="input-group mb-3">
-                        <input type="password" class="form-control" name="password" required
-                            autocomplete="current-password"placeholder="Password">
-                        <div class="input-group-append">
-                            <div class="input-group-text">
-                                <span class="fas fa-lock"></span>
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="row">
-                        {{-- <div class="col-8">
-                            <div class="icheck-primary">
-                                <input type="checkbox" id="remember">
-                                <label for="remember">
-                                    Remember Me
-                                </label>
-                            </div>
-                        </div> --}}
-                        <!-- /.col -->
                         <div class="col-4">
                             <button type="submit" class="btn btn-primary btn-block">Forgot</button>
                         </div>
                         <!-- /.col -->
                     </div>
                 </form>
-                <div class="row">
-                    {{-- <div class="col-6 mt-4"><p>
-        @if (Route::has('password.request'))
-            <a class="underline text-sm text-gray-600 hover:text-gray-900"
-                href="{{ route('password.request') }}">
-                {{ __('Forgot your password?') }}
-            </a>
-        @endif
-    </p></div> --}}
-                    {{-- <div class="col-6 mt-4">
-        <a href="{{route('register_form')}}" class="float-right">Create account?</a>
-    </div> --}}
-                </div>
-
+                <div class="row"></div>
                 <!-- /.card-body -->
             </div>
             <!-- /.card -->

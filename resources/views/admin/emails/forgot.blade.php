@@ -1,6 +1,6 @@
 @component('mail::message')
-    <p>Hello {{$customer->name}}</p>
-    @component('mail::button', ['url' => url('admin/reset/'.$customer->remember_token)])
+    <p>Hello {{$client->name}}</p>
+    @component('mail::button', ['url' => url('admin/reset/'.$client->remember_token)])
         Reset Your Password
     @endcomponent
     <p>In case you have any issue recovering your password, please contact us.</p>

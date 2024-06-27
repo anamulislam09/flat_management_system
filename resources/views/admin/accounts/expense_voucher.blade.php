@@ -113,7 +113,7 @@
                                                 </div>
                                                 <div class="col-lg-3 col-md-3 col-sm-12">
                                                     <form action="{{ route('account.expense.voucher.generateall') }}"
-                                                        method="post">
+                                                        method="post" target="_blank">
                                                         @csrf
                                                         <input type="hidden" name="month" value="{{ $months }}">
                                                         <input type="hidden" name="year" value="{{ $year }}">

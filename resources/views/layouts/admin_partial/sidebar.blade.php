@@ -59,15 +59,6 @@
 
                         </ul>
                     </li>
-                    {{-- expense category start here --}}
-                    {{-- <li  class="nav-item {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'menu-open' : '' }}">>
-                        <a href="{{ route('category.index') }}"
-                            class="nav-link {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-circle"></i>
-                            <p>Expense Category</p>
-                        </a>
-                    </li> --}}
-
                     <li
                         class="nav-item {{ Request::routeIs('category.index') || Request::routeIs('category.create') ? 'menu-open' : '' }}">
                         <a href="#"
@@ -133,8 +124,35 @@
 
                         </ul>
                     </li>
-
                     {{-- Package route ends here --}}
+                    {{-- Client collection Start here --}}
+                    <li
+                        class="nav-item {{ Request::routeIs('collections.all') || Request::routeIs('collection.create') || Request::routeIs('collection.store') ? 'menu-open' : '' }}">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-circle"></i>
+                            <p>
+                                Collections
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview ml-3">
+                            <li class="nav-item">
+                                <a href="{{ route('collection.create') }}"
+                                    class="nav-link {{ Request::routeIs('collection.create') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>Create Collection</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('collections.all') }}"
+                                    class="nav-link {{ Request::routeIs('collections.all') ? 'active' : '' }}">
+                                    <i class="far fa-dot-circle nav-icon"></i>
+                                    <p>All Collection</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    {{-- Client collection ends here --}}
                 @endif
 
                 @if (Auth::guard('admin')->user()->role == 1)
@@ -383,7 +401,7 @@
                             </li>
                             <li class="nav-item">
                                 <a href="{{ route('expense.setup') }}"
-                                    class="nav-link {{ Request::routeIs('expense.setup') || Request::routeIs('expense.setup.create') || Request::routeIs('expense.setup.edit')  ? 'active' : '' }}">
+                                    class="nav-link {{ Request::routeIs('expense.setup') || Request::routeIs('expense.setup.create') || Request::routeIs('expense.setup.edit') ? 'active' : '' }}">
                                     <i class="far fa-dot-circle nav-icon"></i>
                                     <p>Schedule Setup</p>
                                 </a>

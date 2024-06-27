@@ -108,11 +108,11 @@ class AccountController extends Controller
                     }
                 } elseif (!$openingBlance && $manualOpeningBlance) {
                     if ($manualOpeningBlance->flag == 1) {
-                        $balance = ($manualOpeningBlance->profit + $income + $others_income) - $month_exp->total;
+                        $balance = ($manualOpeningBlance->amount + $income + $others_income) - $month_exp->total;
 
                         $data['year'] = $year;
                         $data['month'] = $month;
-                        $data['total_income'] = $manualOpeningBlance->profit + $income + $others_income;
+                        $data['total_income'] = $manualOpeningBlance->amount + $income + $others_income;
                         $data['total_expense'] = $month_exp->total;
                         $data['amount'] = $balance;
                         $data['client_id'] = $month_exp->client_id;
@@ -131,12 +131,12 @@ class AccountController extends Controller
                             return redirect()->back()->with('message', 'Something went wrong!');
                         }
                     } elseif ($manualOpeningBlance->flag == 0) {
-                        $balance = ($income + $others_income - $manualOpeningBlance->loss) - $month_exp->total;
+                        $balance = ($income + $others_income - $manualOpeningBlance->amount) - $month_exp->total;
 
                         $data['year'] = $year;
                         $data['month'] = $month;
                         $data['total_income'] = $income + $others_income;
-                        $data['total_expense'] = $month_exp->total + $manualOpeningBlance->loss;
+                        $data['total_expense'] = $month_exp->total + $manualOpeningBlance->amount;
                         $data['amount'] = $balance;
                         $data['client_id'] = $month_exp->client_id;
                         $data['auth_id'] = $month_exp->auth_id;
@@ -308,7 +308,7 @@ class AccountController extends Controller
              } else {
                  $manualOpeningBalance = OpeningBalance::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->first();
                  if($manualOpeningBalance){
-                     $income += ($manualOpeningBalance->flag == 1 ? $manualOpeningBalance->profit : -$manualOpeningBalance->loss);
+                     $income += ($manualOpeningBalance->flag == 1 ? $manualOpeningBalance->amount : -$manualOpeningBalance->amount);
                  }
                 }
                 $income += $others_income;

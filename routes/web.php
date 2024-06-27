@@ -12,6 +12,7 @@ use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\LadgerController;
 use App\Http\Controllers\OthersIncomeController;
 use App\Http\Controllers\PackageController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\PdfGeneratorController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
@@ -83,6 +84,15 @@ Route::group(['prefix' => 'admin', 'middleware' => ['admin']], function () {
     Route::get('/package/edit/{id}', [PackageController::class, 'Edit'])->name('package.edit');
     Route::post('/package/update', [PackageController::class, 'Update'])->name('package.update');
     Route::get('/package/delete/{id}', [PackageController::class, 'Delete'])->name('package.delete');
+
+    // Payment route  
+    Route::get('/client-collections', [PaymentController::class, 'Index'])->name('collections.all');
+    Route::get('/collection/create', [PaymentController::class, 'Create'])->name('collection.create');
+    Route::post('/get-package', [PaymentController::class, 'getPackage']); // get subcategory using ajex 
+    Route::post('/collection/store', [PaymentController::class, 'Store'])->name('collection.store');
+    // Route::get('/collection/edit/{id}', [PaymentController::class, 'Edit'])->name('collection.edit');
+    // Route::post('/collection/update', [PaymentController::class, 'Update'])->name('collection.update');
+    // Route::get('/collection/delete/{id}', [PaymentController::class, 'Delete'])->name('collection.delete');
 });
 
 /*---------------- Admin route ends here ------------------*/

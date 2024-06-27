@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Client;
+use App\Models\Payment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaymentController extends Controller
 {
@@ -14,7 +17,7 @@ class PaymentController extends Controller
 
     public function Create()
     {
-        $client = Customer::where('role', 1)->get();
+        $client = Client::where('role', 1)->get();
         return view('superadmin.payments.create', compact('client'));
     }
 
@@ -22,7 +25,7 @@ class PaymentController extends Controller
     public function getPackage(Request $request)
     {
         $clientid = $request->post('client_id');
-        $client = Customer::where('id', $clientid)->first();
+        $client = Client::where('id', $clientid)->first();
         $data['package'] = DB::table('packages')->where('id', $client->package_id)->first();
         return response()->json($data);
     }
@@ -57,10 +60,10 @@ class PaymentController extends Controller
         $data['year'] = date('Y');
         $payments = Payment::create($data);
         if ($payments) {
-            $balance = DB::table('customers')->where('id', $request->client_id)->first();
-            $balance = $balance->customer_balance - $request->collection_amount;
-            $client['customer_balance'] = $balance;
-            DB::table('customers')->where('id', $request->client_id)->update($client);
+            $balance = DB::table('clients')->where('id', $request->client_id)->first();
+            $balance = $balance->client_balance - $request->collection_amount;
+            $client['client_balance'] = $balance;
+            DB::table('clients')->where('id', $request->client_id)->update($client);
             // $client->save();
         }
 

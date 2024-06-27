@@ -39,7 +39,7 @@ class ForgotPasswordMail extends Mailable
         return new Content(
             markdown: 'admin.emails.forgot',
             with: [
-                'customer' => $this->client,
+                'client' => $this->client,
             ],
         );
     }
