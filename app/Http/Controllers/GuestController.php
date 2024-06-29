@@ -66,8 +66,9 @@ class GuestController extends Controller
     public function Edit($id)
     {
         $data = Guest::where('client_id', Auth()->guard('admin')->user()->id)->where('id', $id)->first();
+        $flatId =GuestHistory::where('client_id', Auth()->guard('admin')->user()->id)->where('guest_id', $data->id)->value('flat_id');
         $flats = Flat::where('client_id', Auth()->guard('admin')->user()->id)->get();
-        return view('admin.guest.edit', compact('data', 'flats'));
+        return view('admin.guest.edit', compact('data', 'flats','flatId'));
     }
 
     public function Update(Request $request)

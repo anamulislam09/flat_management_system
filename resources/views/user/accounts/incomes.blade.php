@@ -1,36 +1,9 @@
 @extends('user.user_layouts.user')
 
 @section('user_content')
-<style>
-    input:focus {
-        outline: none
-    }
-
-    table,
-    thead,
-    tbody,
-    tr,
-    td,
-    th {
-        font-size: 14px !important;
-        padding: 5px !important;
-    }
-
-    .text {
-        font-size: 14px !important;
-    }
-
-    @media screen and (max-width: 767px) {
-
-        div.dataTables_wrapper div.dataTables_length,
-        div.dataTables_wrapper div.dataTables_filter,
-        div.dataTables_wrapper div.dataTables_info,
-        div.dataTables_wrapper div.dataTables_paginate {
-            text-align: right !important;
-        }
-
-        .card-title a {
-            font-size: 15px;
+    <style>
+        input:focus {
+            outline: none
         }
 
         table,
@@ -39,23 +12,50 @@
         tr,
         td,
         th {
-            font-size: 13px !important;
+            font-size: 14px !important;
             padding: 5px !important;
-        }
-
-        .card-header {
-            padding: .25rem 1.25rem;
         }
 
         .text {
             font-size: 14px !important;
         }
 
-        .button {
-            margin-top: -0px !important;
+        @media screen and (max-width: 767px) {
+
+            div.dataTables_wrapper div.dataTables_length,
+            div.dataTables_wrapper div.dataTables_filter,
+            div.dataTables_wrapper div.dataTables_info,
+            div.dataTables_wrapper div.dataTables_paginate {
+                text-align: right !important;
+            }
+
+            .card-title a {
+                font-size: 15px;
+            }
+
+            table,
+            thead,
+            tbody,
+            tr,
+            td,
+            th {
+                font-size: 13px !important;
+                padding: 5px !important;
+            }
+
+            .card-header {
+                padding: .25rem 1.25rem;
+            }
+
+            .text {
+                font-size: 14px !important;
+            }
+
+            .button {
+                margin-top: -0px !important;
+            }
         }
-    }
-</style>
+    </style>
     <div class="content-wrapper">
         <!-- Main content -->
         <section class="content mt-3">
@@ -105,10 +105,9 @@
                                                         'user_id',
                                                         Auth::user()->user_id,
                                                     )->first();
-                                                    $total = App\Models\Income::where(
-                                                        'client_id',
-                                                        $id->client_id,
-                                                    )->sum('amount');
+                                                    $total = App\Models\Income::where('client_id', $id->client_id)->sum(
+                                                        'amount',
+                                                    );
                                                     $collection = App\Models\Income::where(
                                                         'client_id',
                                                         $id->client_id,
@@ -150,7 +149,7 @@
                                                     <td>{{ $item->paid }}</td>
                                                     <td>{{ $item->due }}</td>
                                                     @if ($user)
-                                                        <td>{{ $userName->name }}</td>
+                                                        <td><span class="badge badge-info">{{ $userName->name }}</span></td>
                                                     @elseif ($client)
                                                         <td><span class="badge badge-success">Admin</span></td>
                                                     @endif
