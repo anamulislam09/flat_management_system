@@ -445,13 +445,20 @@ class AdminController extends Controller
 
     public function GetTransaction($date)
     {
+        $timestamp = strtotime($date);
+
+        $month = date('n', $timestamp); // 'n' gives month without leading zeros
+        $year = date('Y', $timestamp);
 
         $data['flats'] = Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
-        $data['expense'] = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
-        $data['income'] = Income::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('paid');
-        $manualOpeningBalance = DB::table('opening_balances')->where('client_id', Auth::guard('admin')->user()->id)->where('entry_datetime', $date)->first();
-        $data['others_income'] = DB::table('others_incomes')->where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
-        $data['balance'] = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
+        // $data['expense'] = Exp_process::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->value('total');
+        // $data['expense'] = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
+        $data['expense'] = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->value('total_expense');
+        $data['income'] = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->value('total_income');
+        // $data['income'] = Income::where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('paid');
+        // $manualOpeningBalance = DB::table('opening_balances')->where('client_id', Auth::guard('admin')->user()->id)->where('entry_datetime', $date)->first();
+        // $data['others_income'] = DB::table('others_incomes')->where('client_id', Auth::guard('admin')->user()->id)->where('date', $date)->sum('amount');
+        $data['balance'] = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->value('amount');
 
         return response()->json($data);
     }

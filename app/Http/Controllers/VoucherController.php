@@ -84,14 +84,11 @@ class VoucherController extends Controller
     {
         $month = $month;
         $year = $year;
+        // dd($month);
         if ($month == date('m') && $year == date('Y')) {
             $expense = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('amount');
             $income = Income::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('paid');
             $others_income = OthersIncome::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('amount');
-
-            // $previousDate = explode('-', date('Y-m', strtotime($year . '-' . 01 . " -1 month")));
-            // $year = $previousDate[0];
-            // $month = $previousDate[1];
 
             $monthlyOB = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month - 1)->where('year', $year)->first();
 
@@ -101,7 +98,7 @@ class VoucherController extends Controller
                 $manualOpeningBalance = OpeningBalance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->first();
                 // dd($manualOpeningBalance);
                 if ($manualOpeningBalance) {
-                    $income += ($manualOpeningBalance->flag == 1 ? $manualOpeningBalance->profit : -$manualOpeningBalance->loss);
+                    $income += ($manualOpeningBalance->flag == 1 ? $manualOpeningBalance->amount : -$manualOpeningBalance->amount);
                 }
             }
             $income += $others_income;
@@ -116,6 +113,7 @@ class VoucherController extends Controller
         $data['expense'] = $expense;
         $data['balance'] = $data['income'] - $data['expense'];
         $data['flag'] = $data['balance'] >= 0 ? 'Profit' : 'Loss';
+        // dd($data);
         return response()->json($data, 200);
     }
 

@@ -1,18 +1,23 @@
 @extends('layouts.admin')
 @section('admin_content')
 
-<style>
-    h3{
-        font-size: 20px !important;
-    }
-    p{
-        font-size: 14px !important
-    }
-    .text {font-size: 14px !important }
-    .link{
-        font-size: 12px !important;
-    }
-</style>
+    <style>
+        h3 {
+            font-size: 20px !important;
+        }
+
+        p {
+            font-size: 14px !important
+        }
+
+        .text {
+            font-size: 14px !important
+        }
+
+        .link {
+            font-size: 12px !important;
+        }
+    </style>
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <div class="content-header">
@@ -23,7 +28,8 @@
                     </div><!-- /.col -->
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item" style="font-size: 14px"><a href="{{ route('admin.dashboard') }}">Home</a></li>
+                            <li class="breadcrumb-item" style="font-size: 14px"><a
+                                    href="{{ route('admin.dashboard') }}">Home</a></li>
                             <li class="breadcrumb-item active" style="font-size: 14px">Dashboard </li>
                         </ol>
                     </div><!-- /.col -->
@@ -48,6 +54,7 @@
             $category = App\Models\Category::count();
             $packages = App\Models\Package::count();
             $superAdmin = Auth::guard('admin')->user()->id;
+            $total_colloection = App\Models\Payment::sum('paid');
 
             // this month transactions
             $flats = App\Models\Flat::where('client_id', Auth::guard('admin')->user()->id)->count();
@@ -62,10 +69,23 @@
                 ->where('client_id', Auth::guard('admin')->user()->id)
                 ->where('date', date('Y-m'))
                 ->sum('amount');
-            $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)
-                ->where('date', date('Y-m'))
-                ->sum('amount');
-                $total_colloection = App\Models\Payment::sum('paid');
+            // $month_balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)
+            //     ->where('date', date('Y-m-d'))
+            //     ->value('amount');
+            $timestamp = strtotime(date('Y-m'));
+            $month = date('n', $timestamp); // 'n' gives month without leading zeros
+            $year = date('Y', $timestamp);
+            $Monthly_Manual_Opening_Balance = DB::table('opening_balances')
+                ->where('client_id', Auth::guard('admin')->user()->id)
+                ->where('year', date('Y'))
+                ->where('month', $month)
+                ->first();
+
+            $openingBlance = DB::table('balances')
+                ->where('month', $month - 1)
+                ->where('year', $year)
+                ->where('client_id', Auth::guard('admin')->user()->id)
+                ->first();
         @endphp
         <!-- Main content -->
         <section class="content">
@@ -211,7 +231,7 @@
                         </div>
 
                         <!-- fix for small devices only -->
-                        <div class="clearfix hidden-md-up"></div>
+                        {{-- <div class="clearfix hidden-md-up"></div>
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
                             <div class="small-box bg-secondary">
@@ -226,7 +246,34 @@
                                 <a href="#" class="small-box-footer link">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
-                        </div>
+                        </div> --}}
+                        {{-- <div class="clearfix hidden-md-up"></div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    @if (isset($manualOpeningBlance))
+                                        @if ($manualOpeningBlance->flag == 1)
+                                            <p>Opening Balance (Profit)</p>
+                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @else
+                                            <p>Opening Balance (Loss)</p>
+                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup></h3>
+                                        @endif
+                                    @else
+                                        <p>Opening Balance </p>
+                                        <h3>0<sup style="font-size: 14px">TK</sup>
+                                        </h3>
+                                    @endif
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="#" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div> --}}
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
                             <div class="small-box bg-danger">
@@ -314,13 +361,78 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
+                        <!-- fix for small devices only -->
+                        <div class="clearfix hidden-md-up"></div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    @if (isset($Monthly_Manual_Opening_Balance))
+                                        @if ($Monthly_Manual_Opening_Balance->flag == 1)
+                                            <p>Opening Balance (Profit)</p>
+                                            <h3>{{ $Monthly_Manual_Opening_Balance->amount }}<sup
+                                                    style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @else
+                                            <p>Opening Balance (Loss)</p>
+                                            <h3>{{ $Monthly_Manual_Opening_Balance->amount }}<sup
+                                                    style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @endif
+                                    @elseif (isset($openingBlance))
+                                        @if ($openingBlance->flag == 1)
+                                            <p>Opening Balance </p>
+                                            <h3>{{ $openingBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @else
+                                            <p>Opening Balance (Loss)</p>
+                                            <h3>{{ $openingBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @endif
+                                    @else
+                                        <p>Opening Balance </p>
+                                        <h3>0<sup style="font-size: 14px">TK</sup>
+                                        </h3>
+                                    @endif
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="#" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3>{{ $balance }} <sup style="font-size: 14px">TK</sup></h3>
-
+                                    @if (isset($Monthly_Manual_Opening_Balance))
+                                    
+                                        @if ($Monthly_Manual_Opening_Balance->flag == 1)
+                                            <h3>{{ $income + $others_income + $Monthly_Manual_Opening_Balance->amount - $expense }}
+                                                <sup style="font-size: 14px">TK</sup></h3>
+                                        @else
+                                        
+                                            <h3>{{ $income + $others_income - ($expense + $Monthly_Manual_Opening_Balance->amount) }}
+                                                <sup style="font-size: 14px">TK</sup></h3>
+                                        @endif
+                                    @elseif (isset($openingBlance))
+                                    
+                                        @if ($openingBlance->flag == 1)
+                                            <h3>{{ $income + $others_income + $openingBlance->amount - $expense }}
+                                                <sup style="font-size: 14px">TK</sup></h3>
+                                        @else
+                                        <h3>{{ $income + $others_income - ($expense + $openingBlance->amount) }}
+                                            <sup style="font-size: 14px">TK</sup></h3>
+                                        @endif
+                                    @else
+                                    
+                                        <p>Opening Balance </p>
+                                        <h3>0<sup style="font-size: 14px">TK</sup>
+                                        </h3>
+                                    @endif
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
@@ -435,7 +547,8 @@
                                             </h3>
                                         @else
                                             <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup></h3>
+                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            </h3>
                                         @endif
                                     @else
                                         <p>Opening Balance </p>
@@ -453,7 +566,7 @@
                         <!-- /.col -->
 
                         <!-- ./col -->
-                        <div class="col-lg-3 col-6">
+                        {{-- <div class="col-lg-3 col-6">
                             <!-- small box -->
                             <div class="small-box" style="background: #FB5200">
                                 <div class="inner">
@@ -479,7 +592,7 @@
                                 <a href="#" class="small-box-footer link">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
-                        </div>
+                        </div> --}}
 
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
@@ -521,12 +634,12 @@
                     dataType: "json",
                     success: function(res) {
                         console.log(res);
-                        $('#flats').text(res.elats);
-                        $('#expense').text(res.expense);
-                        $('#income').text(res.income);
+                        $('#flats').text(res.flats);
+                        $('#expense').text(res.expense ? res.expense : 0);
+                        $('#income').text(res.income ? res.income : 0);
                         // $('#manualOpeningBalance').text(res.manualOpeningBalance);
-                        $('#others_income').text(res.others_income);
-                        $('#balance').text(res.balance);
+                        // $('#others_income').text(res.others_income);
+                        $('#balance').text(res.balance ? res.balance : 0);
                     }
                 });
             });
