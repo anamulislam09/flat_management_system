@@ -68,6 +68,10 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
+       $pass = $request->password;
+       $pass_confirmation = $request->password_confirmation;
+
+      if($pass == $pass_confirmation){
         $start_at = 1001;
 
         if ($start_at) {
@@ -114,6 +118,9 @@ class AdminController extends Controller
 
             return redirect()->route('admin.verfy')->with('message', 'Registration Successfully');
         }
+      }else{
+        return redirect()->back()->with('message', 'Password Not Matched');
+      }
     }
 
     // register method ends here

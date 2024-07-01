@@ -172,7 +172,7 @@ class IncomeController extends Controller
                                         'due' => $flats[$i]->amount,
                                     ]);
                                 }
-                                return redirect()->back()->with('message', 'Service5 charge added successfully');
+                                return redirect()->back()->with('message', 'Service charge added successfully');
                             }
                         }
                     }

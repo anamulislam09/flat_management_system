@@ -45,11 +45,11 @@
             $manualOpeningBlance = DB::table('opening_balances')
                 ->where('client_id', Auth::guard('admin')->user()->id)
                 ->first();
-            $others_income = DB::table('others_incomes')
+            $total_others_income = DB::table('others_incomes')
                 ->where('client_id', Auth::guard('admin')->user()->id)
                 ->sum('amount');
 
-            $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)->sum('amount');
+            $balance = App\Models\Balance::where('client_id', Auth::guard('admin')->user()->id)->latest()->value('amount');
             $clients = App\Models\Client::where('role', 1)->count();
             $category = App\Models\Category::count();
             $packages = App\Models\Package::count();
@@ -99,7 +99,6 @@
                                 <div class="inner">
                                     <p>Total Clients</p>
                                     <h3>{{ $clients }}</h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
@@ -115,7 +114,6 @@
                                 <div class="inner">
                                     <p>Total Category</p>
                                     <h3>{{ $category }}</h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -130,7 +128,6 @@
                                 <div class="inner">
                                     <p>Total Packages</p>
                                     <h3>{{ $packages }}</h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -145,7 +142,6 @@
                                 <div class="inner">
                                     <p>Total Collection</p>
                                     <h3>{{ $total_colloection }}</h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -154,22 +150,6 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                        {{-- <div class="col-lg-3 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-danger">
-                                <div class="inner">
-                                    <p>Total Due</p>
-                                    <h3>{{ $total_due }}</h3>
-
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-person-add"></i>
-                                </div>
-                                <a href="{{ route('category.index') }}" class="small-box-footer link">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div> --}}
-                        <!-- /.col -->
                     </div>
                 @else
                     <div class="card " style="margin-top: -20px !important">
@@ -185,7 +165,6 @@
                                 <div class="inner text-white">
                                     <p>No of Flat</p>
                                     <h3 id="flats">{{ $flat }}</h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
@@ -201,12 +180,11 @@
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
                                     <h3 id="expense"><sup style="font-size: 14px">TK</sup></h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
-                                <a href="{{ route('expenses.year') }}" class="small-box-footer link">More info <i
+                                <a href="{{ route('expenses.month') }}" class="small-box-footer link">More info <i
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
@@ -220,7 +198,6 @@
                                 <div class="inner">
                                     <p>Total Service Charge</p>
                                     <h3 id="income"><sup style="font-size: 14px">TK</sup></h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -230,57 +207,12 @@
                             </div>
                         </div>
 
-                        <!-- fix for small devices only -->
-                        {{-- <div class="clearfix hidden-md-up"></div>
-                        <div class="col-lg-3 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-secondary">
-                                <div class="inner">
-                                    <p>Others Income</p>
-                                    <h3 id="others_income"><sup style="font-size: 14px">TK</sup></h3>
-
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="#" class="small-box-footer link">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div> --}}
-                        {{-- <div class="clearfix hidden-md-up"></div>
-                        <div class="col-lg-3 col-6">
-                            <!-- small box -->
-                            <div class="small-box bg-primary">
-                                <div class="inner">
-                                    @if (isset($manualOpeningBlance))
-                                        @if ($manualOpeningBlance->flag == 1)
-                                            <p>Opening Balance (Profit)</p>
-                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup>
-                                            </h3>
-                                        @else
-                                            <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup></h3>
-                                        @endif
-                                    @else
-                                        <p>Opening Balance </p>
-                                        <h3>0<sup style="font-size: 14px">TK</sup>
-                                        </h3>
-                                    @endif
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-stats-bars"></i>
-                                </div>
-                                <a href="#" class="small-box-footer link">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div> --}}
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Balance</p>
                                     <h3 id="balance"><sup style="font-size: 14px">TK</sup></h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
@@ -291,7 +223,6 @@
                         </div>
                         <!-- /.col -->
                     </div>
-
                     <div class="row" id="todaydata">
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
@@ -299,7 +230,6 @@
                                 <div class="inner text-white">
                                     <p>No of Flat</p>
                                     <h3>{{ $flat }}</h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
@@ -315,7 +245,6 @@
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
                                     <h3>{{ $expense }}<sup style="font-size: 14px">TK</sup></h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -334,7 +263,6 @@
                                 <div class="inner">
                                     <p>Total Service Charge</p>
                                     <h3>{{ $income }}<sup style="font-size: 14px">TK</sup></h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -352,7 +280,6 @@
                                 <div class="inner">
                                     <p>Others Income</p>
                                     <h3>{{ $others_income }}<sup style="font-size: 14px">TK</sup></h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -414,12 +341,10 @@
                                             <h3>{{ $income + $others_income + $Monthly_Manual_Opening_Balance->amount - $expense }}
                                                 <sup style="font-size: 14px">TK</sup></h3>
                                         @else
-                                        
                                             <h3>{{ $income + $others_income - ($expense + $Monthly_Manual_Opening_Balance->amount) }}
                                                 <sup style="font-size: 14px">TK</sup></h3>
                                         @endif
                                     @elseif (isset($openingBlance))
-                                    
                                         @if ($openingBlance->flag == 1)
                                             <h3>{{ $income + $others_income + $openingBlance->amount - $expense }}
                                                 <sup style="font-size: 14px">TK</sup></h3>
@@ -428,8 +353,6 @@
                                             <sup style="font-size: 14px">TK</sup></h3>
                                         @endif
                                     @else
-                                    
-                                        <p>Opening Balance </p>
                                         <h3>0<sup style="font-size: 14px">TK</sup>
                                         </h3>
                                     @endif
@@ -456,7 +379,6 @@
                                 <div class="inner">
                                     <p>Total User</p>
                                     <h3>{{ $user }}</h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
@@ -471,7 +393,6 @@
                                 <div class="inner text-white">
                                     <p>No of Flat</p>
                                     <h3>{{ $flat }}</h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-bag"></i>
@@ -487,7 +408,6 @@
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
                                     <h3>{{ $total_exp }}<sup style="font-size: 14px">TK</sup></h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -506,7 +426,6 @@
                                 <div class="inner">
                                     <p>Total Service Charge</p>
                                     <h3>{{ $total_income }}<sup style="font-size: 14px">TK</sup></h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -523,8 +442,7 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Others Income</p>
-                                    <h3>{{ $others_income }}<sup style="font-size: 14px">TK</sup></h3>
-
+                                    <h3>{{ $total_others_income }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -563,36 +481,6 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-                        <!-- /.col -->
-
-                        <!-- ./col -->
-                        {{-- <div class="col-lg-3 col-6">
-                            <!-- small box -->
-                            <div class="small-box" style="background: #FB5200">
-                                <div class="inner">
-                                    <p>Total Collection</p>
-
-                                    @if (isset($manualOpeningBlance))
-                                        @if ($manualOpeningBlance->flag == 1)
-                                            <h3>{{ $total_income + $others_income + $manualOpeningBlance->amount }} <sup
-                                                    style="font-size: 20px">TK</sup></h3>
-                                        @else
-                                            <h3>{{ $total_income + $others_income - $manualOpeningBlance->amount }} <sup
-                                                    style="font-size: 20px">TK</sup></h3>
-                                        @endif
-                                    @else
-                                        <h3>{{ $total_income + $others_income }} <sup style="font-size: 14px">TK</sup>
-                                        </h3>
-                                    @endif
-
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-pie-graph"></i>
-                                </div>
-                                <a href="#" class="small-box-footer link">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div> --}}
 
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
@@ -600,7 +488,6 @@
                                 <div class="inner">
                                     <p>Balance</p>
                                     <h3>{{ $balance }} <sup style="font-size: 14px">TK</sup></h3>
-
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>

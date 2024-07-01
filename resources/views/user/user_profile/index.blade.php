@@ -1,28 +1,34 @@
 @extends('user.user_layouts.user')
 @section('user_content')
-<style>
-    h3{
-        font-size: 20px !important;
-    }
-    p{
-        font-size: 14px !important
-    }
-    .text {font-size: 14px !important }
-    .link{
-        font-size: 12px !important;
-    }
-</style>
+    <style>
+        h3 {
+            font-size: 20px !important;
+        }
+
+        p {
+            font-size: 14px !important
+        }
+
+        .text {
+            font-size: 14px !important
+        }
+
+        .link {
+            font-size: 12px !important;
+        }
+    </style>
 
     <div class="content-wrapper">
         <div class="content-header">
             <div class="container-fluid">
                 <div class="row mb-2">
                     <div class="col-sm-6">
-                        <h1 class="m-0" style="font-size: 28px">{{Auth::user()->name}} Dashboard</h1>
+                        <h1 class="m-0" style="font-size: 28px">{{ Auth::user()->name }} Dashboard</h1>
                     </div>
                     <div class="col-sm-6">
                         <ol class="breadcrumb float-sm-right">
-                            <li class="breadcrumb-item" style="font-size: 14px"><a href="{{ route('user.Profile') }}">Home</a></li>
+                            <li class="breadcrumb-item" style="font-size: 14px"><a
+                                    href="{{ route('user.Profile') }}">Home</a></li>
                             <li class="breadcrumb-item active" style="font-size: 14px">Dashboard </li>
                         </ol>
                     </div>
@@ -40,11 +46,13 @@
             $manualOpeningBlance = DB::table('opening_balances')
                 ->where('client_id', $user_id->client_id)
                 ->first();
-            $others_income = DB::table('others_incomes')
+            $total_others_income = DB::table('others_incomes')
                 ->where('client_id', $user_id->client_id)
                 ->sum('amount');
 
-            $balance = App\Models\Balance::where('client_id', $user_id->client_id)->sum('amount');
+            $balance = App\Models\Balance::where('client_id', $user_id->client_id)
+                ->latest()
+                ->value('amount');
             $clients = App\Models\Client::where('role', 1)->count();
             $category = App\Models\Category::count();
             $superAdmin = Auth::user()->user_id;
@@ -58,13 +66,34 @@
                 ->sum('amount');
             // user transaction ends here
 
-             // this month transactions 
+            // this month transactions
             $flats = App\Models\Flat::where('client_id', $user_id->client_id)->count();
-            $expense = App\Models\Expense::where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('amount');
-            $income = App\Models\Income::where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('paid');
-            $others_income = DB::table('others_incomes')->where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('amount');
-            $balance = App\Models\Balance::where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('amount');
+            $expense = App\Models\Expense::where('client_id', $user_id->client_id)
+                ->where('date', date('Y-m'))
+                ->sum('amount');
+            $income = App\Models\Income::where('client_id', $user_id->client_id)
+                ->where('date', date('Y-m'))
+                ->sum('paid');
+            $others_income = DB::table('others_incomes')
+                ->where('client_id', $user_id->client_id)
+                ->where('date', date('Y-m'))
+                ->sum('amount');
+            // $balance = App\Models\Balance::where('client_id', $user_id->client_id)->where('date', date('Y-m'))->sum('amount');
 
+            $timestamp = strtotime(date('Y-m'));
+            $month = date('n', $timestamp); // 'n' gives month without leading zeros
+            $year = date('Y', $timestamp);
+            $Monthly_Manual_Opening_Balance = DB::table('opening_balances')
+                ->where('client_id', $user_id->client_id)
+                ->where('year', date('Y'))
+                ->where('month', $month)
+                ->first();
+
+            $openingBlance = DB::table('balances')
+                ->where('month', $month - 1)
+                ->where('year', $year)
+                ->where('client_id', $user_id->client_id)
+                ->first();
         @endphp
 
         <section class="content">
@@ -74,29 +103,23 @@
                     <div class="row">
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-info text-center">
-                                <div class="inner">
+                                <div class="inner text-white">
                                     <p>Total Paid</p>
-                                    <h3>{{ $total_paid }}</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-bag"></i>
+                                    <h3>{{ $total_paid }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                             </div>
                         </div>
-                        <!-- /.col -->
                         <div class="col-lg-3 col-6">
-                            <!-- small box -->
                             <div class="small-box bg-warning text-center">
                                 <div class="inner ">
                                     <p>Total Due</p>
-                                    <h3>{{ $total_amount - $total_paid }}</h3>
+                                    <h3>{{ $total_amount - $total_paid }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
                             </div>
                         </div>
-                        <!-- /.col -->
                     </div>
                     <hr>
                     <p>All Transaction</p>
@@ -177,7 +200,8 @@
                                             </h3>
                                         @else
                                             <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup></h3>
+                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            </h3>
                                         @endif
                                     @else
                                         <p>Opening Balance </p>
@@ -187,25 +211,6 @@
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-6">
-                            <div class="small-box" style="background: #FB5200">
-                                <div class="inner">
-                                    <p>Total Collection</p>
-
-                                    @if (isset($manualOpeningBlance))
-                                        @if ($manualOpeningBlance->flag == 1)
-                                            <h3>{{ $total_income + $others_income + $manualOpeningBlance->amount }} <sup
-                                                    style="font-size: 20px">TK</sup></h3>
-                                        @else
-                                            <h3>{{ $total_income + $others_income - $manualOpeningBlance->amount }} <sup
-                                                    style="font-size: 20px">TK</sup></h3>
-                                        @endif
-                                    @else
-                                        <h3>{{ $total_income + $others_income }} <sup style="font-size: 14px">TK</sup></h3>
-                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -222,187 +227,228 @@
                         </div>
                     </div>
                 @else
-
-                <div class="card " style="margin-top: -20px !important">
-                    <div class="card-header row ">
-                        <h4><input value="{{ date('Y-m') }}" type="month" name="date" class="form-control text"
-                                id="date"></h4>
-                    </div>
-                </div>
-                <div class="row" id="datewiseData">
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box " style="background: #df8e15">
-                            <div class="inner text-white">
-                                <p>No of Flat</p>
-                                <h3 id="flats">{{$flat}}</h3>
-
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-bag"></i>
-                            </div>
-                            <a href="{{ route('manager.flat.index') }}" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+                    <div class="card " style="margin-top: -20px !important">
+                        <div class="card-header row ">
+                            <h4><input value="{{ date('Y-m') }}" type="month" name="date" class="form-control text"
+                                    id="date">
+                            </h4>
                         </div>
                     </div>
-                    <!-- /.col -->
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-warning">
-                            <div class="inner text-white">
-                                <p>Total Expenses</p>
-                                <h3 id="expense"><sup style="font-size: 14px">TK</sup></h3>
+                    <div class="row" id="datewiseData">
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box " style="background: #df8e15">
+                                <div class="inner text-white">
+                                    <p>No of Flat</p>
+                                    <h3 id="flats">{{ $flat }}</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                                <a href="{{ route('manager.flat.index') }}" class="small-box-footer link"">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-warning">
+                                <div class="inner text-white">
+                                    <p>Total Expenses</p>
+                                    <h3 id="expense"><sup style="font-size: 14px">TK</sup></h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                <a href="{{ route('manager.expenses.month') }}" class="small-box-footer link"">More info
+                                    <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- /.col -->
 
+                        <!-- fix for small devices only -->
+                        <div class="clearfix hidden-md-up"></div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <p>Total Service Charge</p>
+                                    <h3 id="income"><sup style="font-size: 14px">TK</sup></h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="{{ route('manager.income.statement') }}" class="small-box-footer link"">More
+                                    info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
-                            <div class="icon">
-                                <i class="ion ion-person-add"></i>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <p>Balance</p>
+                                    <h3 id="balance"><sup style="font-size: 14px">TK</sup></h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                                <a href="{{ route('manager.blance.index') }}" class="small-box-footer link"">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
                             </div>
-                            <a href="{{ route('manager.expenses.year') }}" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <div class="row" id="todaydata">
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box " style="background: #df8e15">
+                                <div class="inner text-white">
+                                    <p>No of Flat</p>
+                                    <h3>{{ $flat }}</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-bag"></i>
+                                </div>
+                                <a href="{{ route('manager.flat.index') }}" class="small-box-footer link"">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+                        <div class="col-lg-3 col-6">
+                            <div class="small-box bg-warning">
+                                <div class="inner text-white">
+                                    <p>Total Expenses</p>
+                                    <h3>{{ $expense }}<sup style="font-size: 14px">TK</sup></h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-person-add"></i>
+                                </div>
+                                <a href="{{ route('manager.expenses.year') }}" class="small-box-footer link"">More info
+                                    <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+                        <!-- /.col -->
+
+                        <!-- fix for small devices only -->
+                        <div class="clearfix hidden-md-up"></div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-success">
+                                <div class="inner">
+                                    <p>Total Service Charge</p>
+                                    <h3>{{ $income }}<sup style="font-size: 14px">TK</sup></h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="{{ route('manager.income.statement') }}" class="small-box-footer link"">More
+                                    info <i class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
+                        <!-- fix for small devices only -->
+                        <div class="clearfix hidden-md-up"></div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-secondary">
+                                <div class="inner">
+                                    <p>Others Income</p>
+                                    <h3>{{ $others_income }}<sup style="font-size: 14px">TK</sup></h3>
+
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="#" class="small-box-footer link"">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="clearfix hidden-md-up"></div>
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    @if (isset($Monthly_Manual_Opening_Balance))
+                                        @if ($Monthly_Manual_Opening_Balance->flag == 1)
+                                            <p>Opening Balance (Profit)</p>
+                                            <h3>{{ $Monthly_Manual_Opening_Balance->amount }}<sup
+                                                    style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @else
+                                            <p>Opening Balance (Loss)</p>
+                                            <h3>{{ $Monthly_Manual_Opening_Balance->amount }}<sup
+                                                    style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @endif
+                                    @elseif (isset($openingBlance))
+                                        @if ($openingBlance->flag == 1)
+                                            <p>Opening Balance </p>
+                                            <h3>{{ $openingBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @else
+                                            <p>Opening Balance (Loss)</p>
+                                            <h3>{{ $openingBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @endif
+                                    @else
+                                        <p>Opening Balance </p>
+                                        <h3>0<sup style="font-size: 14px">TK</sup>
+                                        </h3>
+                                    @endif
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-stats-bars"></i>
+                                </div>
+                                <a href="#" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-6">
+                            <!-- small box -->
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <p>Balance</p>
+                                    @if (isset($Monthly_Manual_Opening_Balance))
+                                        @if ($Monthly_Manual_Opening_Balance->flag == 1)
+                                            <h3>{{ $income + $others_income + $Monthly_Manual_Opening_Balance->amount - $expense }}
+                                                <sup style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @else
+                                            <h3>{{ $income + $others_income - ($expense + $Monthly_Manual_Opening_Balance->amount) }}
+                                                <sup style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @endif
+                                    @elseif (isset($openingBlance))
+                                        @if ($openingBlance->flag == 1)
+                                            <h3>{{ $income + $others_income + $openingBlance->amount - $expense }}
+                                                <sup style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @else
+                                            <h3>{{ $income + $others_income - ($expense + $openingBlance->amount) }}
+                                                <sup style="font-size: 14px">TK</sup>
+                                            </h3>
+                                        @endif
+                                    @else
+                                        <h3>0<sup style="font-size: 14px">TK</sup>
+                                        </h3>
+                                    @endif
+                                </div>
+                                <div class="icon">
+                                    <i class="ion ion-pie-graph"></i>
+                                </div>
+                                <a href="{{ route('blance.index') }}" class="small-box-footer link">More info <i
+                                        class="fas fa-arrow-circle-right"></i></a>
+                            </div>
                         </div>
                     </div>
-                    <!-- /.col -->
 
-                    <!-- fix for small devices only -->
-                    <div class="clearfix hidden-md-up"></div>
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <p>Total Service Charge</p>
-                                <h3 id="income"><sup style="font-size: 14px">TK</sup></h3>
-
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-stats-bars"></i>
-                            </div>
-                            <a href="{{ route('manager.income.statement') }}" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="title" style="font-size: 20px">Total Transactions</h4>
                         </div>
                     </div>
-
-                    <!-- fix for small devices only -->
-                    <div class="clearfix hidden-md-up"></div>
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-secondary">
-                            <div class="inner">
-                                <p>Others Income</p>
-                                <h3 id="others_income"><sup style="font-size: 14px">TK</sup></h3>
-
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-stats-bars"></i>
-                            </div>
-                            <a href="#" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-danger">
-                            <div class="inner">
-                                <p>Balance</p>
-                                <h3 id="balance"><sup style="font-size: 14px">TK</sup></h3>
-
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-pie-graph"></i>
-                            </div>
-                            <a href="{{ route('manager.blance.index') }}" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                </div>
-                <div class="row" id="todaydata">
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box " style="background: #df8e15">
-                            <div class="inner text-white">
-                                <p>No of Flat</p>
-                                <h3>{{ $flat }}</h3>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-bag"></i>
-                            </div>
-                            <a href="{{ route('manager.flat.index') }}" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-                    <div class="col-lg-3 col-6">
-                        <div class="small-box bg-warning">
-                            <div class="inner text-white">
-                                <p>Total Expenses</p>
-                                <h3>{{ $expense }}<sup style="font-size: 14px">TK</sup></h3>
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-person-add"></i>
-                            </div>
-                            <a href="{{ route('manager.expenses.year') }}" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                    <!-- /.col -->
-
-                    <!-- fix for small devices only -->
-                    <div class="clearfix hidden-md-up"></div>
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-success">
-                            <div class="inner">
-                                <p>Total Service Charge</p>
-                                <h3>{{ $income }}<sup style="font-size: 14px">TK</sup></h3>
-
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-stats-bars"></i>
-                            </div>
-                            <a href="{{ route('manager.income.statement') }}" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <!-- fix for small devices only -->
-                    <div class="clearfix hidden-md-up"></div>
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-secondary">
-                            <div class="inner">
-                                <p>Others Income</p>
-                                <h3>{{ $others_income }}<sup style="font-size: 14px">TK</sup></h3>
-
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-stats-bars"></i>
-                            </div>
-                            <a href="#" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-
-                    <div class="col-lg-3 col-6">
-                        <!-- small box -->
-                        <div class="small-box bg-danger">
-                            <div class="inner">
-                                <p>Balance</p>
-                                <h3>{{ $balance }} <sup style="font-size: 14px">TK</sup></h3>
-
-                            </div>
-                            <div class="icon">
-                                <i class="ion ion-pie-graph"></i>
-                            </div>
-                            <a href="{{ route('manager.blance.index') }}" class="small-box-footer link"">More info <i
-                                    class="fas fa-arrow-circle-right"></i></a>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <h4 class="title" style="font-size: 20px">Total Transactions</h4>
-                    </div>
-                </div>
                     <div class="row">
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-info">
@@ -440,8 +486,8 @@
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
                                 </div>
-                                <a href="{{ route('manager.expenses.year') }}" class="small-box-footer link"">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{ route('manager.expenses.year') }}" class="small-box-footer link"">More info
+                                    <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
                         <!-- /.col -->
@@ -457,8 +503,8 @@
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
                                 </div>
-                                <a href="{{ route('manager.income.statement') }}" class="small-box-footer link"">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
+                                <a href="{{ route('manager.income.statement') }}" class="small-box-footer link"">More
+                                    info <i class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
 
@@ -468,7 +514,7 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Others Income</p>
-                                    <h3>{{ $others_income }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ $total_others_income }}<sup style="font-size: 14px">TK</sup></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -489,7 +535,8 @@
                                             </h3>
                                         @else
                                             <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup></h3>
+                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            </h3>
                                         @endif
                                     @else
                                         <p>Opening Balance </p>
@@ -504,31 +551,7 @@
                                         class="fas fa-arrow-circle-right"></i></a>
                             </div>
                         </div>
-
-                        <div class="col-lg-3 col-6">
-                            <div class="small-box" style="background: #FB5200">
-                                <div class="inner">
-                                    <p>Total Collection</p>
-                                    @if (isset($manualOpeningBlance))
-                                        @if ($manualOpeningBlance->flag == 1)
-                                            <h3>{{ $total_income + $others_income + $manualOpeningBlance->amount }} <sup
-                                                    style="font-size: 20px">TK</sup></h3>
-                                        @else
-                                            <h3>{{ $total_income + $others_income - $manualOpeningBlance->amount }} <sup
-                                                    style="font-size: 20px">TK</sup></h3>
-                                        @endif
-                                    @else
-                                        <h3>{{ $total_income + $others_income }} <sup style="font-size: 14px">TK</sup></h3>
-                                    @endif
-                                </div>
-                                <div class="icon">
-                                    <i class="ion ion-pie-graph"></i>
-                                </div>
-                                <a href="#" class="small-box-footer link"">More info <i
-                                        class="fas fa-arrow-circle-right"></i></a>
-                            </div>
-                        </div>
-
+                        
                         <div class="col-lg-3 col-6">
                             <div class="small-box bg-danger">
                                 <div class="inner">
@@ -552,25 +575,25 @@
     <script>
         var searchRequest = null;
 
-    $(document).ready(function() {
-        $("#datewiseData").hide();
-        $("#date").on('change', function() {
-            $("#datewiseData").show();
-            $("#todaydata").hide();
-            var date = $(this).val();
-            // alert(date);
-            $.ajax({
-                type: "GET",
-                url: "{{ url('get-transaction') }}/" + date,
-                dataType: "json",
-                success: function(res) {
-                    console.log(res);
-                        $('#flats').text(res.elats);
-                        $('#expense').text(res.expense);
-                        $('#income').text(res.income);
+        $(document).ready(function() {
+            $("#datewiseData").hide();
+            $("#date").on('change', function() {
+                $("#datewiseData").show();
+                $("#todaydata").hide();
+                var date = $(this).val();
+                // alert(date);
+                $.ajax({
+                    type: "GET",
+                    url: "{{ url('get-transaction') }}/" + date,
+                    dataType: "json",
+                    success: function(res) {
+                        console.log(res);
+                        $('#flats').text(res.flats);
+                        $('#expense').text(res.expense ? res.expense : 0);
+                        $('#income').text(res.income ? res.income : 0);
                         // $('#manualOpeningBalance').text(res.manualOpeningBalance);
-                        $('#others_income').text(res.others_income);
-                        $('#balance').text(res.balance);
+                        // $('#others_income').text(res.others_income);
+                        $('#balance').text(res.balance ? res.balance : 0);
                     }
                 });
             });

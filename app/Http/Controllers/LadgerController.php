@@ -25,8 +25,11 @@ class LadgerController extends Controller
         $month = Carbon::now()->month;
         $year = Carbon::now()->year;
         $clientId = Auth::guard('admin')->user()->id;
+        $isExistExp_process = Exp_process::where('client_id', $clientId)->where('month', $month)->where('year', $year)->exists();
+        $isExistbalance = Balance::where('client_id', $clientId)->where('month', $month)->where('year', $year)->exists();
 
-        if (Exp_process::where('client_id', $clientId)->where('month', $month)->where('year', $year)->exists()) {
+        if ($isExistExp_process || $isExistbalance) {
+        // if (Exp_process::where('client_id', $clientId)->where('month', $month)->where('year', $year)->exists()) {
             return redirect()->back()->with('message', 'You have already submitted');
         }
 
@@ -39,14 +42,11 @@ class LadgerController extends Controller
                 'client_id' => $expense->client_id,
                 'auth_id' => $expense->auth_id,
             ];
-            $exp_process = Exp_process::create($data);
+             Exp_process::create($data);
         }
 
-        if (!$exp_process) {
-            return redirect()->back()->with('message', 'Something went wrong!');
-        }
-
-        $monthExp = Exp_process::where('client_id', $clientId)->where('month', $month)->where('year', $year)->first();
+        $monthExpTotal = (float) Expense::where('client_id', $clientId)->where('month', $month)->where('year', $year)->sum('amount');
+        // $monthExp = Exp_process::where('client_id', $clientId)->where('month', $month)->where('year', $year)->first();
         $income = (float) DB::table('incomes')->where('month', $month)->where('year', $year)->where('client_id', $clientId)->sum('paid');
         $othersIncome = (float) DB::table('others_incomes')->where('month', $month)->where('year', $year)->where('client_id', $clientId)->sum('amount');
 
@@ -55,7 +55,7 @@ class LadgerController extends Controller
 
         if (!isset($manualOpeningBalance) && !isset($openingBalance)) {
             $totalIncome = $income + $othersIncome; 
-            $totalExpense = $monthExp->total;
+            $totalExpense = $monthExpTotal;
             $balance = $totalIncome - $totalExpense;
         } else {
             if ($manualOpeningBalance) {
@@ -67,11 +67,11 @@ class LadgerController extends Controller
             }
             if ($flag == 1) {
                 $totalIncome = $openingAmount + $income + $othersIncome;
-                $totalExpense = $monthExp->total;
+                $totalExpense = $monthExpTotal;
                 $balance = $totalIncome - $totalExpense;
             } else {
                 $totalIncome = $income + $othersIncome;
-                $totalExpense = $monthExp->total + $openingAmount;
+                $totalExpense = $monthExpTotal + $openingAmount;
                 $balance = $totalIncome - $totalExpense;
             }
         }
@@ -82,8 +82,8 @@ class LadgerController extends Controller
             'total_income' => $totalIncome,
             'total_expense' => $totalExpense,
             'amount' => $balance,
-            'client_id' => $monthExp->client_id,
-            'auth_id' => $monthExp->auth_id,
+            'client_id' => $clientId,
+            'auth_id' => $clientId,
             'date' => date('Y-m-d'),
             'flag' => $balance >= 0 ? 1 : 0,
         ];
