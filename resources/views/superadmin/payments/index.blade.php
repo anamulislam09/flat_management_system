@@ -59,6 +59,7 @@
                                             <tr style="border-top: 1px solid #ddd">
                                                 <th>SL</th>
                                                 <th>Client Name</th>
+                                                <th>Phone</th>
                                                 <th>Package Amount</th>
                                                 <th>Collection Amount</th>
                                                 <th>Due</th>
@@ -81,13 +82,14 @@
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $client->name }}</td>
-                                                    <td>{{ $item->payment_amount }}</td>
-                                                    <td>{{ $paidAmount }}</td>
+                                                    <td>{{ $client->phone }}</td>
+                                                    <td>{{ number_format($item->payment_amount, 2) }}</td>
+                                                    <td>{{ number_format($paidAmount, 2) }}</td>
                                                     <td>
                                                         @if ($due > 0)
-                                                            <span class="badge badge-danger">{{ $due }}</span>
+                                                            <span class="badge badge-danger">{{ number_format($due, 2) }}</span>
                                                         @else
-                                                            <span class="badge badge-primary">{{ $due }}</span>
+                                                            <span class="badge badge-primary">{{ number_format($due, 2) }}</span>
                                                         @endif
                                                     </td>
                                                 </tr>

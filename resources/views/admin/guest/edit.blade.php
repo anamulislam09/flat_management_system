@@ -2,7 +2,7 @@
     @media screen and (max-width: 767px) {
         .text {
             font-size: 13px !important;
-     }
+        }
     }
 </style>
 
@@ -30,7 +30,8 @@
                 <select name="flat_id" id="" class="form-control text" required>
                     <option value="" selected disabled>Select Flat</option>
                     @foreach ($flats as $flat)
-                        <option value="{{ $flat->flat_id }}" @if ($flatId == $flat->flat_id) selected @endif>{{ $flat->flat_name }}</option>
+                        <option value="{{ $flat->flat_id }}" @if ($flatId == $flat->flat_id) selected @endif>
+                            {{ $flat->flat_name }}</option>
                     @endforeach
                 </select>
             </div>
@@ -40,10 +41,10 @@
             </div>
 
             @if (!@empty($data->image))
-            <div class="">
-                <img src="{{ asset('images/' . $data->image) }}" style="width: 80px; margin:auto;"
-                    alt="{{ $data->image }}">
-            </div>
+                <div class="">
+                    <img src="{{ $data->image ? asset('images/' . $data->image) : '' }}"
+                        style="width: 80px; margin:auto;" alt="{{ $data->image ? $data->image : '' }}">
+                </div>
             @endif
         </div>
         <div class="modal-footer">

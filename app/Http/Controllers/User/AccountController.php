@@ -370,15 +370,12 @@ class AccountController extends Controller
     {
         $month = $month;
         $year = $year;
+        
         $user = User::where('user_id', Auth::user()->user_id)->first();
         if ($month == date('m') && $year == date('Y')) {
             $expense = Expense::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->sum('amount');
             $income = Income::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->sum('paid');
             $others_income = OthersIncome::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->sum('amount');
-
-            // $previousDate = explode('-', date('Y-m', strtotime($year . '-' . 01 . " -1 month")));
-            // $year = $previousDate[0];
-            // $month = $previousDate[1];
 
             $monthlyOB = Balance::where('client_id', $user->client_id)->where('month', $month - 1)->where('year', $year)->first();
             if ($monthlyOB) {
@@ -387,11 +384,11 @@ class AccountController extends Controller
                 $manualOpeningBalance = OpeningBalance::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->first();
                 if ($manualOpeningBalance) {
                     $income += ($manualOpeningBalance->flag == 1 ? $manualOpeningBalance->amount : -$manualOpeningBalance->amount);
+                    
                 }
             }
             $income += $others_income;
         } else {
-            // dd($month);
             $data = Balance::where('client_id', $user->client_id)->where('month', $month)->where('year', $year)->first();
             $income = isset($data) ? $data->total_income : 0;
             $expense = isset($data) ? $data->total_expense : 0;
@@ -401,6 +398,46 @@ class AccountController extends Controller
         $data['expense'] = $expense;
         $data['balance'] = $data['income'] - $data['expense'];
         $data['flag'] = $data['balance'] >= 0 ? 'Profit' : 'Loss';
+        // dd($data);
+
+
+
+
+        // if ($month == date('m') && $year == date('Y')) {
+        //     $expense = Expense::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('amount');
+        //     $income = Income::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('paid');
+        //     $others_income = OthersIncome::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->sum('amount');
+
+        //     $monthlyOB = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month - 1)->where('year', $year)->first();
+
+        //     if ($monthlyOB) {
+        //         $income += $monthlyOB->amount;
+        //     } else {
+        //         $manualOpeningBalance = OpeningBalance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->first();
+        //         // dd($manualOpeningBalance);
+        //         if ($manualOpeningBalance) {
+        //             $income += ($manualOpeningBalance->flag == 1 ? $manualOpeningBalance->amount : -$manualOpeningBalance->amount);
+        //         }
+        //     }
+        //     $income += $others_income;
+        // } else {
+        //     // dd($month);
+        //     $data = Balance::where('client_id', Auth::guard('admin')->user()->id)->where('month', $month)->where('year', $year)->first();
+        //     $income = isset($data) ? $data->total_income : 0;
+        //     $expense = isset($data) ? $data->total_expense : 0;
+        // }
+
+        // $data['income'] = $income;
+        // $data['expense'] = $expense;
+        // $data['balance'] = $data['income'] - $data['expense'];
+        // $data['flag'] = $data['balance'] >= 0 ? 'Profit' : 'Loss';
+
+
+
+
+
+
+
         return response()->json($data, 200);
     }
 
@@ -415,6 +452,8 @@ class AccountController extends Controller
     public function GenerateExpenseVoucherAll(Request $request)
     {
         $user = User::where('user_id', Auth::user()->user_id)->first();
+
+        $date = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->value('date');
         $inv = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->groupBy('cat_id')->get();
         $total = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->sum('amount');
         $month = Expense::where('client_id', $user->client_id)->where('month', $request->month)->where('year', $request->year)->first();
@@ -423,6 +462,7 @@ class AccountController extends Controller
         $Client = Client::where('id', $user->client_id)->first();
 
         $data = [
+            'date' => $date,
             'inv' => $inv,
             'total' => $total,
             'month' => $month,

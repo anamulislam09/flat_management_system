@@ -53,7 +53,7 @@
             $clients = App\Models\Client::where('role', 1)->count();
             $category = App\Models\Category::count();
             $packages = App\Models\Package::count();
-            $superAdmin = Auth::guard('admin')->user()->id;
+            $spanerAdmin = Auth::guard('admin')->user()->id;
             $total_colloection = App\Models\Payment::sum('paid');
 
             // this month transactions
@@ -91,7 +91,7 @@
         <section class="content">
             <div class="container-fluid">
                 <!-- Info boxes -->
-                @if ($superAdmin == 1001)
+                @if ($spanerAdmin == 1001)
                     <div class="row">
                         <div class="col-lg-3 col-6">
                             <!-- small box -->
@@ -141,7 +141,7 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Total Collection</p>
-                                    <h3>{{ $total_colloection }}</h3>
+                                    <h3>{{ number_format($total_colloection, 2) }}</h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -179,7 +179,7 @@
                             <div class="small-box bg-warning">
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
-                                    <h3 id="expense"><sup style="font-size: 14px">TK</sup></h3>
+                                    <h3 id="expense"><span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -197,7 +197,7 @@
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <p>Total Service Charge</p>
-                                    <h3 id="income"><sup style="font-size: 14px">TK</sup></h3>
+                                    <h3 id="income"><span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -212,7 +212,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3 id="balance"><sup style="font-size: 14px">TK</sup></h3>
+                                    <h3 id="balance"><span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
@@ -244,7 +244,7 @@
                             <div class="small-box bg-warning">
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
-                                    <h3>{{ $expense }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ number_format($expense, 2) }}<span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -262,7 +262,7 @@
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <p>Total Service Charge</p>
-                                    <h3>{{ $income }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ number_format($income ,2) }}<span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -279,7 +279,7 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Others Income</p>
-                                    <h3>{{ $others_income }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ number_format($others_income, 2) }}<span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -297,28 +297,28 @@
                                     @if (isset($Monthly_Manual_Opening_Balance))
                                         @if ($Monthly_Manual_Opening_Balance->flag == 1)
                                             <p>Opening Balance (Profit)</p>
-                                            <h3>{{ $Monthly_Manual_Opening_Balance->amount }}<sup
-                                                    style="font-size: 14px">TK</sup>
+                                            <h3>{{ number_format($Monthly_Manual_Opening_Balance->amount, 2) }}<span
+                                                    style="font-size: 14px"> TK</span>
                                             </h3>
                                         @else
                                             <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $Monthly_Manual_Opening_Balance->amount }}<sup
-                                                    style="font-size: 14px">TK</sup>
+                                            <h3>{{ number_format($Monthly_Manual_Opening_Balance->amount, 2) }}<span
+                                                    style="font-size: 14px"> TK</span>
                                             </h3>
                                         @endif
                                     @elseif (isset($openingBlance))
                                         @if ($openingBlance->flag == 1)
                                             <p>Opening Balance </p>
-                                            <h3>{{ $openingBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            <h3>{{ number_format($openingBlance->amount , 2) }}<span style="font-size: 14px"> TK</span>
                                             </h3>
                                         @else
                                             <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $openingBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            <h3>{{ number_format($openingBlance->amount , 2) }}<span style="font-size: 14px"> TK</span>
                                             </h3>
                                         @endif
                                     @else
                                         <p>Opening Balance </p>
-                                        <h3>0<sup style="font-size: 14px">TK</sup>
+                                        <h3>0.00<span style="font-size: 14px"> TK</span>
                                         </h3>
                                     @endif
                                 </div>
@@ -338,22 +338,22 @@
                                     @if (isset($Monthly_Manual_Opening_Balance))
                                     
                                         @if ($Monthly_Manual_Opening_Balance->flag == 1)
-                                            <h3>{{ $income + $others_income + $Monthly_Manual_Opening_Balance->amount - $expense }}
-                                                <sup style="font-size: 14px">TK</sup></h3>
+                                            <h3>{{ number_format($income + $others_income + $Monthly_Manual_Opening_Balance->amount - $expense, 2) }}
+                                                <span style="font-size: 14px"> TK</span></h3>
                                         @else
-                                            <h3>{{ $income + $others_income - ($expense + $Monthly_Manual_Opening_Balance->amount) }}
-                                                <sup style="font-size: 14px">TK</sup></h3>
+                                            <h3>{{ number_format($income + $others_income - ($expense + $Monthly_Manual_Opening_Balance->amount),2) }}
+                                                <span style="font-size: 14px"> TK</span></h3>
                                         @endif
                                     @elseif (isset($openingBlance))
                                         @if ($openingBlance->flag == 1)
-                                            <h3>{{ $income + $others_income + $openingBlance->amount - $expense }}
-                                                <sup style="font-size: 14px">TK</sup></h3>
+                                            <h3>{{ number_format($income + $others_income + $openingBlance->amount - $expense, 2) }}
+                                                <span style="font-size: 14px"> TK</span></h3>
                                         @else
-                                        <h3>{{ $income + $others_income - ($expense + $openingBlance->amount) }}
-                                            <sup style="font-size: 14px">TK</sup></h3>
+                                        <h3>{{ number_format($income + $others_income - ($expense + $openingBlance->amount), 2) }}
+                                            <span style="font-size: 14px"> TK</span></h3>
                                         @endif
                                     @else
-                                        <h3>0<sup style="font-size: 14px">TK</sup>
+                                        <h3>0.00<span style="font-size: 14px"> TK</span>
                                         </h3>
                                     @endif
                                 </div>
@@ -407,7 +407,7 @@
                             <div class="small-box bg-warning">
                                 <div class="inner text-white">
                                     <p>Total Expenses</p>
-                                    <h3>{{ $total_exp }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ number_format($total_exp, 2) }}<span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-person-add"></i>
@@ -425,7 +425,7 @@
                             <div class="small-box bg-success">
                                 <div class="inner">
                                     <p>Total Service Charge</p>
-                                    <h3>{{ $total_income }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ number_format($total_income, 2) }}<span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -442,7 +442,7 @@
                             <div class="small-box bg-secondary">
                                 <div class="inner">
                                     <p>Others Income</p>
-                                    <h3>{{ $total_others_income }}<sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ number_format($total_others_income, 2) }}<span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-stats-bars"></i>
@@ -461,16 +461,16 @@
                                     @if (isset($manualOpeningBlance))
                                         @if ($manualOpeningBlance->flag == 1)
                                             <p>Opening Balance (Profit)</p>
-                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            <h3>{{ number_format($manualOpeningBlance->amount, 2) }}<span style="font-size: 14px"> TK</span>
                                             </h3>
                                         @else
                                             <p>Opening Balance (Loss)</p>
-                                            <h3>{{ $manualOpeningBlance->amount }}<sup style="font-size: 14px">TK</sup>
+                                            <h3>{{ number_format($manualOpeningBlance->amount, 2) }}<span style="font-size: 14px"> TK</span>
                                             </h3>
                                         @endif
                                     @else
                                         <p>Opening Balance </p>
-                                        <h3>0<sup style="font-size: 14px">TK</sup>
+                                        <h3>0.00<span style="font-size: 14px"> TK</span>
                                         </h3>
                                     @endif
                                 </div>
@@ -487,7 +487,7 @@
                             <div class="small-box bg-danger">
                                 <div class="inner">
                                     <p>Balance</p>
-                                    <h3>{{ $balance }} <sup style="font-size: 14px">TK</sup></h3>
+                                    <h3>{{ number_format($balance, 2) }} <span style="font-size: 14px"> TK</span></h3>
                                 </div>
                                 <div class="icon">
                                     <i class="ion ion-pie-graph"></i>
@@ -522,11 +522,11 @@
                     success: function(res) {
                         console.log(res);
                         $('#flats').text(res.flats);
-                        $('#expense').text(res.expense ? res.expense : 0);
-                        $('#income').text(res.income ? res.income : 0);
+                        $('#expense').text(res.expense ? parseFloat(res.expense).toFixed(2) : 0);
+                        $('#income').text(res.income ? parseFloat(res.income).toFixed(2) : 0);
                         // $('#manualOpeningBalance').text(res.manualOpeningBalance);
                         // $('#others_income').text(res.others_income);
-                        $('#balance').text(res.balance ? res.balance : 0);
+                        $('#balance').text(res.balance ? parseFloat(res.balance).toFixed(2) : 0);
                     }
                 });
             });

@@ -57,7 +57,7 @@
                                     <div class="col-lg-4 col-sm-6">
                                         @if ($m_opening_balance)
                                             <h3 class="card-title text"><strong>
-                                                Opening {{ $m_opening_balance->flag == 1 ? 'Balance' : 'Loss' }} {{ $m_opening_balance->flag == 1 ? $m_opening_balance->amount : '(' . $m_opening_balance->amount . ')' }}
+                                                Opening {{ $m_opening_balance->flag == 1 ? 'Balance' : 'Loss' }} {{ $m_opening_balance->flag == 1 ? number_format($m_opening_balance->amount, 2) : '(' . number_format($m_opening_balance->amount, 2) . ')' }}
                                             </strong></h3>
                                         @endif
                                     </div>
@@ -76,13 +76,13 @@
                                         <tr>
                                             <td class="text-center">1</td>
                                             <td class="text-left">{{ $month->charge ?? 'Main Income' }}</td>
-                                            <td class="text-right">{{ $m_income }}</td>
+                                            <td class="text-right">{{number_format( $m_income, 2) }}</td>
                                         </tr>
                                         @foreach ($m_other_income as $key => $item)
                                             <tr>
                                                 <td class="text-center">{{ $key + 2 }}</td>
                                                 <td class="text-left">{{ $item->income_info }}</td>
-                                                <td class="text-right">{{ $item->amount }}</td>
+                                                <td class="text-right">{{ number_format($item->amount, 2) }}</td>
                                             </tr>
                                         @endforeach
                                     </tbody>
@@ -96,12 +96,12 @@
                                         @endphp
                                         <tr>
                                             <td colspan="2" class="text-right"><strong>Total Income without O/P:</strong></td>
-                                            <td class="text-right"><strong>{{ $total_income_without_op }}</strong></td>
+                                            <td class="text-right"><strong>{{ number_format($total_income_without_op, 2) }}</strong></td>
                                         </tr>
                                         @if ($m_opening_balance)
                                             <tr>
                                                 <td colspan="2" class="text-right"><strong>Total Income with O/P:</strong></td>
-                                                <td class="text-right"><strong>{{ $total_income_with_op }}</strong></td>
+                                                <td class="text-right"><strong>{{ number_format($total_income_with_op, 2) }}</strong></td>
                                             </tr>
                                         @endif
                                     </tfoot>

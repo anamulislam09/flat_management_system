@@ -144,14 +144,14 @@
                                                         </td>
                                                         <td>{{ $item->flat_name }}</td>
                                                         <td>{{ $item->charge }}</td>
-                                                        <td>{{ $item->amount }}</td>
-                                                        <td>{{ $item->paid }}</td>
-                                                        <td>{{ $item->due }}</td>
+                                                        <td class="text-right">{{ number_format($item->amount, 2) }}</td>
+                                                        <td class="text-right">{{ number_format($item->paid, 2) }}</td>
+                                                        <td class="text-right">{{ number_format($item->due, 2) }}</td>
                                                         @if ($user)
-                                                            <td><span class="badge badge-info">{{ $userName->name }}</span>
+                                                            <td class="text-center"><span class="badge badge-info">{{ $userName->name }}</span>
                                                             </td>
                                                         @elseif ($customer)
-                                                            <td><span class="badge badge-success">Admin</span></td>
+                                                            <td class="text-center"><span class="badge badge-success">Admin</span></td>
                                                         @endif
 
                                                     </tr>
@@ -161,14 +161,14 @@
                                             @else
                                                 <tr>
                                                     <td colspan="3" class="text-right"> <strong>Total :</strong></td>
-                                                    <td class="text-right"><strong>{{ $total }}</strong></td>
+                                                    <td class="text-right"><strong>{{ number_format($total, 2) }}</strong></td>
                                                     @if (isset($collection))
-                                                        <td class="text-right"><strong>{{ $collection }}</strong></td>
-                                                        <td class="text-right"><strong>{{ $total - $collection }}</strong>
+                                                        <td class="text-right"><strong>{{ number_format($collection, 2) }}</strong></td>
+                                                        <td class="text-right"><strong>{{ number_format($total - $collection, 2) }}</strong>
                                                         </td>
                                                     @else
-                                                        <td class="text-right"><strong>00</strong></td>
-                                                        <td class="text-right"><strong>{{ $total }}</strong></td>
+                                                        <td class="text-right"><strong>0.00</strong></td>
+                                                        <td class="text-right"><strong>{{ number_format($total, 2) }}</strong></td>
                                                     @endif
                                                     <td></td>
                                                 </tr>

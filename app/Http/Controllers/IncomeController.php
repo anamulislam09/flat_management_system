@@ -41,9 +41,8 @@ class IncomeController extends Controller
                         return redirect()->back()->with('message', 'You have already created!');
                     } else {
                         $flats = Flat::where('client_id', Auth::guard('admin')->user()->id)->get();
-
                         for ($i = 0; $i < count($flats); $i++) {
-                            Income::insert([
+                            $income = Income::insert([
                                 'month' => $request->month,
                                 'year' => $request->year,
                                 'flat_id' => $flats[$i]->flat_id,
@@ -56,7 +55,12 @@ class IncomeController extends Controller
                                 'date' => date('Y-m'),
                             ]);
                         }
-                        return redirect()->back()->with('message', 'Service charge added successfully');
+
+                        if ($income) {
+                            return redirect()->back()->with('message', 'Service charge added successfully');
+                        } else {
+                            return redirect()->back()->with('message', 'something went wrong');
+                        }
                     }
                 } elseif (($month - 1 == $request->month) || ($year != $request->year)) {
                     return redirect()->back()->with('message', "PLS, Select current year.");
@@ -91,12 +95,7 @@ class IncomeController extends Controller
                                         'date' => date('Y-m'),
                                     ]);
                                 }
-
-                                if ($income) {
-                                    return redirect()->back()->with('message', 'Service charge added successfully');
-                                } else {
-                                    return redirect()->back()->with('message', 'something went wrong');
-                                }
+                                return redirect()->back()->with('message', 'Service charge added successfully');
                             } else {
                                 $flats = Flat::where('client_id', Auth::guard('admin')->user()->id)->get();
                                 $month = $request->month;
@@ -119,8 +118,8 @@ class IncomeController extends Controller
                                 return redirect()->back()->with('message', 'Service charge added successfully');
                             }
                         }
-                    }
-                    /*-------------------if previous year has data ends here --------------*/ else {
+                        /*-------------------if previous year has data ends here --------------*/
+                    } else {
                         $month = $request->month;
                         $year = $request->year;
                         $data = Income::where('month', $month)->where('year', $year)->where('client_id', Auth::guard('admin')->user()->id)->exists();
@@ -175,11 +174,11 @@ class IncomeController extends Controller
                             }
                         }
                     }
-                    // return redirect()->back()->with('message', 'Pls! Select Current Year!');
                 }
             }
         }
     }
+
     /*-------------------Income ends here--------------*/
 
 
@@ -225,7 +224,7 @@ class IncomeController extends Controller
                     $invoice_id = Income::where('client_id', Auth::guard('admin')->user()->id)->max('invoice_id');
                     $item['invoice_id'] = $this->formatSrl(++$invoice_id);
                 } else {
-                    $item['invoice_id'] =$this->formatSrl($inv_id);
+                    $item['invoice_id'] = $this->formatSrl($inv_id);
                 }
 
 

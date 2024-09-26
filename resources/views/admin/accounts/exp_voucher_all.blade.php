@@ -72,7 +72,7 @@
         .Prepared {
             width: 33.33%;
             float: left;
-            font-size:14px;
+            font-size: 14px;
         }
 
         .Prepared h4 {
@@ -85,7 +85,7 @@
             width: 33.33%;
             float: left;
             text-align: -webkit-center;
-            font-size:14px;
+            font-size: 14px;
         }
 
         .Approved h4 {
@@ -98,7 +98,7 @@
             width: 33.33%;
             float: left;
             text-align: -webkit-right;
-            font-size:14px;
+            font-size: 14px;
         }
 
         .Recipient h4 {
@@ -132,18 +132,20 @@
             margin-top: 4px;
         }
 
-        .dateTime{
-          margin-bottom: -10px;
+        .dateTime {
+            margin-bottom: -10px;
         }
-        .month{
-          width: 50%;
-          float: left;
+
+        .month {
+            width: 50%;
+            float: left;
         }
-      
-        .date p{
-         text-align: center;
-         font-size:14px;
+
+        .date p {
+            text-align: center;
+            font-size: 14px;
         }
+
         /* body text ends here  */
     </style>
 </head>
@@ -153,70 +155,34 @@
         <div class="header-section">
             <div class="logo">
                 <h4>{{ $client->name }}</h4>
-                {{-- <img src="" alt="$client->name "> --}}
             </div>
 
             <div class="header-text">
                 <h2>{{ $client->name }}</h2>
                 <p>{{ $client->address }}</p>
                 <p>{{ $client->phone }}, {{ $client->email }}</p>
-                {{-- <p>{{ $client->email }}</p> --}}
             </div>
 
             <div class="status">
                 <h4>Payment Voucher</h4>
             </div>
         </div>
-
-        {{-- <div class="bodyInfo">
-      <div class="left-text">
-        <p>Name : {{ $inv->name }}</p>
-        <p>Phone : {{ $inv->phone }}</p>
-        <p>Address : {{ $inv->address }}</p>
-      </div>
-      <div class="right-text">
-        <p>Voucher No : {{ $inv->voucher_id }}</p>
-        <p>Voucher Date :{{ $inv->date }}</p>
-      </div>
-    </div> --}}
         <div class="body">
 
-           <div class="dateTime">
-            <div class="month">
-              <p style="font-size: 14px;">Total Expense for the Month of<strong><span>
-                          @if ('1' == date('m'))
-                              January
-                          @elseif ('2' == date('m'))
-                              February
-                          @elseif ('3' == date('m'))
-                              March
-                          @elseif ('4' == date('m'))
-                              April
-                          @elseif ('5' == date('m'))
-                              May
-                          @elseif ('6' == date('m'))
-                              June
-                          @elseif ('7' == date('m'))
-                              July
-                          @elseif ('8' == date('m'))
-                              August
-                          @elseif ('9' == date('m'))
-                              September
-                          @elseif ('10' == date('m'))
-                              October
-                          @elseif ('11' == date('m'))
-                              November
-                          @elseif ('12' == date('m'))
-                              December
-                          @endif -{{date('Y')}}
-                      </span> <strong>
-              </p>
-          </div>
-          <div class="date">
-              <p>Date: {{date("Y/m/d")}}</p>
-          </div>
+            <div class="dateTime">
+                <div class="month">
+                    @php
+                        $formattedDate = date('F Y', strtotime($date));
+                    @endphp
+                    <p style="font-size: 14px;">Total Expense for the Month of <strong><span>{{ $formattedDate }} </span>
+                            <strong>
+                    </p>
+                </div>
+                <div class="date">
+                    <p>Date: {{ date('Y/m/d') }}</p>
+                </div>
 
-           </div>
+            </div>
             <table>
                 <thead>
                     <tr>
@@ -229,7 +195,6 @@
                     @foreach ($inv as $key => $item)
                         @php
                             $exp_name = App\Models\Category::where('id', $item->cat_id)->first();
-                            // $user = App\Models\User::where('user_id', Auth::guard('admin')->user()->user_id)->first();
                             $amount = App\Models\Expense::where('client_id', Auth::guard('admin')->user()->id)
                                 ->where('month', $item->month)
                                 ->where('year', $item->year)
@@ -239,14 +204,14 @@
                         <tr>
                             <td style="text-align: center">{{ $key + 1 }}</td>
                             <td colspan="2">{{ $exp_name->name }}</td>
-                            <td style="text-align: center">{{ $amount }}</td>
+                            <td style="text-align: center">{{ number_format($amount, 2) }}</td>
                         </tr>
                     @endforeach
 
                     <tr>
                         <td colspan="2">Payment Method :</td>
                         <td style="text-align: center">Total Amount</td>
-                        <td style="text-align: center">{{ $total }}</td>
+                        <td style="text-align: center">{{ number_format($total, 2) }}</td>
                     </tr>
                 </tbody>
             </table>

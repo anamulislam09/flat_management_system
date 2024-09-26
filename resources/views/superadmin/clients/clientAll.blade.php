@@ -41,7 +41,7 @@
                           <select name="id" id="" class="form-control" required>
                             <option value="" selected disabled>Select Once</option>
                             @foreach ($data as $item )
-                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                <option value="{{$item->id}}">{{$item->name}} {{$item->phone}}</option>
                             @endforeach
                           </select>
                         </div>

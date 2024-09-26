@@ -144,9 +144,9 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
-                    $('#income').html(res.income);
-                    $('#expense').html(res.expense);
-                    $('#balance').html(res.balance);
+                    $('#income').html(parseFloat(res.income).toFixed(2));
+                    $('#expense').html(parseFloat(res.expense).toFixed(2));
+                    $('#balance').html(parseFloat(res.balance).toFixed(2));
                     $('#flag').html(res.flag);
                 }
             });

@@ -107,7 +107,7 @@
                                                 </div>
                                                 <div class="col-lg-3 col-md-3 col-sm-12">
                                                     <form
-                                                        action="{{ route('manager.account.expense.voucher.generateall') }}"
+                                                        action="{{ route('manager.account.expense.voucher.generateall') }}" target="_blank"
                                                         method="post">
                                                         @csrf
                                                         <input type="hidden" name="month" value="{{ $months }}">
@@ -156,7 +156,7 @@
                                                     <tr>
                                                         <td class="text-center">{{ $key + 1 }}</td>
                                                         <td>{{ $category->name }}</td>
-                                                        <td class="text-right">{{ $sub_total }}</td>
+                                                        <td class="text-right">{{ number_format($sub_total, 2) }}</td>
                                                     </tr>
                                                 @endforeach
                                             </tbody>
@@ -164,7 +164,7 @@
                                                 <tr>
                                                     <td colspan="2" class="text-right"> <strong>Total :</strong></td>
                                                     <td class="text-right">
-                                                        <strong>{{ $total }}</strong>
+                                                        <strong>{{ number_format($total, 2) }}</strong>
                                                     </td>
                                                 </tr>
                                             </tfoot>

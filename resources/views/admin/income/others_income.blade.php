@@ -52,7 +52,7 @@
                                             <div class=" form-group">
                                                 <label for="floor" class="text">Amount </label>
                                                 <input type="text" class="form-control text" value="" name="amount"
-                                                    id="amount" placeholder="Enter Income Amount" required>
+                                                    id="amount" placeholder="0.00" required>
                                             </div>
                                             
                                             <div class="">

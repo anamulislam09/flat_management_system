@@ -78,7 +78,7 @@
                         </div>
                         <div class=" col-lg-5 col-md-5 col-sm-6 form-group">
                           <label for="unit" class="text">Expense Amount</label>
-                          <input type="text" name="amount" class="form-control text" placeholder="Enter Expense Amount"
+                          <input type="text" name="amount" class="form-control text" placeholder="0.00"
                             required>
                         </div>
                         <div class="col-lg-2 mb-2">
@@ -153,7 +153,7 @@
                           </td>
 
                           <td>{{ $data->name }}</td>
-                          <td class="text-right">{{ $item->amount }}</td>
+                          <td class="text-right">{{ number_format($item->amount, 2) }}</td>
                           <td class="text-center">
                             <a href="#" class="btn btn-sm btn-info edit" data-id="{{ $item->id }}"
                               data-toggle="modal" data-target="#editexp"><i class="fas fa-edit"></i></a>
@@ -166,7 +166,7 @@
                       @endforeach
                       <tr>
                         <td colspan="4" class="text-right"><strong>Total =</strong></td>
-                        <td class="text-right"><strong>{{ $total }}</strong></td>
+                        <td class="text-right"><strong>{{number_format( $total, 2) }}</strong></td>
                       </tr>
                     </tbody>
                   </table>

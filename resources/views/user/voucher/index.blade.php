@@ -14,7 +14,7 @@
 
         .header-section {
             width: 100%;
-            height: 120px;
+            height: 80px;
             margin-top: -30px;
         }
 
@@ -27,6 +27,8 @@
             width: 55%;
             float: left;
             text-align: center;
+            /* float:right; */
+            margin-top: -10px;
         }
 
         .status {
@@ -36,14 +38,16 @@
 
         }
 
-        .header-text h1 {
+        .header-text h2 {
             font-family: arial;
-            margin-bottom: -6Px;
+            margin-bottom: 0Px;
         }
 
 
         .header-text p {
             margin: 0px 10px;
+            font-size: 15px;
+            /* font-family: Arial, Helvetica, sans-serif */
         }
 
         .status h3 {
@@ -108,23 +112,28 @@
             justify-content: space-between;
             display: block;
             padding: 15px 0px;
-            padding-bottom: 25px width: 100%;
-            /* background: #fb5200; */
+            padding-bottom: 5px;
+            width: 100%;
+            list-style: 10px;
+            font-size: 15px;
         }
 
         .left-text {
             width: 70%;
             float: left;
-            line-height: 10px;
+            line-height: 5px;
         }
 
-        .righrightt-text {
-            width: 30%;
-            float: left;
+        .right-text {
+            padding-top: 10px;
+            line-height: 5px;
+            text-align: right;
         }
 
         .textAmount h3 {
-            margin-top: -0px;
+            margin-top: 10px;
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 18px 
         }
 
         /* body text ends here  */
@@ -134,16 +143,10 @@
 <body>
     <div class="container">
         <div class="header-section">
-            {{-- <div class="logo">
-                <h3>{{ $client->name }}</h3>
-                <img src="" alt="logo">
-            </div> --}}
-
-            <div class="header-text">
-                <h1>{{ $client->name }}</h1>
+            <div class="header-text 9">
+                <h2>{{ $client->name }}</h2>
                 <p>{{ $client->address }}</p>
-                <p>{{ $client->phone }}</p>
-                <p>{{ $client->email }}</p>
+                <p>{{ $client->phone }}, {{ $client->email }}</p>
             </div>
 
             <div class="status">
@@ -159,7 +162,7 @@
             </div>
             <div class="right-text">
                 <p>Voucher No : {{ $inv->voucher_id }}</p>
-                <p>Voucher Date :{{ $inv->date }}</p>
+                <p>Date :{{ $inv->date }}</p>
             </div>
         </div>
         <div class="body">
@@ -175,16 +178,15 @@
                     <tr>
                         <td style="text-align: center">1</td>
                         <td colspan="2">{{ $exp_name->name }}</td>
-                        <td style="text-align: center">{{ $inv->amount }}</td>
+                        <td style="text-align: center">{{ number_format($inv->amount, 2) }}</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Payment Method :</td>
-                        <td style="text-align: center">Total Amount</td>
-                        <td style="text-align: center">{{ $inv->amount }}</td>
+                        <td colspan="2" style="font-size: 15px;">Payment Method :</td>
+                        <td style="text-align: center" style="font-size: 15px;">Total Amount</td>
+                        <td style="text-align: center; font-size: 15px;">{{ number_format($inv->amount, 2) }}</td>
                     </tr>
                 </tbody>
             </table>
-
             @php
                 // Function which returns number to words
                 function numberToWord($num = '')
@@ -310,7 +312,7 @@
             @endphp
 
             <div class="textAmount">
-                <h3>In Word: {{ $word }}</h3>
+                <h3>In Word: {{ $word }} taka (only)</h3>
             </div>
         </div>
         <div class="footer">

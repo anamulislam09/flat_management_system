@@ -168,18 +168,6 @@
                 <h4>Payment Voucher</h4>
             </div>
         </div>
-
-        {{-- <div class="bodyInfo">
-      <div class="left-text">
-        <p>Name : {{ $inv->name }}</p>
-        <p>Phone : {{ $inv->phone }}</p>
-        <p>Address : {{ $inv->address }}</p>
-      </div>
-      <div class="right-text">
-        <p>Voucher No : {{ $inv->voucher_id }}</p>
-        <p>Voucher Date :{{ $inv->date }}</p>
-      </div>
-    </div> --}}
         <div class="body">
 
             <div class="dateTime">

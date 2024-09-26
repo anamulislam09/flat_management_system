@@ -135,7 +135,7 @@
                                                 <label for="" class="text">Email</label>
                                                 <input type="email" name="email"class="form-control text"
                                                     placeholder="User email">
-                                                <span style="font-size: 14px">Note: Please, create id for manual
+                                                <span style="font-size: 12px; color:#fb5200;font-weight:600;">Note: Please, create id for manual
                                                     user.</span>
                                             </div>
                                             <input type="submit" class="btn btn-primary" value="Submit">

@@ -143,7 +143,7 @@
                                     </div>
                                     <div class="row">
                                         <div class="container-fluid" id="camcam">
-                                            <a class="btn btn-primary text-white text" id="open">Open cam</a>
+                                            <a class="btn btn-warning text-white text" id="open">Open cam</a>
                                             <div class="row">
                                                 <div class="col-md-12">
                                                     <div id="wrap">

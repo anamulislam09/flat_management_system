@@ -99,7 +99,7 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $item->client_id }}</td>
                                                     <td>{{ $item->flat_name }}</td>
-                                                    <td class="text-right">{{ $item->amount }}</td>
+                                                    <td class="text-right">{{ number_format($item->amount, 2) }}</td>
                                                     <td class="text-center">
                                                         @if ($item->status == 1)
                                                             <span class="badge badge-primary">Active</span>

@@ -123,10 +123,6 @@
 <body>
     <div class="container">
         <div class="header-section">
-            {{-- <div class="logo"> --}}
-            {{-- <h3>{{ $customer->name }}</h3> --}}
-            {{-- <img src="" alt="$customer->name "> --}}
-            {{-- </div> --}}
 
             <div class="header-text">
                 <h1>{{ $client->name }}</h1>
@@ -134,27 +130,11 @@
                 <p>{{ $client->phone }}</p>
                 <p>{{ $client->email }}</p>
             </div>
-
-            {{-- <div class="status" style="text-align: center"> --}}
-            {{-- <h3>Money Receipt</h3> --}}
-            {{-- <p>{{ $custDetails->address }}</p> --}}
-            {{-- </div> --}}
         </div>
 
         <div class="bodyInfo">
             <div class="left-text">
                 <p>MR No : {{ $inv->invoice_id }}</p>
-                {{-- @if (isset($user->name) && !empty($user->name))
-                    <p>Name : {{ $user->name }}</p>
-                @else
-                    <p>Flat_Name : {{ $inv->flat_name }}</p>
-                @endif --}}
-                {{-- @isset($user->name) --}}
-                {{-- <p>name : {{ $user->name }}</p> --}}
-                {{-- @endisset
-               
-                <p>name : ..........</p> --}}
-                {{-- <p>Flat_name : {{ $inv->flat_name }}</p> --}}
             </div>
             <div class="middle-text">
                 <p>Money Receipt</p>
@@ -325,7 +305,7 @@
                             December
                         @endif {{ $inv->year }}
                     </span> </strong>. In Cash <strong><span style="border-bottom: 2px dotted #000; padding:0px 30px">
-                        {{ $inv->paid }}</span></strong>.
+                        {{ number_format($inv->paid, 2) }}</span></strong>.
                 Service Charge of Flat No <strong><span
                         style="border-bottom: 2px dotted #000; padding:0px 30px; width:50%">{{ $inv->flat_name }}</span></strong>.
             </p>

@@ -54,7 +54,8 @@
                             <div class="card-header bg-primary">
                                 <div class="row ">
                                     <div class="col-lg-10 col-sm-12 ">
-                                        <h3 class="card-title text" style="width: 100%; text-align:center">Service Charge</h3>
+                                        <h3 class="card-title text" style="width: 100%; text-align:center">Service Charge
+                                        </h3>
                                     </div>
                                 </div>
                             </div>
@@ -137,7 +138,8 @@
                                                 @if (Route::current()->getName() == 'manager.income.create')
                                                     <div class="col-lg-2">
                                                         <label for="" class="col-form-label"></label>
-                                                        <input type="submit" class="btn btn-sm btn-primary text" value="Generate">
+                                                        <input type="submit" class="btn btn-sm btn-primary text"
+                                                            value="Generate">
                                                     </div>
                                                 @else
                                                 @endif
@@ -185,10 +187,12 @@
                                                     @if (isset($opening_balance) && !empty($data))
                                                         @if ($opening_balance->flag == 1)
                                                             <h3 class="card-title"><strong>Opening Balance
-                                                                    {{ $opening_balance->profit }}</strong></h3>
+                                                                    {{ number_format($opening_balance->profit, 2) }}</strong>
+                                                            </h3>
                                                         @else
                                                             <h3 class="card-title"><strong>Opening Loss
-                                                                    {{ $opening_balance->loss }}</strong></h3>
+                                                                    {{ number_format($opening_balance->loss, 2) }}</strong>
+                                                            </h3>
                                                         @endif
                                                     @else
                                                     @endif
@@ -222,7 +226,8 @@
                                                             <tr>
                                                                 <td class="text-center">{{ $key + 1 }}</td>
                                                                 <td>{{ $item->flat_name }}</td>
-                                                                <td class="text-right">{{ $item->amount }}</td>
+                                                                <td class="text-right">{{ number_format($item->amount, 2) }}
+                                                                </td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -230,7 +235,8 @@
                                                         <tr>
                                                             <td colspan="2" class="text-right"> <strong>Total :</strong>
                                                             </td>
-                                                            <td class="text-right"><strong>{{ $total }}</strong></td>
+                                                            <td class="text-right">
+                                                                <strong>{{ number_format($total, 2) }}</strong></td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
@@ -246,5 +252,5 @@
                 </div>
             </div>
         </section>
-    </div> 
+    </div>
 @endsection

@@ -293,7 +293,7 @@
                                 @endif {{ $voucher->year }}
                             </span> </strong>. In Cash <strong><span
                                 style="border-bottom: 2px dotted #000; padding:0px 10px">
-                                {{ $voucher->paid }}</span></strong>.
+                                {{ number_format($voucher->paid,2) }}</span></strong>.
                         Service Charge of Flat No <strong><span
                                 style="border-bottom: 2px dotted #000; padding:0px 10px; width:50%">{{ $voucher->flat_name }}</span></strong>.
                     </p>

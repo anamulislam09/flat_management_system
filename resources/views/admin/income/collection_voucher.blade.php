@@ -180,10 +180,10 @@
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $item->flat_name }}</td>
                                                     @if (isset($previousMonthData->due) && !empty($previousMonthData->due))
-                                                        <td class="text-right"> {{ $amount }}</td>
+                                                        <td class="text-right"> {{ number_format($amount, 2) }}</td>
                                                     @else
                                                         @if (isset($data->amount) && !empty($data->amount))
-                                                            <td class="text-right"> {{ $data->amount }}</td>
+                                                            <td class="text-right"> {{ number_format($data->amount, 2) }}</td>
                                                         @else
                                                         @endif
                                                     @endif
@@ -197,8 +197,8 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="2" class="text-right"> <strong>Total :</strong></td>
-                                                <td class="text-right"><strong>{{ $total + $due }}</strong></td>
-                                                <td class="text-right"><strong>{{ $total }}</strong></td>
+                                                <td class="text-right"><strong>{{ number_format($total + $due, 2) }}</strong></td>
+                                                <td class="text-right"><strong>{{ number_format($total, 2) }}</strong></td>
                                             </tr>
                                         </tfoot>
                                     </table>
@@ -305,14 +305,14 @@
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>{{ $item->flat_name }}</td>
                                                             @if (isset($previousMonthData->due) && !empty($previousMonthData->due))
-                                                                <td class="text-right"> {{ $amount }}</td>
+                                                                <td class="text-right"> {{ number_format($amount, 2) }}</td>
                                                             @else
                                                                 @if (isset($data->amount) && !empty($data->amount))
-                                                                    <td class="text-right"> {{ $data->amount }}</td>
+                                                                    <td class="text-right"> {{ number_format($data->amount, 2) }}</td>
                                                                 @else
                                                                 @endif
                                                             @endif
-                                                            <td class="text-right"> {{ $item->paid }}</td>
+                                                            <td class="text-right"> {{ number_format($item->paid, 2) }}</td>
                                                             <td class="text-center"><a
                                                                     href="{{ route('income.voucher.generate', $item->id) }}"
                                                                     class="badge badge-info" target="_blank">Voucher</a>
@@ -324,8 +324,8 @@
                                                     <tr>
                                                         <td colspan="2" class="text-right"> <strong>Total :</strong>
                                                         </td>
-                                                        <td class="text-right"><strong>{{ $total + $due }}</strong></td>
-                                                        <td class="text-right"><strong>{{ $total }}</strong></td>
+                                                        <td class="text-right"><strong>{{ number_format($total + $due, 2) }}</strong></td>
+                                                        <td class="text-right"><strong>{{ number_format($total, 2) }}</strong></td>
                                                     </tr>
                                                 </tfoot>
                                             </table>

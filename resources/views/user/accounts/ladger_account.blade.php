@@ -141,29 +141,29 @@
                                                 <td></td>
                                                 @if ($month == 1)
                                                     @if (!$lastYopeningBlance)
-                                                        <td><strong>00</strong></td>
+                                                        <td><strong>0.00</strong></td>
                                                     @else
                                                         @if ($lastYopeningBlance->flag == 1)
-                                                            <td><strong>{{ $lastYopeningBlance->amount }}</strong></td>
+                                                            <td><strong>{{ number_format($lastYopeningBlance->amount, 2) }}</strong></td>
                                                         @else
-                                                            <td><strong>({{ $lastYopeningBlance->amount }})</strong></td>
+                                                            <td><strong>({{ number_format($lastYopeningBlance->amount, 2) }})</strong></td>
                                                         @endif
                                                     @endif
                                                 @else
                                                     @if (!$openingBlance && !$manualOpeningBlance)
-                                                        <td><strong>00</strong></td>
+                                                        <td><strong>0.00</strong></td>
                                                     @elseif (!$openingBlance && $manualOpeningBlance)
                                                         {{-- <td><strong>000</strong></td> --}}
                                                         @if ($manualOpeningBlance->flag == 1)
-                                                            <td><strong>{{ $manualOpeningBlance->amount }}</strong></td>
+                                                            <td><strong>{{ number_format($manualOpeningBlance->amount, 2) }}</strong></td>
                                                         @else
-                                                            <td><strong>({{ $manualOpeningBlance->amount }})</strong></td>
+                                                            <td><strong>({{ number_format($manualOpeningBlance->amount, 2) }})</strong></td>
                                                         @endif
                                                     @else
                                                         @if ($openingBlance->flag == 1)
-                                                            <td><strong>{{ $openingBlance->amount }}</strong></td>
+                                                            <td><strong>{{ number_format($openingBlance->amount, 2) }}</strong></td>
                                                         @else
-                                                            <td><strong>({{ $openingBlance->amount }})</strong></td>
+                                                            <td><strong>({{ number_format($openingBlance->amount, 2) }})</strong></td>
                                                         @endif
                                                     @endif
                                                 @endif
@@ -174,7 +174,7 @@
                                                     Month</td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>{{ $income }}</td>
+                                                <td>{{ number_format($income, 2) }}</td>
                                                 <td></td>
                                             </tr>
                                             <tr>
@@ -183,8 +183,8 @@
                                                     Month</td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>{{ $others_income }}</td>
-                                                <td>{{ $income + $others_income }}</td>
+                                                <td>{{ number_format($others_income, 2) }}</td>
+                                                <td>{{ number_format($income + $others_income, 2) }}</td>
                                             </tr>
                                             @if (count($expense) > 0)
                                                 @foreach ($expense as $key => $item)
@@ -211,7 +211,7 @@
                                                     <tr>
                                                         <td style="border-right:1px solid #ddd">{{ $key + 4 }}</td>
                                                         <td>{{ $data->name }}</td>
-                                                        <td>{{ $total_exp }}</td>
+                                                        <td>{{ number_format($total_exp, 2) }}</td>
                                                         <td rowspan=""></td>
                                                         <td></td>
                                                         <td></td>
@@ -227,70 +227,70 @@
                                                 <td colspan="2">Total Expenses of this month
                                                 </td>
                                                 @if (count($expense) > 0)
-                                                    <td>{{ $total }}</td>
+                                                    <td>{{ number_format($total, 2) }}</td>
                                                 @else
-                                                    <td>00</td>
+                                                    <td>0.00</td>
                                                 @endif
                                                 <td></td>
                                                 @if (count($expense) > 0)
-                                                    <td>({{ $total }})</td>
+                                                    <td>({{ number_format($total,2) }})</td>
                                                 @else
-                                                    <td>00</td>
+                                                    <td>0.00</td>
                                                 @endif
                                             </tr>
                                             <tr>
                                                 <td colspan="3"><strong>Total
                                                     </strong></td>
                                                 @if (count($expense) > 0)
-                                                    <td><strong>{{ $total }}</strong></td>
+                                                    <td><strong>{{ number_format($total, 2) }}</strong></td>
                                                 @else
-                                                    <td><strong>00</strong></td>
+                                                    <td><strong>0.00</strong></td>
                                                 @endif
-                                                <td><strong>{{ $income + $others_income }}</strong></td>
+                                                <td><strong>{{ number_format($income + $others_income, 2) }}</strong></td>
                                                 <td class="botderd">
                                                     @if (count($expense) > 0)
                                                         @if (!$openingBlance && !$manualOpeningBlance && !$others_income)
                                                             <strong
-                                                                style="border-right:1px solid #ddd">{{ $income - $total }}</strong>
+                                                                style="border-right:1px solid #ddd">{{ number_format($income - $total,2) }}</strong>
                                                         @elseif (!$openingBlance && !$manualOpeningBlance && $others_income)
                                                             <strong
-                                                                style="border-right:1px solid #ddd">{{ $income + $others_income - $total }}</strong>
+                                                                style="border-right:1px solid #ddd">{{ number_format($income + $others_income - $total, 2) }}</strong>
                                                         @elseif (!$openingBlance && $manualOpeningBlance)
                                                             @if ($manualOpeningBlance->flag == 1)
                                                                 <strong
-                                                                    style="border-right:1px solid #ddd">{{ $manualOpeningBlance->amount + $income + $others_income - $total }}</strong>
+                                                                    style="border-right:1px solid #ddd">{{ number_format($manualOpeningBlance->amount + $income + $others_income - $total, 2) }}</strong>
                                                             @else
                                                                 <strong
-                                                                    style="border-right:1px solid #ddd">{{ $income + $others_income - $manualOpeningBlance->amount - $total }}</strong>
+                                                                    style="border-right:1px solid #ddd">{{ number_format($income + $others_income - $manualOpeningBlance->amount - $total, 2) }}</strong>
                                                             @endif
                                                         @elseif($openingBlance)
                                                             @if ($openingBlance->flag == 1)
                                                                 <strong style="border-right:1px solid #ddd">
-                                                                    {{ $openingBlance->amount + $income + $others_income - $total }}</strong>
+                                                                    {{ number_format($openingBlance->amount + $income + $others_income - $total, 2) }}</strong>
                                                             @else
                                                                 <strong style="border-right:1px solid #ddd">
-                                                                    {{ $income + $others_income - $openingBlance->amount - $total }}</strong>
+                                                                    {{ number_format($income + $others_income - $openingBlance->amount - $total, 2) }}</strong>
                                                             @endif
                                                         @endif
                                                     @else
                                                         @if (!$openingBlance && !$manualOpeningBlance && !$others_income)
                                                             <strong
-                                                                style="border-right:1px solid #ddd">{{ $income }}</strong>
+                                                                style="border-right:1px solid #ddd">{{ number_format($income, 2) }}</strong>
                                                         @elseif (!$openingBlance && $manualOpeningBlance)
                                                             @if ($manualOpeningBlance->flag == 1)
                                                                 <strong
-                                                                    style="border-right:1px solid #ddd">{{ $manualOpeningBlance->amount + $income + $others_income }}</strong>
+                                                                    style="border-right:1px solid #ddd">{{ number_format($manualOpeningBlance->amount + $income + $others_income, 2) }}</strong>
                                                             @else
                                                                 <strong
-                                                                    style="border-right:1px solid #ddd">{{ $income + $others_income - $manualOpeningBlance->amount }}</strong>
+                                                                    style="border-right:1px solid #ddd">{{ number_format($income + $others_income - $manualOpeningBlance->amount, 2) }}</strong>
                                                             @endif
                                                         @elseif($openingBlance)
                                                             @if ($openingBlance->flag == 1)
                                                                 <strong style="border-right:1px solid #ddd">
-                                                                    {{ $openingBlance->amount + $income + $others_income }}</strong>
+                                                                    {{ number_format($openingBlance->amount + $income + $others_income, 2) }}</strong>
                                                             @else
                                                                 <strong style="border-right:1px solid #ddd">
-                                                                    {{ $income + $others_income - $openingBlance->amount }}</strong>
+                                                                    {{ number_format($income + $others_income - $openingBlance->amount, 2) }}</strong>
                                                             @endif
                                                         @endif
                                                     @endif

@@ -39,14 +39,14 @@
                                         <div class="mb-3 mt-3 form">
                                             <label for="amount" class="form-label">Package Amount</label>
                                             <input type="text" class="form-control" value="{{ old('amount') }}"
-                                                name="amount" placeholder="Enter amount">
+                                                name="amount" placeholder="0.00">
                                         </div>
                                         <div class="mb-3 mt-3 form">
                                             <label for="duration" class="form-label">Package Duration <sub
                                                     style="color: #ee8049">(days)</sub></label>
                                             <input type="text" class="form-control" value="{{ old('duration') }}"
                                                 name="duration" placeholder="Enter Package Duration">
-                                            <span style="font-size: 14px">Note: Duration will days.</span>
+                                            <span style="font-size: 12px; color:#fb5200; font-weight:600">Note: Duration will days.</span>
                                         </div>
                                     </div>
                                 </div>

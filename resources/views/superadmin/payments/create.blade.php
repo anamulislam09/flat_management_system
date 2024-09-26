@@ -39,7 +39,7 @@
                                                 <option value="" selected disabled>Select Once</option>
                                                 @foreach ($client as $item)
                                                     <option class="pb-3" value="{{ $item->id }}">
-                                                        {{ $item->name }}</option>
+                                                        {{ $item->name }} {{ $item->phone }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -57,7 +57,7 @@
                                         <div class="mb-3 mt-3 form">
                                             <label for="amount" class="form-label">Collection Amount</label>
                                             <input type="text" class="form-control" value="{{ old('amount') }}"
-                                                name="collection_amount" placeholder="Enter amount">
+                                                name="collection_amount" placeholder="0.00">
                                         </div>
                                     </div>
                                 </div>

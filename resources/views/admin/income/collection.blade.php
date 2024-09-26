@@ -137,22 +137,22 @@
                                                         <tr>
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>{{ $item->flat_name }}</td>
-                                                            <td>{{ $item->amount }}</td>
+                                                            <td>{{ number_format($item->amount, 2) }}</td>
                                                             @if (!$previousMonthData)
-                                                                <td>000</td>
+                                                                <td>0.00</td>
                                                             @else
-                                                                <td>{{ $previousMonthData->due }}</td>
+                                                                <td>{{ number_format($previousMonthData->due, 2) }}</td>
                                                             @endif
                                                             @if (!$previousMonthData)
-                                                                <td>{{ $item->amount }}</td>
+                                                                <td>{{ number_format($item->amount, 2) }}</td>
                                                             @else
-                                                                <td>{{ $item->amount + $previousMonthData->due }}</td>
+                                                                <td>{{ number_format($item->amount + $previousMonthData->due, 2) }}</td>
                                                             @endif
-                                                            <td>{{ $item->due }}</td>
+                                                            <td>{{ number_format($item->due, 2) }}</td>
                                                             <td><input type="text"
-                                                                    style="width:100%; border:none; border-radius:20px; text-align:center"
+                                                                    style="width:100%; border:none; border-radius:20px; text-align:right"
                                                                     name="paid" value="{{ old('paid') }}"
-                                                                    placeholder="000" required></td>
+                                                                    placeholder="0.00" required></td>
                                                             <td>
                                                                 @if ($item->status == 1)
                                                                     <span class="badge badge-success">Paid</span>
@@ -176,12 +176,12 @@
                                             <tfoot>
                                                 <tr>
                                                     <td colspan="2" class="text-right"> <strong>Total :</strong></td>
-                                                    <td class="text-right"><strong>{{ $total }}</strong></td>
-                                                    <td class="text-right"><strong>{{ $previous_total }}</strong></td>
-                                                    <td class="text-right"><strong>{{ $total + $previous_total }}</strong>
+                                                    <td class="text-right"><strong>{{ number_format($total, 2) }}</strong></td>
+                                                    <td class="text-right"><strong>{{ number_format($previous_total, 2) }}</strong></td>
+                                                    <td class="text-right"><strong>{{ number_format($total + $previous_total, 2) }}</strong>
                                                     </td>
-                                                    <td class="text-right"><strong>{{ $current_total }}</strong></td>
-                                                    <td class="text-right"><strong>{{ $collect_total }}</strong></td>
+                                                    <td class="text-right"><strong>{{ number_format($current_total, 2) }}</strong></td>
+                                                    <td class="text-right"><strong>{{ number_format($collect_total, 2) }}</strong></td>
                                                 </tr>
                                             </tfoot>
                                         </table>

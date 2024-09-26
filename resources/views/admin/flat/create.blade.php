@@ -54,7 +54,7 @@
                       <ul class="text">
                         <li>No of Flat:{{$no_flat}} </li>
                         <li>No of Floor:{{$no_floor}} </li>
-                        <li>Service Charge: {{$data->amount}} tk</li>
+                        <li>Service Charge: {{number_format($data->amount, 2)}} tk</li>
                         <li>Created Date:  <span style="font-size: 16px"> ({{ date($data->create_date)}} {{$data->create_month}} {{$data->create_year}})</span></li>
                       </ul>
                     </div>
@@ -97,7 +97,7 @@
                       <div class="form-group">
                         <label for="unit" class="label text">Amount of Service Charge :</label>
                         <input type="text" class="form-control text" value="" name="amount"
-                          placeholder="Enter Service Charge" required>
+                          placeholder="0.00" required>
                       </div>
                       <div class="">
                         <button type="submit" class="btn btn-sm btn-primary text" id="generate">Generate</button>

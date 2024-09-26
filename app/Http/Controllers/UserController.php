@@ -8,7 +8,7 @@ use App\Models\Flat;
 use App\Models\Income;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -109,19 +109,8 @@ class UserController extends Controller
   }
 
   // user dashboard date transaction start here 
-
   public function GetTransaction($date)
   {
-    // $Manager = User::where('user_id', Auth::user()->user_id)->first();
-
-    // $data['flats'] = Flat::where('client_id', $Manager->client_id)->count();
-    //   $data['expense'] = Expense::where('client_id', $Manager->client_id)->where('date', $date)->sum('amount');
-    //   $data['income'] = Income::where('client_id', $Manager->client_id)->where('date', $date)->sum('paid');
-    //   $manualOpeningBalance = DB::table('opening_balances')->where('client_id', $Manager->client_id)->where('entry_datetime', $date)->first();
-    //   $data['others_income'] = DB::table('others_incomes')->where('client_id', $Manager->client_id)->where('date', $date)->sum('amount');
-    //   $data['balance'] = Balance::where('client_id', $Manager->client_id)->where('date', $date)->sum('amount');
-
-
     $timestamp = strtotime($date);
     $month = date('n', $timestamp); // 'n' gives month without leading zeros
     $year = date('Y', $timestamp);

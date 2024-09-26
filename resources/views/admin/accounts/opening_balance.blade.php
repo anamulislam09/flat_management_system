@@ -23,7 +23,7 @@
                                             <div class="form-group">
                                                 <label for="unit" class="">Amount of opening balance :</label>
                                                 <input type="text" class="form-control" name="amount"
-                                                    placeholder="Enter Amount">
+                                                    placeholder="0.00">
                                             </div>
                                             <div class="form-group clearfix">
                                                 <div class="icheck-success d-inline">

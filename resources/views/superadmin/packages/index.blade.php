@@ -61,7 +61,7 @@
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
                                                     <td>{{ $item->package_name }}</td>
-                                                    <td>{{ $item->amount }}</td>
+                                                    <td>{{ number_format($item->amount, 2) }}</td>
                                                     <td>{{ $item->duration }}</td>
                                                     <td>
                                                         {{-- <a href="" class="btn btn-sm btn-info edit" data-id="{{$item->id}}" data-toggle="modal" data-target="#editUser"><i class="fas fa-edit"></i></a> --}}

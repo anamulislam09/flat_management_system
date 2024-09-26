@@ -36,9 +36,9 @@
                                             @foreach ($data as $key => $item)
                                                 <tr>
                                                     <td>{{ $key + 1 }}</td>
-                                                    <td>{{ $item->total_income }}</td>
-                                                    <td>{{ $item->total_expense }}</td>
-                                                    <td>{{ $item->amount }}</td>
+                                                    <td>{{ number_format($item->total_income, 2) }}</td>
+                                                    <td>{{ number_format($item->total_expense, 2) }}</td>
+                                                    <td>{{ number_format($item->amount, 2) }}</td>
                                                     <td>
                                                         @if ($item->flag == 1)
                                                             <span class="badge badge-success">Profit</span>

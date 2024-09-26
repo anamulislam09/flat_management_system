@@ -98,9 +98,7 @@
                                                         </option>
                                                     </select>
                                                 </div>
-                                                {{-- 'month', date('m'))->where('year', date('Y') --}}
                                                 <div class="col-lg-3 date">
-                                                    {{-- <label for="" class="col-form-label">Select Month</label> --}}
                                                     <select name="month" class="form-control text" id="">
                                                         <option value="" selected disabled>Select Month </option>
                                                         <option value="1"
@@ -144,7 +142,8 @@
                                                 @if (Route::current()->getName() == 'income.create')
                                                     <div class="col-lg-2">
                                                         <label for="" class="col-form-label"></label>
-                                                        <input type="submit" class="btn btn-sm btn-primary text" value="Generate">
+                                                        <input type="submit" class="btn btn-sm btn-primary text"
+                                                            value="Generate">
                                                     </div>
                                                 @else
                                                 @endif
@@ -192,10 +191,12 @@
                                                     @if (isset($opening_balance) && !empty($data))
                                                         @if ($opening_balance->flag == 1)
                                                             <h3 class="card-title"><strong>Opening Balance
-                                                                    {{ $opening_balance->amount }}</strong></h3>
+                                                                    {{ number_format($opening_balance->amount, 2) }}</strong>
+                                                            </h3>
                                                         @else
                                                             <h3 class="card-title"><strong>Opening Loss
-                                                                    {{ $opening_balance->amount }}</strong></h3>
+                                                                    {{ number_format($opening_balance->amount, 2) }}</strong>
+                                                            </h3>
                                                         @endif
                                                     @else
                                                     @endif
@@ -228,7 +229,7 @@
                                                             <tr>
                                                                 <td class="text-center">{{ $key + 1 }}</td>
                                                                 <td>{{ $item->flat_name }}</td>
-                                                                <td class="text-right">{{ $item->amount }}</td>
+                                                                <td class="text-right">{{ number_format($item->amount, 2) }}</td>
                                                             </tr>
                                                         @endforeach
                                                     </tbody>
@@ -236,7 +237,7 @@
                                                         <tr>
                                                             <td colspan="2" class="text-right"> <strong>Total :</strong>
                                                             </td>
-                                                            <td class="text-right"><strong>{{ $total }}</strong></td>
+                                                            <td class="text-right"><strong>{{ number_format($total, 2) }}</strong></td>
                                                         </tr>
                                                     </tfoot>
                                                 </table>
